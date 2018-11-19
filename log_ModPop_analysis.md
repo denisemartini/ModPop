@@ -49,5 +49,19 @@ sed -i 's/Superscaffold/un_ssc_/' pseudochromosomes.fasta
 sed -i 's/scaffold/un_sc_/' pseudochromosomes.fasta
 ```
 
-Finally, fixing the script to run Tassel5 and also moving it into the repo
+Finally, moving the script to run Tassel5 into the repo and fixing it
 `cp Kaka_GBS/GBS_scripts/tassel5-GBS2.sh ModPop_analysis/ModPop_repo`
+Then, moving to boros and running it
+`scp ModPop_analysis/ModPop_repo/tassel5-GBS2.sh boros:/data/denise/ModPop_analysis/tassel`
+``` bash
+screen -S TASSEL
+cd /data/denise/ModPop_analysis/tassel
+bash tassel5-GBS2.sh 2>&1 | tee tassel.log
+```
+I had forgotten a detail: to run in tassel, the fastq file must be named like the flowcell and lane numbers found in the keyfile, so fixing that before rerunning the above:
+```bash
+cd ..
+mv SQ0501_S6_L006_R1_001.fastq.gz CB67BANXX_6_fastq.gz
+cd tassel
+bash tassel5-GBS2.sh 2>&1 | tee tassel.log
+```
