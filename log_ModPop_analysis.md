@@ -69,3 +69,12 @@ mv SQ0501_S6_L006_R1_001.fastq.gz CB67BANXX_6_fastq.gz
 cd tassel
 bash tassel5-GBS2.sh 2>&1 | tee tassel.log
 ```
+###### 20.11.18
+
+I had forgotten an important detail: Tassel runs BWA at some point for the alignment to the reference .fasta genome, and it assumes that this is indexed already. In this case it wasn't, so it failed to locate the index and did not run the alignment, with obvious consequences for the rest of the pipeline. So:
+```bash
+cd ..
+/usr/local/bwa-0.7.17/bwa index pseudochromosomes.fasta
+cd tassel
+bash tassel5-GBS2.sh 2>&1 | tee tassel.log
+```
