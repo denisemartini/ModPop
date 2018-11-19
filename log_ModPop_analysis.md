@@ -5,7 +5,7 @@
 All the analysis is done in the ModPop_analysis directory in boros/nesi and moved to HCS for storage
 
 #### What needs to be done:
-- [ ] Fixing the input files (genome, keyfiles, scripts, etc)
+- [x] Fixing the input files (genome, keyfiles, scripts, etc)
 - [ ] Rerun variant callers, specifically realignments and then:
   - [ ] platypus
   - [ ] stacks
@@ -48,6 +48,10 @@ sed -i 's/Pseudo_mitochondrion/ps_mito/' pseudochromosomes.fasta
 sed -i 's/Superscaffold/un_ssc_/' pseudochromosomes.fasta
 sed -i 's/scaffold/un_sc_/' pseudochromosomes.fasta
 ```
+
+#### Variant Calling
+##### TASSEL5
+###### 19.11.18
 
 Finally, moving the script to run Tassel5 into the repo and fixing it
 `cp Kaka_GBS/GBS_scripts/tassel5-GBS2.sh ModPop_analysis/ModPop_repo`
