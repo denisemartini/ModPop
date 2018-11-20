@@ -113,8 +113,8 @@ se	single-end barcode de-multiplexing
 --help, display this help and exit
 --version, output version information and exit
 ```
-so, the path to sabre to use in my script would be: `/nesi/project/uoo02327/denise/sabre-master/sabre`.
-Now, to go back and get a barcodes file ready for sabre, which should be in this format (tab-delimited):
+So, the path to sabre to use in my script would be: `/nesi/project/uoo02327/denise/sabre-master/sabre`.
+Now, going back to get a barcodes file ready for sabre, which should be in this format (tab-delimited):
 ```
 CCACCGT   SI-COD01_6_CB67BANXX.fq
 GAACAAT   SI-COD02_6_CB67BANXX.fq
@@ -136,7 +136,7 @@ CB67BANXX	6	CTGTATG	L40852	gbs2038	A	4	501			PstI-MspIKaka	96	SI_FIO07
 CB67BANXX	6	CCTACAG	L42605	gbs2038	A	5	501			PstI-MspIKaka	96	SI_FIO08
 CB67BANXX	6	AGCGGTG	L42617	gbs2038	A	6	501			PstI-MspIKaka	96	SI_FIO09
 ```
-I only need fields #3 and #14 for my scopes (`awk`). I also want to skip the header, so I am using `/CB67/` to select the lines that contain that pattern. The `tr` command makes sure that fields are tab-delimited instead of space-delimited. I can then just add the flowcell and lane at the end of the line (`sed` with the `$` symbol), since it is the same for all samples.
+I only need fields #3 and #14 for sabre and I can filter them out with `awk`. I also want to skip the header, so I am using `/CB67/` to select the lines that contain that pattern. The `tr` command makes sure that fields are tab-delimited instead of space-delimited. I can then just add the flowcell and lane at the end of the line (`sed` with the `$` symbol), since it is the same for all samples.
 ```bash
 awk -F '\t' '/CB67/{print $3, $14}' keyfile.txt | tr ' ' '\t' >> barcodes.txt
 sed -i s'/$/_6_CB67BANXX.fq/' barcodes.txt
