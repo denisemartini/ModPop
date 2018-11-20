@@ -78,6 +78,18 @@ cd ..
 cd tassel
 bash tassel5-GBS2.sh 2>&1 | tee tassel.log
 ```
+###### 21.11.18
+
+Turns out that Tassel5 does weird things with the names of the chromosomes in the reference fasta file, that makes it so it doesn't recognise them anymore later on in the analysis...refer to this link https://groups.google.com/forum/#!topic/tassel/Nd63V-3N-mw  
+Anyway, in order to fix this, I will just rename the reference fasta in a way that exclude the word "chr" and that should be enough. Lucky that I started with this variant caller, or I would have had to redo all the others later.
+```bash
+cd ..
+sed -i 's/ps_chr/ps_ch/' pseudochromosomes.fasta
+/usr/local/bwa-0.7.17/bwa index pseudochromosomes.fasta
+cd tassel
+rm *
+bash tassel5-GBS2.sh 2>&1 | tee tassel.log
+```
 
 ##### REALIGNMENT
 ###### 20.11.18
