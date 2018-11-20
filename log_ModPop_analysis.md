@@ -16,11 +16,11 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
 - [ ] Population structure tests:
   - [ ] admixture
   - [ ] dapc in adegenet
-  - [ ] tree in treemix?
-  - [ ] modeling in dadi?
+  - [ ] tree in treemix
+  - [ ] modeling in dadi
 - [ ] Stats for selection outliers (Fst, Tajima's D, etc)
 - [ ] Environmental correlations
-- [ ] Inbreeding?
+- [ ] Inbreeding tests
 
 ###### _Technical note_
 Most of the first part of the analysis has already been tested before, and scripts/tips are available from the Kaka_GBS directory. Parts yet to test from that part are ipyrad, treemix, dadi.  
