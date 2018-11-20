@@ -139,7 +139,7 @@ CB67BANXX	6	AGCGGTG	L42617	gbs2038	A	6	501			PstI-MspIKaka	96	SI_FIO09
 I only need fields #3 and #14 for my scopes (`awk`). I also want to skip the header, so I am using `/CB67/` to select the lines that contain that pattern. The `tr` command makes sure that fields are tab-delimited instead of space-delimited. I can then just add the flowcell and lane at the end of the line (`sed` with the `$` symbol), since it is the same for all samples.
 ```bash
 awk -F '\t' '/CB67/{print $3, $14}' keyfile.txt | tr ' ' '\t' >> barcodes.txt
-sed -i s'/$/_6_CB67BANXX/' barcodes.txt
+sed -i s'/$/_6_CB67BANXX.fq/' barcodes.txt
 ```
 Moving the script to run sabre and cutadapt into the repo and fixing it for use in NeSI.
 `cp Kaka_GBS/GBS_scripts/GBS_sabre_cutadapt.sh ModPop_analysis/ModPop_repo`
@@ -150,6 +150,6 @@ Then copying the script over to NeSI:
 And running:
 ```
 sbatch GBS_sabre_cutadapt.sh
-Submitted batch job 901568
+Submitted batch job 901598
 ```
 The job should be short and not intensive, so the requirements were low, it started right away.
