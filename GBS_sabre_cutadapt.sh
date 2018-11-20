@@ -1,20 +1,30 @@
-#  GBSpipeline.sh
-#  
-#
-#  Created by Denise Martini on 22/09/17.
-#
-# just the first few steps of the pipeline for now, testing sabre and cutadapt
+#!/bin/bash -e
+#SBATCH --job-name=GBS_preproc      # job name (shows up in the queue)
+#SBATCH --account=uoo02327     # Project Account
+#SBATCH --time=6:00:00         # Walltime (HH:MM:SS)
+#SBATCH --cpus-per-task=1      # number of cores per task
+#SBATCH --mem-per-cpu=1500      # memory/cpu (in MB)
+#SBATCH --ntasks=1              # number of tasks (e.g. MPI)
+#SBATCH --partition=large       # specify a partition
+#SBATCH --hint=nomultithread    # don't use hyperthreading
+#SBATCH --chdir=/nesi/nobackup/uoo02327/denise/ModPop_analysis   # directory where you run the job
+#SBATCH --output=%x-%j.out      # %x and %j are replaced by job name and ID
+#SBATCH --mail-type=ALL         # Optional: Send email notifications
+#SBATCH --mail-user=marde569@student.otago.ac.nz     # Use with --mail-type option
 
-# set up datadir and file before beginning
-datadir=/data/denise/Kaka_GBS
+# This script was adapted for use in NeSI with a SLURM system, on 20.11.18
+# loading necessary modules:
+module load cutadapt/1.16-gimkl-2017a-Python-3.6.3
+sabre=/nesi/project/uoo02327/denise/sabre-master/sabre
+
+# defining variables:
+datadir=/nesi/nobackup/uoo02327/denise/ModPop_analysis
 datafile=SQ0501_S6_L006_R1_001.fastq.gz
 
 # setting up a logfile
-start=`date`
-echo "Logfile for GBS pipeline run on $start" > logfile.txt
-logfile=${datadir}/logfile.txt
+echo "Logfile for GBS preprocessing run on "`date` > preprocess.log
+logfile=${datadir}/preprocess.log
 
-echo "Demultiplexing with sabre"
 echo "Demultiplexing with sabre" >> $logfile
 
 mkdir demultiplexed
@@ -22,11 +32,9 @@ cd demultiplexed/
 
 # command to run sabre for single end data, uncomment the option needed: -m 1 allows for 1 mismatch in barcode
 #sabre se -f ${datadir}/data.fq -b ${datadir}/barcodes.txt -u unknown_barcode.fq > sabre_summary.txt
-sabre se -f ${datadir}/${datafile} -m 1 -b ${datadir}/barcodes.txt -u unknown_barcode.fq > sabre_summary.txt
+$sabre se -f ${datadir}/${datafile} -m 1 -b ${datadir}/barcodes.txt -u unknown_barcode.fq > sabre_summary.txt
 
-echo "Demultiplexing with sabre done"
-echo "Demultiplexing done" >> $logfile
-echo "Cleaning and defining sample list"
+echo "Demultiplexing done"`date` >> $logfile
 
 # removing unnecessary files for later steps
 rm GBSNEG*.fq
@@ -39,59 +47,50 @@ cd ..
 
 #####################################
 
-echo "Filtering and trimming with cutadapt"
 echo "Filtering and trimming with cutadapt" >> $logfile
 
+echo "Preprocessing summary" > preprocessing_summary.txt
+summary=${datadir}/preprocessing_summary.txt
+echo "Sample"$'\t'"Demultiplexed_reads"$'\t'"Filtered_reads"$'\t'"Trimmed reads" >> $summary
+
 mkdir filtered
-echo "Filtering summary" > filtered/filtering_summary.txt
 mkdir trimmed
-echo "Trimming summary" > trimmed/trimming_summary.txt
 
 for samp in $samplist
 
 do
 
-now=`date`
-echo "Processing $samp $now" >> $logfile
-echo "Filtering $samp"
+  echo "Processing $samp "`date` >> $logfile
 
-cd filtered
+  cd filtered
 
-echo "$samp" >> filtering_summary.txt
-grep '^@' ../demultiplexed/${samp}.fq | wc -l >> filtering_summary.txt
+  echo -n "$samp"$'\t' >> $summary
+  echo -n `grep '^@' ../demultiplexed/${samp}.fq | wc -l`$'\t' >> $summary
 
-## this is to select only the reads that begin with the proper enzyme restriction site
-grep -B1 -A2 '^TGCAG' ../demultiplexed/${samp}.fq | sed '/^--$/d' > ${samp}.fq
+  ## this is to select only the reads that begin with the proper enzyme restriction site
+  grep -B1 -A2 '^TGCAG' ../demultiplexed/${samp}.fq | sed '/^--$/d' > ${samp}.fq
 
-grep '^@' ${samp}.fq | wc -l >> filtering_summary.txt
+  echo -n `grep '^@' ${samp}.fq | wc -l`$'\t' >> $summary
 
-cd ..
+  cd ..
 
-#####
+  #####
 
-echo "Trimming $samp"
+  cd trimmed/
 
-cd trimmed/
+  # command to run cutadapt
+  cutadapt -a file:${datadir}/adaptersSE.fa -m 50 -o ${samp}.fq ../filtered/${samp}.fq >> cutadapt_summary.txt
 
-echo "$samp" >> trimming_summary.txt
-grep '^@' ../filtered/${samp}.fq | wc -l >> trimming_summary.txt
+  ## using an adapter.fasta file with the adapter sequences that come with trimmomatic, checked with Illumina, they should be fine, no quality trimming because BWA does that on its own; min length to keep a read is 50
 
-# command to run cutadapt
-cutadapt -a file:${datadir}/adaptersSE.fa -m 50 -o ${samp}.fq ../filtered/${samp}.fq >> cutadapt_summary.txt
+  grep '^@' ${samp}.fq | wc -l >> $summary
 
-## using an adapter.fasta file with the adapter sequences that come with trimmomatic, checked with Illumina, they should be fine, no quality trimming because BWA does that on its own; min length to keep a read is 50
+  cd ..
 
-grep '^@' ${samp}.fq | wc -l >> trimming_summary.txt
-
-cd ..
-
-echo "$samp processed"
-echo "$samp processed" >> $logfile
+  echo "$samp processed" >> $logfile
 
 done
 
-end=`date`
-echo "Filtering and trimming done"
-echo "Filtering and trimming done $end" >> $logfile
+echo "Filtering and trimming done "`date` >> $logfile
 
 ######################################
