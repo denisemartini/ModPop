@@ -53,7 +53,7 @@ sed -i 's/scaffold/un_sc_/' pseudochromosomes.fasta
 ##### TASSEL5
 ###### 19.11.18
 
-Finally, moving the script to run Tassel5 into the repo and fixing it
+Moving the script to run Tassel5 into the repo and fixing it
 `cp Kaka_GBS/GBS_scripts/tassel5-GBS2.sh ModPop_analysis/ModPop_repo`
 Then, moving to boros and running it
 `scp ModPop_analysis/ModPop_repo/tassel5-GBS2.sh boros:/data/denise/ModPop_analysis/tassel`
@@ -71,10 +71,73 @@ bash tassel5-GBS2.sh 2>&1 | tee tassel.log
 ```
 ###### 20.11.18
 
-I had forgotten an important detail: Tassel runs BWA at some point for the alignment to the reference .fasta genome, and it assumes that this is indexed already. In this case it wasn't, so it failed to locate the index and did not run the alignment, with obvious consequences for the rest of the pipeline. So:
+I had forgotten another important detail: Tassel runs BWA at some point for the alignment to the reference .fasta genome, and it assumes that this is indexed already. In this case it wasn't, so it failed to locate the index and did not run the alignment, with obvious consequences for the rest of the pipeline. So:
 ```bash
 cd ..
 /usr/local/bwa-0.7.17/bwa index pseudochromosomes.fasta
 cd tassel
 bash tassel5-GBS2.sh 2>&1 | tee tassel.log
+```
+
+##### REALIGNMENT
+###### 20.11.18
+
+This will be setup in NeSI, it should be faster there.
+```bash
+cd /nesi/nobackup/uoo02327/denise
+mkdir ModPop_analysis
+cd ModPop_analysis/
+```
+Moving required files to NeSI:
+`scp ModPop_analysis/SQ0501_S6_L006_R1_001.fastq.gz mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
+scp ModPop_analysis/pseudochromosomes.fasta mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
+scp ModPop_analysis/keyfile.txt mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
+
+To run the preprocessing (demultiplexing and trimming) I need to install sabre on NeSI:
+```bash
+cd /nesi/project/uoo02327/denise/
+wget https://github.com/najoshi/sabre/archive/master.zip
+unzip master.zip
+rm master.zip
+cd sabre-master/
+make
+cd ..
+./sabre-master/sabre
+
+Usage: sabre <command> [options]
+
+Command:
+pe	paired-end barcode de-multiplexing
+se	single-end barcode de-multiplexing
+
+--help, display this help and exit
+--version, output version information and exit
+```
+so, the path to sabre to use in my script would be: `/nesi/project/uoo02327/denise/sabre-master/sabre`.
+Now, to go back and get a barcodes file ready for sabre, which should be in this format (tab-delimited):
+```
+CCACCGT   SI-COD01_6_CB67BANXX.fq
+GAACAAT   SI-COD02_6_CB67BANXX.fq
+AACCGAT   SI-FIO06_6_CB67BANXX.fq
+CTGTATG   SI-FIO07_6_CB67BANXX.fq
+CCTACAG   SI-FIO08_6_CB67BANXX.fq
+```
+It should be easy to obtain this from `keyfile.txt`
+```bash
+cd /nesi/nobackup/uoo02327/denise/ModPop_analysis/
+head keyfile.txt
+```
+```
+Flowcell	Lane	Barcode	sample	platename	row	column	libraryprepid	counter	comment	enzyme	species	numberofbarcodes	FullSampleName
+CB67BANXX	6	CCACCGT	FT3818	gbs2038	A	1	501			PstI-MspIKaka	96	SI_COD01
+CB67BANXX	6	GAACAAT	FT3819	gbs2038	A	2	501			PstI-MspIKaka	96	SI_COD02
+CB67BANXX	6	AACCGAT	L34826	gbs2038	A	3	501			PstI-MspIKaka	96	SI_FIO06
+CB67BANXX	6	CTGTATG	L40852	gbs2038	A	4	501			PstI-MspIKaka	96	SI_FIO07
+CB67BANXX	6	CCTACAG	L42605	gbs2038	A	5	501			PstI-MspIKaka	96	SI_FIO08
+CB67BANXX	6	AGCGGTG	L42617	gbs2038	A	6	501			PstI-MspIKaka	96	SI_FIO09
+```
+I only need fields #3 and #14 for my scopes (`awk`). I also want to skip the header, so I am using `/CB67/` to select the lines that contain that pattern. The `tr` command makes sure that fields are tab-delimited instead of space-delimited. I can then just add the flowcell and lane at the end of the line (`sed` with the `$` symbol), since it is the same for all samples.
+```bash
+awk -F '\t' '/CB67/{print $3, $14}' keyfile.txt | tr ' ' '\t' >> barcodes.txt
+sed -i s'/$/_6_CB67BANXX/' barcodes.txt
 ```
