@@ -89,9 +89,9 @@ mkdir ModPop_analysis
 cd ModPop_analysis/
 ```
 Moving required files to NeSI:  
-`scp ModPop_analysis/SQ0501_S6_L006_R1_001.fastq.gz mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
-scp ModPop_analysis/pseudochromosomes.fasta mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
-scp ModPop_analysis/keyfile.txt mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
+`scp ModPop_analysis/SQ0501_S6_L006_R1_001.fastq.gz mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`  
+`scp ModPop_analysis/pseudochromosomes.fasta mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`  
+`scp ModPop_analysis/keyfile.txt mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
 
 To run the preprocessing (demultiplexing and trimming) I need to install sabre on NeSI:
 ```bash
