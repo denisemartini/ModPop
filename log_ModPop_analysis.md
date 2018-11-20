@@ -143,3 +143,13 @@ sed -i s'/$/_6_CB67BANXX/' barcodes.txt
 ```
 Moving the script to run sabre and cutadapt into the repo and fixing it for use in NeSI.
 `cp Kaka_GBS/GBS_scripts/GBS_sabre_cutadapt.sh ModPop_analysis/ModPop_repo`
+While fixing the script I realised that I need the adapters file for cutadapt as well, so moving that to the working directory:
+`scp Kaka_GBS/adaptersSE.fa mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
+Then copying the script over to NeSI:
+`scp ModPop_analysis/ModPop_repo/GBS_sabre_cutadapt.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
+And running:
+```
+sbatch GBS_sabre_cutadapt.sh
+Submitted batch job 901568
+```
+The job should be short and not intensive, so the requirements were low, it started right away.
