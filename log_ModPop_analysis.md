@@ -141,3 +141,5 @@ I only need fields #3 and #14 for my scopes (`awk`). I also want to skip the hea
 awk -F '\t' '/CB67/{print $3, $14}' keyfile.txt | tr ' ' '\t' >> barcodes.txt
 sed -i s'/$/_6_CB67BANXX/' barcodes.txt
 ```
+Moving the script to run sabre and cutadapt into the repo and fixing it for use in NeSI.
+`cp Kaka_GBS/GBS_scripts/GBS_sabre_cutadapt.sh ModPop_analysis/ModPop_repo`
