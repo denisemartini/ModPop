@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #SBATCH --job-name=GBS_map      # job name (shows up in the queue)
 #SBATCH --account=uoo02327     # Project Account
-#SBATCH --time=12:00:00         # Walltime (HH:MM:SS)
+#SBATCH --time=36:00:00         # Walltime (HH:MM:SS)
 #SBATCH --cpus-per-task=8      # number of cores per task
 #SBATCH --mem-per-cpu=1500      # memory/cpu (in MB)
 #SBATCH --ntasks=1              # number of tasks (e.g. MPI)
@@ -26,10 +26,29 @@ datadir=/nesi/nobackup/uoo02327/denise/ModPop_analysis
 ref=$datadir/pseudochromosomes.fasta
 fqdir=$datadir/trimmed
 
+# to clean up as you go
+mkdir mapped
+mkdir rg
+mkdir dedup
+mkdir realigned
+
 ## first, check if the reference genome has been indexed:
 if [ ! -f $ref\.amb ]
-	then
-	bwa index -a bwtsw $ref
+then
+  bwa index -a bwtsw $ref
+  else
+    echo "BWA index found"
+fi
+
+#Create a Sequence Dictionary if necessary
+if [ ! -e $ref\.dict ]
+then
+  echo "SequenceDictionary of reference does not exist: creating one with picard"
+  java -jar $picard CreateSequenceDictionary \
+  R=$ref \
+  O=$ref.dict
+  else
+    echo "SequenceDictionary found"
 fi
 
 # creating a summary file of mapping
@@ -37,30 +56,60 @@ echo "Mapping summary" > mapping_summary.txt
 summary=${datadir}/mapping_summary.txt
 echo "Sample"$'\t'"Mapped_reads"$'\t'"%_mapped"$'\t'"Unmapped_reads" >> $summary
 
-# alignment
-# bwa mem -t 8 genome.fa reads.fastq | samtools sort -@8 -o output.bam -
+# start processing
 
 cat fq_list.txt | while read fq
 do
-  echo $fq
-  base=$(echo $fq | cut -f 1 -d '.')
-  bwa mem -t 8 $ref $fqdir/$fq | samtools sort -@8 -o sorted_$base\.bam -
-  samtools index sorted_$base\.bam
+  echo "$fq started "$(date)
+  name=$(echo $fq | cut -f 1,2 -d '_')
+  # alignment
+  echo "processing alignment "$(date)
+  # bwa mem -t 8 genome.fa reads.fastq | samtools sort -@8 -o output.bam -
+  bwa mem -t 8 $ref $fqdir/$fq | samtools sort -@8 -o sorted_$name\.bam -
+  samtools index sorted_$name\.bam
 
   # adding mapping stats to summary
-  map=$(samtools view -F4 -c sorted_$base\.bam)
-  unmap=$(samtools view -f4 -c sorted_$base\.bam)
+  map=$(samtools view -F4 -c sorted_$name\.bam)
+  unmap=$(samtools view -f4 -c sorted_$name\.bam)
   total=$(($map + $unmap))
   perc_mapped=`echo "scale=4;($map/$total)*100" | bc`
-  echo -n $(echo $base | cut -f 1,2 -d '_')$'\t' >> $summary
+  echo -n $name$'\t' >> $summary
   echo -n $map$'\t' >> $summary
   echo -n $perc_mapped$'\t' >> $summary
   echo $unmap >> $summary
 
+  # fix read groups
+  echo "fixing read groups "$(date)
+  rgpu=$(echo $fq | cut -f 1 -d '.' | cut -f 3,4 -d '_')
+
+  java -jar $picard AddOrReplaceReadGroups \
+    I=sorted_$name\.bam \
+    O=rg_$name\.bam \
+    RGID=D00390:320 \
+    RGLB=lib1 \
+    RGPL=illumina \
+    RGPU=$rgpu \
+    RGSM=$name
+
+  mv sorted*.bam mapped
+  mv sorted*.bai mapped
+
+  # fixing everything else the way gatk likes it
+  echo "marking duplicates "$(date)
+  java -jar $picard MarkDuplicates INPUT=rg_$name\.bam OUTPUT=/dev/stdout METRICS_FILE=$name\_metrics.txt | \
+  java -jar $picard ReorderSam I=/dev/stdin O=dedup_$name\.bam R=$ref
+  samtools index -b dedup_$name\.bam
+  mv rg*.bam rg
+
+  echo "realigning indels "$(date)
+  java -jar $gatk -T RealignerTargetCreator -R $ref -I dedup_$name\.bam -o $name\.intervals
+  java -jar $gatk -T IndelRealigner -R $ref -I dedup_$name\.bam -targetIntervals $name\.intervals -o realigned_$name\.bam
+  samtools index -b realigned_$name\.bam
+  mv dedup*.bam dedup
+  mv dedup*.bai dedup
+  mv realigned*.bam realigned
+  mv realigned*.bai realigned
+
+  echo "$fq done "$(date)
+
 done
-
-# clean up after alignment
-rm tmp_*
-
-mv *.bam ../mapped
-mv *.bai ../mapped
