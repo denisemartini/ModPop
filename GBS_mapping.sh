@@ -24,10 +24,47 @@ gatk=/opt/nesi/mahuika/GATK/3.8-1/GenomeAnalysisTK.jar
 # input files and working directory
 datadir=/nesi/nobackup/uoo02327/denise/ModPop_analysis
 ref=$datadir/pseudochromosomes.fasta
-fqdir=$datadir/trimmed/
+fqdir=$datadir/trimmed
 
 ## first, check if the reference genome has been indexed:
 if [ ! -f $ref\.amb ]
 	then
 	bwa index -a bwtsw $ref
 fi
+
+# alignment
+# bwa mem -t 8 genome.fa reads.fastq | samtools sort -@8 -o output.bam -
+
+cat fq_list.txt | while read fq
+do
+  echo $fq
+  base=$(echo $fq | cut -f 1 -d '.')
+  bwa mem -t 8 $ref $fqdir/$fq | samtools sort -@8 -o sorted_$base\.bam -
+  samtools index sorted_$base\.bam
+
+done
+
+# clean up after alignment
+rm tmp_*
+
+mv *.bam ../mapped
+mv *.bai ../mapped
+
+# creating a mapping summary
+echo "Mapping summary" > mapping_summary.txt
+summary=${datadir}/mapping_summary.txt
+echo "Sample"$'\t'"Mapped_reads"$'\t'"%_mapped"$'\t'"Unmapped_reads" >> $summary
+
+for bam in $(ls $datadir/mapped/*.bam)
+
+do
+  map=$(samtools-1.2 view -F4 -c $bam)
+  unmap=$(samtools-1.2 view -f4 -c $bam)
+  total=$(($map + $unmap))
+  perc_mapped=`echo "scale=4;($map/$total)*100" | bc`
+  echo -n $bam$'\t' >> $summary
+  echo -n $map$'\t' >> $summary
+  echo -n $perc_mapped$'\t' >> $summary
+  echo $unmap >> $summary
+
+done
