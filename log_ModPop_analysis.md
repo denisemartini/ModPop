@@ -165,4 +165,20 @@ And running:
 sbatch GBS_sabre_cutadapt.sh
 Submitted batch job 901598
 ```
-The job should be short and not intensive, so the requirements were low, it started right away.
+The job should be short and not intensive, so the requirements were low, it started right away.  
+_N.B. The job ran fine and quite fast, the whole preprocessing took ~2.5hrs. The new summary file also looks good._
+
+###### 21.11.18
+
+I had to fix and index the reference fasta file for Tassel5, so I am transferring that again from boros and into NeSI.  
+`scp boros:/data/denise/ModPop_analysis/pseudochromosomes.* ModPop_analysis/`  
+`scp ModPop_analysis/pseudochromosomes.* mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`  
+Now, for the actual alignment I need to merge together a few scripts from previous tests and adapt them to NeSI.
+Since the preprocessing went fine, deleting the unnecessary intermediate files:
+```bash
+mv demultiplexed/sabre_summary.txt .
+mv trimmed/cutadapt_summary.txt .
+rm -r demultiplexed
+rm -r filtered
+```
+Creating a new script `GBS_mapping.sh` to align the trimmed sequences to the reference file, add read group information and prepare the alignments for variant calling.
