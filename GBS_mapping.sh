@@ -55,7 +55,7 @@ then
   echo "SequenceDictionary of reference does not exist: creating one with picard"
   java -jar $picard CreateSequenceDictionary \
   R=$ref \
-  O=$ref.dict
+  O=$(echo $ref | cut -f 1 -d '.').dict
   else
     echo "SequenceDictionary found" >> $logfile
 fi
@@ -69,10 +69,11 @@ echo "Sample"$'\t'"Mapped_reads"$'\t'"%_mapped"$'\t'"Unmapped_reads" >> $summary
 
 cat fq_list.txt | while read fq
 do
+  echo $fq
   echo "$fq started "$(date) >> $logfile
   name=$(echo $fq | cut -f 1,2 -d '_')
   # alignment
-  echo "processing alignment "$(date)
+  echo "processing alignment "$(date) >> $logfile
   # bwa mem -t 8 genome.fa reads.fastq | samtools sort -@8 -o output.bam -
   bwa mem -t 8 $ref $fqdir/$fq | samtools sort -@8 -o sorted_$name\.bam -
   samtools index sorted_$name\.bam
@@ -118,6 +119,7 @@ do
   mv dedup*.bai dedup
   mv realigned*.bam realigned
   mv realigned*.bai realigned
+  rm *.intervals
 
   echo "$fq done "$(date) >> $logfile
 

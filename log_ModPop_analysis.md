@@ -197,11 +197,11 @@ And running it:
 sbatch GBS_mapping.sh
 Submitted batch job 911985
 ```
-There was error thrown up at the first sample: gatk needs a fasta.fai index for the reference file, so fixing that in the script, adding a separate progress log, and moving it to NeSI again.  
+There was error thrown up at the first sample: gatk needs a fasta.fai index for the reference file, so fixing that in the script, adding a separate progress log, and moving it to NeSI again. Also, fixed the sequence dictionary output, it had the wrong name (which GATK would not recognise), and other bits for the log and cleanup.  
 `scp ModPop_analysis/ModPop_repo/GBS_mapping.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
 Removing files from the previous run, then restarting it:
 ```
 sbatch GBS_mapping.sh
-Submitted batch job 912673
+Submitted batch job 912999
 ```
 If the indel realignment does not take too long, the run should finish all samples within the time limit (36hrs).
