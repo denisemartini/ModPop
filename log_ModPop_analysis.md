@@ -90,6 +90,7 @@ cd tassel
 rm *
 bash tassel5-GBS2.sh 2>&1 | tee tassel.log
 ```
+_N.B. This time the run finished fine, it took about ~4hrs._
 
 ##### REALIGNMENT
 ###### 20.11.18
@@ -182,7 +183,7 @@ rm -r demultiplexed
 rm -r filtered
 ```
 Creating a new script `GBS_mapping.sh` to align the trimmed sequences to the reference file, add read group information and prepare the alignments for variant calling.
-Also preparing a list of the fastq files that need to be processed by the script, in the working directory
+Also preparing a list of the fastq files that need to be processed by the script, in the working directory.
 ```bash
 cd trimmed/
 ls * > ../fq_list.txt
