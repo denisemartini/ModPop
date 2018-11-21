@@ -25,6 +25,7 @@ gatk=/opt/nesi/mahuika/GATK/3.8-1/GenomeAnalysisTK.jar
 datadir=/nesi/nobackup/uoo02327/denise/ModPop_analysis
 ref=$datadir/pseudochromosomes.fasta
 fqdir=$datadir/trimmed
+logfile=$datadir/alignment.log
 
 # to clean up as you go
 mkdir mapped
@@ -32,13 +33,21 @@ mkdir rg
 mkdir dedup
 mkdir realigned
 
+echo "Starting run "$(date) > $logfile
 ## first, check if the reference genome has been indexed:
 if [ ! -f $ref\.amb ]
 then
   bwa index -a bwtsw $ref
   else
-    echo "BWA index found"
+    echo "BWA index found" >> $logfile
 fi
+if [ ! -f $ref\.fai ]
+then
+  samtools faidx $ref
+  else
+    echo "Samtools .fai index found" >> $logfile
+fi
+
 
 #Create a Sequence Dictionary if necessary
 if [ ! -e $ref\.dict ]
@@ -48,7 +57,7 @@ then
   R=$ref \
   O=$ref.dict
   else
-    echo "SequenceDictionary found"
+    echo "SequenceDictionary found" >> $logfile
 fi
 
 # creating a summary file of mapping
@@ -60,7 +69,7 @@ echo "Sample"$'\t'"Mapped_reads"$'\t'"%_mapped"$'\t'"Unmapped_reads" >> $summary
 
 cat fq_list.txt | while read fq
 do
-  echo "$fq started "$(date)
+  echo "$fq started "$(date) >> $logfile
   name=$(echo $fq | cut -f 1,2 -d '_')
   # alignment
   echo "processing alignment "$(date)
@@ -79,7 +88,7 @@ do
   echo $unmap >> $summary
 
   # fix read groups
-  echo "fixing read groups "$(date)
+  echo "fixing read groups "$(date) >> $logfile
   rgpu=$(echo $fq | cut -f 1 -d '.' | cut -f 3,4 -d '_')
 
   java -jar $picard AddOrReplaceReadGroups \
@@ -95,13 +104,13 @@ do
   mv sorted*.bai mapped
 
   # fixing everything else the way gatk likes it
-  echo "marking duplicates "$(date)
+  echo "marking duplicates "$(date) >> $logfile
   java -jar $picard MarkDuplicates INPUT=rg_$name\.bam OUTPUT=/dev/stdout METRICS_FILE=$name\_metrics.txt | \
   java -jar $picard ReorderSam I=/dev/stdin O=dedup_$name\.bam R=$ref
   samtools index -b dedup_$name\.bam
   mv rg*.bam rg
 
-  echo "realigning indels "$(date)
+  echo "realigning indels "$(date) >> $logfile
   java -jar $gatk -T RealignerTargetCreator -R $ref -I dedup_$name\.bam -o $name\.intervals
   java -jar $gatk -T IndelRealigner -R $ref -I dedup_$name\.bam -targetIntervals $name\.intervals -o realigned_$name\.bam
   samtools index -b realigned_$name\.bam
@@ -110,6 +119,6 @@ do
   mv realigned*.bam realigned
   mv realigned*.bai realigned
 
-  echo "$fq done "$(date)
+  echo "$fq done "$(date) >> $logfile
 
 done

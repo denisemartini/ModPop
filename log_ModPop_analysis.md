@@ -182,3 +182,25 @@ rm -r demultiplexed
 rm -r filtered
 ```
 Creating a new script `GBS_mapping.sh` to align the trimmed sequences to the reference file, add read group information and prepare the alignments for variant calling.
+Also preparing a list of the fastq files that need to be processed by the script, in the working directory
+```bash
+cd trimmed/
+ls * > ../fq_list.txt
+cd ..
+```
+From the above list I am taking off sample `SI_FIO01` because it did not have enough sequences to proceed (pretty much the same as the negative controls, so it is considered a failed sample in the GBS report from AgResearch).
+Moving the ready script to NeSI:  
+`scp ModPop_analysis/ModPop_repo/GBS_mapping.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
+And running it:
+```
+sbatch GBS_mapping.sh
+Submitted batch job 911985
+```
+There was error thrown up at the first sample: gatk needs a fasta.fai index for the reference file, so fixing that in the script, adding a separate progress log, and moving it to NeSI again.  
+`scp ModPop_analysis/ModPop_repo/GBS_mapping.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`
+Removing files from the previous run, then restarting it:
+```
+sbatch GBS_mapping.sh
+Submitted batch job 912673
+```
+If the indel realignment does not take too long, the run should finish all samples within the time limit (36hrs).
