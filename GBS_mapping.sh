@@ -32,6 +32,11 @@ if [ ! -f $ref\.amb ]
 	bwa index -a bwtsw $ref
 fi
 
+# creating a summary file of mapping
+echo "Mapping summary" > mapping_summary.txt
+summary=${datadir}/mapping_summary.txt
+echo "Sample"$'\t'"Mapped_reads"$'\t'"%_mapped"$'\t'"Unmapped_reads" >> $summary
+
 # alignment
 # bwa mem -t 8 genome.fa reads.fastq | samtools sort -@8 -o output.bam -
 
@@ -42,6 +47,16 @@ do
   bwa mem -t 8 $ref $fqdir/$fq | samtools sort -@8 -o sorted_$base\.bam -
   samtools index sorted_$base\.bam
 
+  # adding mapping stats to summary
+  map=$(samtools view -F4 -c sorted_$base\.bam)
+  unmap=$(samtools view -f4 -c sorted_$base\.bam)
+  total=$(($map + $unmap))
+  perc_mapped=`echo "scale=4;($map/$total)*100" | bc`
+  echo -n $(echo $base | cut -f 1,2 -d '_')$'\t' >> $summary
+  echo -n $map$'\t' >> $summary
+  echo -n $perc_mapped$'\t' >> $summary
+  echo $unmap >> $summary
+
 done
 
 # clean up after alignment
@@ -49,22 +64,3 @@ rm tmp_*
 
 mv *.bam ../mapped
 mv *.bai ../mapped
-
-# creating a mapping summary
-echo "Mapping summary" > mapping_summary.txt
-summary=${datadir}/mapping_summary.txt
-echo "Sample"$'\t'"Mapped_reads"$'\t'"%_mapped"$'\t'"Unmapped_reads" >> $summary
-
-for bam in $(ls $datadir/mapped/*.bam)
-
-do
-  map=$(samtools-1.2 view -F4 -c $bam)
-  unmap=$(samtools-1.2 view -f4 -c $bam)
-  total=$(($map + $unmap))
-  perc_mapped=`echo "scale=4;($map/$total)*100" | bc`
-  echo -n $bam$'\t' >> $summary
-  echo -n $map$'\t' >> $summary
-  echo -n $perc_mapped$'\t' >> $summary
-  echo $unmap >> $summary
-
-done
