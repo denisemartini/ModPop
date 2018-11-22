@@ -27,12 +27,13 @@ vcfdir=$datadir/gatk_vcf
 
 cat samplelist.txt | while read name
 do
+  echo "Calling variants for $name "$(date) >> $logfile
   # this produces variants for each .bam alignment
   java -jar $gatk -T HaplotypeCaller -R $ref -I $bamdir/realigned_$name\.bam --emitRefConfidence GVCF -o $vcfdir/$name\_raw.snps.g.vcf
 
 done
 
-
+echo "Setting up the .vcf list "$(date) >> $logfile
 for name in $(cat samplelist.txt)
 do
   # this loop prepares the input list for GenotypeGVCFs (--variant file1.g.vcf --variant file2.g.vcf ... --variant fileN.g.vcf)
@@ -42,6 +43,8 @@ do
 done
 
 echo $allVariants
+echo $allVariants >> $logfile
 
+echo "Merging variant calls "$(date) >> $logfile
 # this is the GATK command that unifies the individual vcf calls:
 java -jar $gatk -T GenotypeGVCFs -R $ref -o GATK_output.vcf $allVariants
