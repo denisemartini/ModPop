@@ -225,3 +225,20 @@ Then moving all outputs into a directory named `alignment` and transferring to l
 
 I have in NeSI everything I need to run the GATK varcaller.  
 Creating a new script, called `GBS_GATK.sh`, to run through the individual HaplotypeCaller and the joint genotyping tool of GATK.  
+I will need a list of the samples to be processed, in the name only format.
+```bash
+cut -f1,2 -d '_' alignment/fq_list.txt > samplelist.txt
+head -5 samplelist.txt
+NI_KAP01
+NI_KAP02
+NI_KAP03
+NI_KAP04
+NI_KAP05
+```
+Moving the new script to NeSI  
+`scp ModPop_analysis/ModPop_repo/GBS_GATK.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/`  
+Also setting up an output directory `gatk_vcf`, then running  
+```
+sbatch GBS_GATK.sh
+Submitted batch job 929641
+```
