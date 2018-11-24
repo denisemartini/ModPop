@@ -242,3 +242,20 @@ Also setting up an output directory `gatk_vcf`, then running
 sbatch GBS_GATK.sh
 Submitted batch job 929641
 ```
+
+###### 24.11.18
+
+Unfortunately this time I had not given enough time to the NeSI job (36hrs). The job timed out midway through the individual variant calling of the SI_WES02 sample. To avoid running the whole thing from the beginning, I will modify the script on NeSI, so that it finishes running the missing individuals and then does the joint genotyping.  
+Specifically, I am deleting sample SI_WES02 partial output, then creating a samplelist with the samples from this one on:
+```bash
+rm gatk_vcf/SI_WES02_raw.snps.g.vcf
+grep 'SI_WES02' -A 20 samplelist.txt > last_samples.txt
+```
+Then, on the NeSI script `GBS_GATK.sh` I am switching this new sample list to the previous one, ONLY for the first part of the script.
+I am also adding a line to the logfile (to which the rest of the analysis is still going to be appended):  
+```bash
+echo 'Run interrupted, cleaned and restarted '$(date) >> gatk_varcaller.log
+sbatch GBS_GATK.sh
+Submitted batch job 970851
+```
+This time I gave another 24hrs to the job, so hopefully it will get to the end. 

@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #SBATCH --job-name=GBS_GATK      # job name (shows up in the queue)
 #SBATCH --account=uoo02327     # Project Account
-#SBATCH --time=36:00:00         # Walltime (HH:MM:SS)
+#SBATCH --time=50:00:00         # Walltime (HH:MM:SS)
 #SBATCH --cpus-per-task=8      # number of cores per task
 #SBATCH --mem-per-cpu=1500      # memory/cpu (in MB)
 #SBATCH --ntasks=1              # number of tasks (e.g. MPI)
