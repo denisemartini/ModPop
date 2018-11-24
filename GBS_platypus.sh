@@ -4,12 +4,15 @@
 # script to run Platypus for Illumina reads. Adapted for ModPop_analysis on 24.11.18
 # Created by Denise Martini on 28/09/17.
 
+module load PLATYPUS
+
 # naming input files
 datadir=/data/denise/ModPop_analysis
 bamdir=$datadir/realigned
 bamlist=$(ls $bamdir/*.bam)
 ref=$datadir/pseudochromosomes.fa
 nbcor=10
+
 # these parameters come from the FastGBS pipeline for using Illumina data
 minMapQual=20       #min bam quality for that alignment
 minBaseQual=20      #min fastq quality for that base
