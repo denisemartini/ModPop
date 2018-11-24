@@ -1,17 +1,14 @@
 #!/bin/sh
 
-#  GBS_platypus.sh
-#  
-#
-#  Created by Denise Martini on 28/09/17.
-#
-# to run Platypus with set options
+# GBS_platypus.sh
+# script to run Platypus for Illumina reads. Adapted for ModPop_analysis on 24.11.18
+# Created by Denise Martini on 28/09/17.
 
-## the following could all be moved to a parameters file
 # naming input files
-bamlist=`ls *.bam`
-refdir=/data/denise
-refgen=Kaka_GF3.gapfilled.final.fa
+datadir=/data/denise/ModPop_analysis
+bamdir=$datadir/realigned
+bamlist=$(ls $bamdir/*.bam)
+ref=$datadir/pseudochromosomes.fa
 nbcor=10
 # these parameters come from the FastGBS pipeline for using Illumina data
 minMapQual=20       #min bam quality for that alignment
@@ -23,7 +20,6 @@ logplat=platypus_log.txt
 outplat=platypus_output     #only the prefix
 ##
 
-
 Platypus.py callVariants --bamFiles="${bamlist}" \
 --nCPU="${nbcor}" --minMapQual="${minMapQual}" --minBaseQual="${minBaseQual}" \
 --minGoodQualBases=5 --badReadsThreshold=10 \
@@ -34,7 +30,6 @@ Platypus.py callVariants --bamFiles="${bamlist}" \
 --filterDuplicates=0 \
 --filterVarsByCoverage=0 --filteredReadsFrac=0.7 --minVarFreq=0.002 \
 --mergeClusteredVariants=0 --filterReadsWithUnmappedMates=0 \
---refFile="${refdir}"/"${refgen}" \
+--refFile="${ref}" \
 --logFileName="${logplat}" \
 --output="${outplat}".vcf
-
