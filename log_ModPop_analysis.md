@@ -286,3 +286,13 @@ In the meantime, adding the platypus script to the repo and fixing it.
 ```bash
 cp Kaka_GBS/GBS_scripts/GBS_platypus.sh ModPop_analysis/ModPop_repo/
 ```
+Moving to boros, uncompressing alignment directory and running the script:  
+`scp ModPop_analysis/ModPop_repo/GBS_platypus.sh boros:/data/denise/ModPop_analysis/`
+``` bash
+tar -xzvf realigned.gz
+screen -S PLATYPUS
+mkdir platypus
+mv GBS_platypus.sh platypus
+cd platypus
+bash GBS_platypus.sh 2>&1 | tee platypus_run.log
+```
