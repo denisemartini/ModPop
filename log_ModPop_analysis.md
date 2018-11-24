@@ -307,3 +307,9 @@ Wrapping my stacks command in a NeSI script, that I am creating in the repo as G
 cd ModPop_analysis/ModPop_repo/
 nano GBS_stacks.sh
 ```
+Moving the script to NeSI and running it:
+```
+scp ModPop_analysis/ModPop_repo/GBS_stacks.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
+sbatch GBS_stacks.sh
+Submitted batch job 971838
+```
