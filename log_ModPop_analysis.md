@@ -92,6 +92,17 @@ bash tassel5-GBS2.sh 2>&1 | tee tassel.log
 ```
 _N.B. This time the run finished fine, it took about ~4hrs._
 
+###### 24.11.18
+
+Moving results back to HPC, in the ModPop_analysis directory.
+```bash
+cd /data/denise/ModPop_analysis/
+cp tassel/tassel_output.vcf .
+tar -zcvf tassel.gz tassel/
+rm -r tassel/
+```
+`scp boros:/data/denise/ModPop_analysis/tassel.gz .`
+
 ##### REALIGNMENT
 ###### 20.11.18
 
@@ -258,4 +269,20 @@ echo 'Run interrupted, cleaned and restarted '$(date) >> gatk_varcaller.log
 sbatch GBS_GATK.sh
 Submitted batch job 970851
 ```
-This time I gave another 24hrs to the job, so hopefully it will get to the end. 
+This time I gave another 24hrs to the job, so hopefully it will get to the end.
+
+##### PLATYPUS
+###### 24.11.18
+
+To run Platypus in boros (where it has already been installed), I need the alignments from the mapping script that was run in NeSI. Compressing it first, for ease of transfer, from the HPC ModPop_analysis directory.  
+```bash
+cd alignment
+mkdir realigned
+mv realigned* realigned/
+tar -zcvf ../realigned.gz realigned/
+```
+`scp realigned.gz boros:/data/denise/ModPop_analysis/`  
+In the meantime, adding the platypus script to the repo and fixing it.  
+```bash
+cp Kaka_GBS/GBS_scripts/GBS_platypus.sh ModPop_analysis/ModPop_repo/
+```
