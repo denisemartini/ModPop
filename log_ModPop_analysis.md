@@ -296,3 +296,14 @@ mv GBS_platypus.sh platypus
 cd platypus
 bash GBS_platypus.sh 2>&1 | tee platypus_run.log
 ```
+
+##### STACKS
+###### 24.11.18
+
+I want to setup this in NeSI. Copying a `population.txt` file that I created for previous runs to NeSI.  
+`scp Kaka_GBS/popgen/populations/population.txt mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis`  
+Wrapping my stacks command in a NeSI script, that I am creating in the repo as GBS_stacks.sh  
+```bash
+cd ModPop_analysis/ModPop_repo/
+nano GBS_stacks.sh
+```
