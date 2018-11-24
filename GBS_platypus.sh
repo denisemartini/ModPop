@@ -10,7 +10,7 @@ module load PLATYPUS
 datadir=/data/denise/ModPop_analysis
 bamdir=$datadir/realigned
 bamlist=$(ls $bamdir/*.bam)
-ref=$datadir/pseudochromosomes.fa
+ref=$datadir/pseudochromosomes.fasta
 nbcor=10
 
 # these parameters come from the FastGBS pipeline for using Illumina data
