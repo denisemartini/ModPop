@@ -7,10 +7,10 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
 #### What needs to be done:
 - [x] Fixing the input files (genome, keyfiles, scripts, etc)
 - [ ] Rerun variant callers, specifically realignments and then:
-  - [ ] platypus
+  - [x] platypus
   - [ ] stacks
   - [x] tassel 5
-  - [ ] GATK
+  - [x] GATK
   - [ ] ipyrad
 - [ ] Filter and merge results, vcftools and VennDiagram
 - [ ] Population structure tests:
@@ -102,6 +102,7 @@ tar -zcvf tassel.gz tassel/
 rm -r tassel/
 ```
 `scp boros:/data/denise/ModPop_analysis/tassel.gz .`
+
 
 ##### REALIGNMENT
 ###### 20.11.18
@@ -231,6 +232,7 @@ rm -r dedup/
 Then moving all outputs into a directory named `alignment` and transferring to long storage.  
 `scp -r mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/alignment ModPop_analysis`
 
+
 ##### GATK
 ###### 22.11.18
 
@@ -271,6 +273,17 @@ Submitted batch job 970851
 ```
 This time I gave another 24hrs to the job, so hopefully it will get to the end.
 
+###### 26.11.18
+
+The job finished in another 19hrs, so it took overall 55 hrs, fixed the original script accordingly. Specifically, each individual calling took about ~30mins, plus the final joint genotyping took abouth ~12hrs. So cleaning up and moving results to HPC.
+```bash
+cp GATK/GATK_output.vcf .
+tar -zcvf GATK.gz GATK/
+rm -r GATK/
+```
+`scp boros:/data/denise/ModPop_analysis/GATK.gz .`
+
+
 ##### PLATYPUS
 ###### 24.11.18
 
@@ -299,7 +312,16 @@ bash GBS_platypus.sh 2>&1 | tee platypus_run.log
 
 ###### 24.11.18
 
-Platypus ran fine on boros, as usual it was very fast and it finished the variant calling in about 1 hour. 
+Platypus ran fine on boros, as usual it was very fast and it finished the variant calling in about 1 hour.
+Moving results back to HPC, in the ModPop_analysis directory.
+```bash
+cd /data/denise/ModPop_analysis/
+cp platypus/platypus_output.vcf .
+tar -zcvf platypus.gz platypus/
+rm -r platypus/
+```
+`scp boros:/data/denise/ModPop_analysis/platypus.gz .`
+
 
 ##### STACKS
 ###### 24.11.18
