@@ -349,3 +349,19 @@ scp ModPop_analysis/ModPop_repo/GBS_stacks.sh mahuika:/nesi/nobackup/uoo02327/de
 sbatch GBS_stacks.sh
 Submitted batch job 1010048
 ```
+
+###### 27.11.18
+
+The stacks command failed again: I forgot that the name of the alignments must reflect the sample names in the population file.  
+So, I decided to quickly fix the names of the alignments for this run:
+```bash
+cd alignment
+for f in $(ls *.ba*); do mv $f $(echo $f | cut -d '_' -f 2-); done
+cd ..
+```
+Also note that stacks wants the output directory to exist already, it does not create it on its own. So `mkdir stacks`.  
+And then restart the script:
+```
+sbatch GBS_stacks.sh
+Submitted batch job 1015801
+```
