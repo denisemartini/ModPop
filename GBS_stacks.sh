@@ -21,4 +21,4 @@ datadir=/nesi/nobackup/uoo02327/denise/ModPop_analysis
 bamdir=$datadir/alignment
 outdir=$datadir/stacks
 
-ref_map.pl -T 10 -b 1 -o $outdir -O $datadir/population.txt --samples $bamdir -S -X "populations:--vcf"
+ref_map.pl -T 10 --samples $bamdir --popmap $datadir/population.txt -o $outdir -X "populations:--vcf"

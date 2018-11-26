@@ -281,7 +281,7 @@ cp GATK/GATK_output.vcf .
 tar -zcvf GATK.gz GATK/
 rm -r GATK/
 ```
-`scp boros:/data/denise/ModPop_analysis/GATK.gz .`
+`scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/GATK.gz .`
 
 
 ##### PLATYPUS
@@ -338,4 +338,14 @@ Moving the script to NeSI and running it:
 scp ModPop_analysis/ModPop_repo/GBS_stacks.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
 sbatch GBS_stacks.sh
 Submitted batch job 971838
+```
+
+###### 26.11.18
+
+The stacks command I used in the past had slightly different options from this version of stacks, so the script failed.  
+Fixing that in the GBS_stacks.sh script, then restarting it.  
+```
+scp ModPop_analysis/ModPop_repo/GBS_stacks.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
+sbatch GBS_stacks.sh
+Submitted batch job 1010048
 ```
