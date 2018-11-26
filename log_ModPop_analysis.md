@@ -215,7 +215,7 @@ Removing files from the previous run, then restarting it:
 sbatch GBS_mapping.sh
 Submitted batch job 912999
 ```
-If the indel realignment does not take too long, the run should finish all samples within the time limit (36hrs).
+If the indel realignment does not take too long, the run should finish all samples within the time limit (36hrs).  
 _N.B. The script ran fine, all samples were processed in about 12hrs. The only weird thing I see is in regards to a couple of samples from Zealandia, that seem to have much lower mapping success (in percentage) than the rest. Probably need to check it up?_
 
 ###### 22.11.18
@@ -296,6 +296,10 @@ mv GBS_platypus.sh platypus
 cd platypus
 bash GBS_platypus.sh 2>&1 | tee platypus_run.log
 ```
+
+###### 24.11.18
+
+Platypus ran fine on boros, as usual it was very fast and it finished the variant calling in about 1 hour. 
 
 ##### STACKS
 ###### 24.11.18
