@@ -378,3 +378,60 @@ tar -zcvf stacks.gz stacks/
 rm -r stacks/
 ```
 `scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/stacks.gz .`  
+
+
+##### IPYRAD
+###### 28.11.18
+
+I decided a while ago that I wanted to test ipyrad as well, probably in place of samtools, which was not particularly satisfactory the first time around. Problem is that ipyrad is like Tassel5, meaning that it runs the whole pipeline on its own, rather than starting from the alignments. It should be quite fast anyway, and it is already installed on NeSI, but there could be problems of incompatibility at the end, due to the use of different alignments on which the snps are called. Because this problem might arise anyway from Tassel5, I will try using ypirad anyway for now, then decide on what to do once I compare the vcfs.  
+I need to fix a parameter file to run ipyrad, but I need to load the conda module and activate the environment in which Hugh installed it on NeSI first. So, to first create a parameters file called params-ipyrad.txt in the ModPop_analysis directory:  
+```
+module load Miniconda3/4.4.10
+source activate /nesi/project/uoo02327/programs/miniconda_envs/pyrad
+ipyrad -n ipyrad
+```
+Inside this parameter file I am going to change all the lines I need for my project:
+```
+------- ipyrad params file (v.0.7.28)-------------------------------------------
+ipyrad                         ## [0] [assembly_name]: Assembly name. Used to name output directories for assembly steps
+/nesi/nobackup/uoo02327/denise/ModPop_analysis/ipyrad/   ## [1] [project_dir]: Project dir (made in curdir if not present)
+../SQ0501_S6_L006_R1_001.fastq.gz                       ## [2] [raw_fastq_path]: Location of raw non-demultiplexed fastq files
+../ipyrad_barcodes.txt                               ## [3] [barcodes_path]: Location of barcodes file
+                               ## [4] [sorted_fastq_path]: Location of demultiplexed/sorted fastq files
+reference                      ## [5] [assembly_method]: Assembly method (denovo, reference, denovo+reference, denovo-reference)
+../pseudochromosomes.fasta                           ## [6] [reference_sequence]: Location of reference sequence file
+gbs                            ## [7] [datatype]: Datatype (see docs): rad, gbs, ddrad, etc.
+TGCAG,                         ## [8] [restriction_overhang]: Restriction overhang (cut1,) or (cut1, cut2)
+5                              ## [9] [max_low_qual_bases]: Max low quality base calls (Q<20) in a read
+33                             ## [10] [phred_Qscore_offset]: phred Q score offset (33 is default and very standard)
+6                              ## [11] [mindepth_statistical]: Min depth for statistical base calling
+6                              ## [12] [mindepth_majrule]: Min depth for majority-rule base calling
+10000                          ## [13] [maxdepth]: Max cluster depth within samples
+0.85                           ## [14] [clust_threshold]: Clustering threshold for de novo assembly
+0                              ## [15] [max_barcode_mismatch]: Max number of allowable mismatches in barcodes
+2                              ## [16] [filter_adapters]: Filter for adapters/primers (1 or 2=stricter)
+35                             ## [17] [filter_min_trim_len]: Min length of reads after adapter trim
+2                              ## [18] [max_alleles_consens]: Max alleles per site in consensus sequences
+5, 5                           ## [19] [max_Ns_consens]: Max N's (uncalled bases) in consensus (R1, R2)
+8, 8                           ## [20] [max_Hs_consens]: Max Hs (heterozygotes) in consensus (R1, R2)
+4                              ## [21] [min_samples_locus]: Min # samples per locus for output
+20, 20                         ## [22] [max_SNPs_locus]: Max # SNPs per locus (R1, R2)
+8, 8                           ## [23] [max_Indels_locus]: Max # of indels per locus (R1, R2)
+0.5                            ## [24] [max_shared_Hs_locus]: Max # heterozygous sites per locus (R1, R2)
+0, 0, 0, 0                     ## [25] [trim_reads]: Trim raw read edges (R1>, <R1, R2>, <R2) (see docs)
+0, 0, 0, 0                     ## [26] [trim_loci]: Trim locus edges (see docs) (R1>, <R1, R2>, <R2)
+p, s, v                        ## [27] [output_formats]: Output formats (see docs)
+                               ## [28] [pop_assign_file]: Path to population assignment file
+```
+I will need to modify the barcodes file that I used for the demultiplexing in sabre, specifically to invert the order of columns
+```bash
+cp alignment/barcodes.txt ./barcodes.txt
+cat barcodes.txt | awk -F '\t' '{print $2, $1}' | tr ' ' '\t' > ipyrad_barcodes.txt
+sed -i 's/_6_CB67BANXX.fq//' ipyrad_barcodes.txt
+```
+Then, creating a list of samples to bring to the end of the analysis, excluding the failed sample (SI_FIO01) and the two negative controls.
+```bash
+cat ipyrad_barcodes.txt | awk '{print $1}' > samples.txt
+nano samples.txt
+```
+Finally, fixing a script called `GBS_ipyrad.sh`.
