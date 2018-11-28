@@ -8,7 +8,7 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
 - [x] Fixing the input files (genome, keyfiles, scripts, etc)
 - [ ] Rerun variant callers, specifically realignments and then:
   - [x] platypus
-  - [ ] stacks
+  - [x] stacks
   - [x] tassel 5
   - [x] GATK
   - [ ] ipyrad
@@ -423,7 +423,7 @@ TGCAG,                         ## [8] [restriction_overhang]: Restriction overha
 p, s, v                        ## [27] [output_formats]: Output formats (see docs)
                                ## [28] [pop_assign_file]: Path to population assignment file
 ```
-I will need to modify the barcodes file that I used for the demultiplexing in sabre, specifically to invert the order of columns
+I will need to modify the barcodes file that I used for the demultiplexing in sabre, specifically to invert the order of columns.
 ```bash
 cp alignment/barcodes.txt ./barcodes.txt
 cat barcodes.txt | awk -F '\t' '{print $2, $1}' | tr ' ' '\t' > ipyrad_barcodes.txt
