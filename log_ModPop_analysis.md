@@ -434,4 +434,10 @@ Then, creating a list of samples to bring to the end of the analysis, excluding 
 cat ipyrad_barcodes.txt | awk '{print $1}' > samples.txt
 nano samples.txt
 ```
-Finally, fixing a script called `GBS_ipyrad.sh`.
+Finally, fixing a script called `GBS_ipyrad.sh`.  
+Moving script to NeSI and running it:
+```
+scp ModPop_analysis/ModPop_repo/GBS_ipyrad.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
+sbatch GBS_ipyrad.sh
+Submitted batch job 1048607
+```
