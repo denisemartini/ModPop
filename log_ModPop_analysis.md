@@ -365,3 +365,16 @@ And then restart the script:
 sbatch GBS_stacks.sh
 Submitted batch job 1015801
 ```
+_N.B. This script finished really really quickly this time, in about 15 minutes with 10 cores on NeSI. I have fixed the script to reflect that._
+
+###### 28.11.18
+
+Moving results back to HPC, in the ModPop_analysis directory.
+```bash
+cd /data/denise/ModPop_analysis/
+mv population.txt stacks/
+cp stacks/populations.snps.vcf ./stacks_output.vcf
+tar -zcvf stacks.gz stacks/
+rm -r stacks/
+```
+`scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/stacks.gz .`  
