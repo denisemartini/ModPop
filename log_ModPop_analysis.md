@@ -439,5 +439,5 @@ Moving script to NeSI and running it:
 ```
 scp ModPop_analysis/ModPop_repo/GBS_ipyrad.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
 sbatch GBS_ipyrad.sh
-Submitted batch job 1048607
+Submitted batch job 1051305
 ```
