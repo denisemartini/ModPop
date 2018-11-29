@@ -441,3 +441,12 @@ scp ModPop_analysis/ModPop_repo/GBS_ipyrad.sh mahuika:/nesi/nobackup/uoo02327/de
 sbatch GBS_ipyrad.sh
 Submitted batch job 1051305
 ```
+
+###### 29.11.18
+
+The ipyrad run unfortunately timed out. It looks like the script is working fine anyway, it took ~1hr to run the first part, that is demultiplexing and filtering on the whole dataset, then the subsetting went fine and the second branch also was running fine.
+Because it was not clear at what stage the run had gotten so far, I deleted all the outputs related to the ipyrad_sub part of the script. Then I fixed the script to give it more time (8hrs) and to skip the first two steps (I just commented out the first ipyrad command). And rerunning it:
+```
+sbatch GBS_ipyrad.sh
+Submitted batch job 1059729
+``` 
