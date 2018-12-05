@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #SBATCH --job-name=GBS_ipyrad      # job name (shows up in the queue)
 #SBATCH --account=uoo02327     # Project Account
-#SBATCH --time=04:00:00         # Walltime (HH:MM:SS)
+#SBATCH --time=12:00:00         # Walltime (HH:MM:SS)
 #SBATCH --cpus-per-task=10      # number of cores per task
 #SBATCH --mem-per-cpu=1500      # memory/cpu (in MB)
 #SBATCH --ntasks=2              # number of tasks (e.g. MPI)
@@ -21,5 +21,5 @@ source activate /nesi/project/uoo02327/programs/miniconda_envs/pyrad
 ipyrad -p params-ipyrad.txt -s 12 -c 20 --MPI
 # subsetting the run to exclude the negative controls and failed sample
 ipyrad -p params-ipyrad.txt -b ipyrad_sub samples.txt
-# then running the rest of the pipeline on the remainng samples
+# then running the rest of the pipeline on the remaining samples
 ipyrad -p params-ipyrad_sub.txt -s 34567 -c 20 --MPI

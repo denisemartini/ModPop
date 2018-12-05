@@ -6,12 +6,12 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
 
 #### What needs to be done:
 - [x] Fixing the input files (genome, keyfiles, scripts, etc)
-- [ ] Rerun variant callers, specifically realignments and then:
+- [x] Rerun variant callers, specifically realignments and then:
   - [x] platypus
   - [x] stacks
   - [x] tassel 5
   - [x] GATK
-  - [ ] ipyrad
+  - [x] ipyrad
 - [ ] Filter and merge results, vcftools and VennDiagram
 - [ ] Population structure tests:
   - [ ] admixture
@@ -449,4 +449,21 @@ Because it was not clear at what stage the run had gotten so far, I deleted all 
 ```
 sbatch GBS_ipyrad.sh
 Submitted batch job 1059729
-``` 
+```
+###### 05.11.18
+In the end ipyrad took ~12hrs to comlete the run. There is something confusing in the way the output vcf is formatted: there is first a list of loci that in place of the chrom and position columns are named `locus_####  #` (where # are numbers). Only after these the actual loci with position info start.
+
+I have been examining the ipyrad results and I have come to a few conclusions:
+- the reference method is bugged, because the loci that don't align to reference are still assembled denovo and the results are present in the output (when they should not be), they are the records called `locus_###`. So these need to be filtered out from the output .vcf file.
+- ipyrad calls "locus" the aligned tag, not the snps...so the output contains ANY variant base from a passing filter LOCUS: as long as there is even only ONE variant in that locus that passes filters, all the other variants (even very crappy ones) ARE present in the output. This is not necessarily a tragedy in itself, because all the crappy ones can be filtered out afterwards. The problem is when bad genotypes are called together at sites where actual alleles are present.
+- to add to the above, ipyrad calls as variant sites things that are clearly alignment errors, usually localised at the end of reads, where the trimming has done some damage and left reads with different lengths. These variants are unfortunately not always crappy, meaning that sometimes they have decent depth and would be not easy to filter out. Most of them are tri or tetra-allelic, which is quite uncommon and that's why they are evident from the files, so they would theoretically be filtered out when choosing biallelic sites only.
+
+In an attempt to see if I could clean up some of the bad genotypes at good sites, I used vcftools to filter sites at which an alternate allele is called with a depth less than n reads:
+```
+vcftools --vcf ipyrad_sub.vcf --non-ref-ac 2 --remove-filtered-all --recode --out ipyrad_output
+Outputting VCF file...
+After filtering, kept 729794 out of a possible 821695 Sites
+vcftools --vcf ipyrad_sub.vcf --non-ref-ac 3 --remove-filtered-all --recode --out ipyrad_output3
+Outputting VCF file...
+After filtering, kept 286358 out of a possible 821695 Sites
+```
