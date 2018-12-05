@@ -467,3 +467,30 @@ vcftools --vcf ipyrad_sub.vcf --non-ref-ac 3 --remove-filtered-all --recode --ou
 Outputting VCF file...
 After filtering, kept 286358 out of a possible 821695 Sites
 ```
+###### 06.11.18
+On further examination though, this does not seem to eliminate the problem of tri and tetra allelic sites.
+```
+vcftools --vcf ipyrad_sub.vcf --min-alleles 2 --max-alleles 2
+After filtering, kept 473012 out of a possible 821695 Sites
+vcftools --vcf ipyrad_output3.recode.vcf --min-alleles 2 --max-alleles 2 --remove-filtered-all --recode --out ipyrad_output3_biallelic
+After filtering, kept 154786 out of a possible 286358 Sites
+```
+And even after taking away these sites I see things that I am unhappy with...they might get filtered out later, in the comparison with other programs anyway. I think other than applying all these post filters to this program before comparing it to the others, there is one thing that I could fix from the program parameters themselves, and which is already a requirement in both stacks and tassel pipelines: that I cannot have too many SNPs on the same locus. The default parameter for this is a max of 20 variants per locus and that is really high. So, I am going to try and reduce this parameter to 3 (probably already higher than Tassel, which I think only allows one). I should only need to branch the analysis and run the very last step with this different parameter.
+Preparing the new branch:
+```
+module load Miniconda3/4.4.10
+source activate /nesi/project/uoo02327/programs/miniconda_envs/pyrad
+ipyrad -p params-ipyrad_sub.txt -b ipyrad_filter
+
+loading Assembly: ipyrad_sub
+from saved path: /nesi/nobackup/uoo02327/denise/ModPop_analysis/ipyrad/ipyrad_sub.json
+creating a new branch called 'ipyrad_filter' with 93 Samples
+writing new params file to params-ipyrad_filter.txt
+```
+I am directly modifying the parameter (number 22) in the newly created params-ipyrad_filter.txt
+Then I just modified (temporarily for now) the GBS_ipyrad.sh script in NeSI to only do this command:
+```
+ipyrad -p params-ipyrad_filter.txt -s 7	-c 20 --MPI
+sbatch GBS_ipyrad.sh
+Submitted batch job 1180910
+```
