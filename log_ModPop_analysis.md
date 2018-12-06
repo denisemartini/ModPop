@@ -497,6 +497,22 @@ Submitted batch job 1182413
 ```
 I also reduced the time and memory requirements of the job, since it only needs to do the last step.
 
+###### 07.11.18
+
+The job was still not starting, so I investigated a bit more the NeSI partitions and queuing system and I had forgotten about the prepost partition for small pre and post processing jobs. So, I modified the job requirements in the script to run there:
+```
+#SBATCH --time=02:00:00         # Walltime (HH:MM:SS)
+#SBATCH --cpus-per-task=1      # number of cores per task
+#SBATCH --ntasks=1              # number of tasks (e.g. MPI)
+#SBATCH --partition=prepost	  # specify a partition
+```
+The memory associated with each core is much larger on the prepost partition, so 1 core should be enough.
+```
+scancel 1182413
+sbatch GBS_ipyrad.sh
+Submitted batch job 1192301
+```
+Like this it started right away, now it's to hoping that ipyrad actually is fast enough.
 
 Moving results back to HPC, in the ModPop_analysis directory.
 ```bash
@@ -525,5 +541,26 @@ mv ../platypus_output.vcf .
 mv ../tassel_output.vcf .
 scp ./* mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/vcf_filtering
 ```
+###### 07.11.18
+I also want to count the number of snps called by each pipeline, pre-filtering.
+```bash
+for f in $(ls *.vcf)
+do
+  grep '#' $f | wc -l
+done
+```
+And I was forgetting that I will need to do some extra changes to these files before merging, so might as well do them now.
+```bash
+grep -v "locus_" ipyrad_output.vcf > fixed_ipyrad_output.vcf
+mv fixed_ipyrad_output.vcf ipyrad_output.vcf
+sed -i 's/^PS_CH/ps_ch/' tassel_output.vcf
+sed -i 's/^UN_SSC/un_ssc/' tassel_output.vcf
+```
 Putting the biallelic/indels filtering commands in a quick script, to keep the log in the same place for all samples as well.
-The script is called `GBS_biall_filtering.sh`.
+The script is called `GBS_biall_filtering.sh`. Prepared it to loop through the vcfs in the filtering directory. It is also setup to run in the prepost partition.
+Moving to NeSI and starting it.
+```bash
+scp ModPop_repo/GBS_biall_filtering.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
+sbatch GBS_biall_filtering.sh
+
+```
