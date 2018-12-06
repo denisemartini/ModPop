@@ -513,3 +513,17 @@ rm -r ipyrad/
 
 #### Variant Filtering
 ###### 06.11.18
+I have decided on a few filtering steps that I will be performing on this dataset. First I need to make all datasets a bit more comparable before I compare them. Stacks excludes indels and non-biallelic SNPs by default, so it would probably make sense to do the same on the other pipelines' outputs. This would also already reduce ipyrad's noise, even though there are a lot of multisite loci in that pipeline that would not be in the others, like Tassel...but that's one of the reasons why I am comparing the pipelines in the firstplace. But while I don't need indels and non-biallelic sites for later analysis, some of the multisite loci might be fine, so I am keeping them for now. Platypus and GATK I believe allow some of that, so I will too.
+Creating a directory for this in NeSI and HPC and moving all the output files there.
+```bash
+mkdir vcf_filtering
+cd vcf_filtering/
+mv ../stacks_output.vcf .
+mv ../GATK_output.vcf .
+mv ../ipyrad_output.vcf
+mv ../platypus_output.vcf .
+mv ../tassel_output.vcf .
+scp ./* mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/vcf_filtering
+```
+Putting the biallelic/indels filtering commands in a quick script, to keep the log in the same place for all samples as well.
+The script is called `GBS_biall_filtering.sh`.
