@@ -475,7 +475,7 @@ After filtering, kept 473012 out of a possible 821695 Sites
 vcftools --vcf ipyrad_output3.recode.vcf --min-alleles 2 --max-alleles 2 --remove-filtered-all --recode --out ipyrad_output3_biallelic
 After filtering, kept 154786 out of a possible 286358 Sites
 ```
-And even after taking away these sites I see things that I am unhappy with...they might get filtered out later, in the comparison with other programs anyway. I think other than applying all these post filters to this program before comparing it to the others, there is one thing that I could fix from the program parameters themselves, and which is already a requirement in both stacks and tassel pipelines: that I cannot have too many SNPs on the same locus. The default parameter for this is a max of 20 variants per locus and that is really high. So, I am going to try and reduce this parameter to 3 (probably already higher than Tassel, which I think only allows one). I should only need to branch the analysis and run the very last step with this different parameter.
+And even after taking away these sites I see things that I am unhappy with...they might get filtered out later, in the comparison with other programs anyway. I think other than applying all these post filters to this program before comparing it to the others, there is one thing that I could fix from the program parameters themselves, and which is already a requirement in both stacks and tassel pipelines: that I cannot have too many SNPs on the same locus. The default parameter for this is a max of 20 variants per locus and that is really high. So, I am going to try and reduce this parameter to 5 (probably already higher than Tassel, which I think only allows one). I should only need to branch the analysis and run the very last step with this different parameter.
 Preparing the new branch:
 ```
 module load Miniconda3/4.4.10
@@ -487,10 +487,29 @@ from saved path: /nesi/nobackup/uoo02327/denise/ModPop_analysis/ipyrad/ipyrad_su
 creating a new branch called 'ipyrad_filter' with 93 Samples
 writing new params file to params-ipyrad_filter.txt
 ```
-I am directly modifying the parameter (number 22) in the newly created params-ipyrad_filter.txt
+I am directly modifying the parameter (number 22) in the newly created params-ipyrad_filter.txt, bringing it to 5.
+I also modified parameter 24, bringing it to 0.8...because it sounds a bit dodgy that a heterozygous sites should not be shared by too many samples: doesn't it depend on the reference? I mean, what if the reference represents only one population, where the homozigosity at that locus is a private allele?
 Then I just modified (temporarily for now) the GBS_ipyrad.sh script in NeSI to only do this command:
 ```
 ipyrad -p params-ipyrad_filter.txt -s 7	-c 20 --MPI
 sbatch GBS_ipyrad.sh
-Submitted batch job 1180910
+Submitted batch job 1182413
 ```
+I also reduced the time and memory requirements of the job, since it only needs to do the last step.
+
+
+Moving results back to HPC, in the ModPop_analysis directory.
+```bash
+cd /data/denise/ModPop_analysis/
+cp ipyrad/ipyrad_filter/ipyrad_filter.vcf ./ipyrad_output.vcf
+mv ipyrad_barcodes.txt ipyrad/
+mv ipyrad_log.txt ipyrad/
+mv GBS_ipyrad.sh ipyrad/
+mv params* ipyrad/
+tar -zcvf ipyrad.gz ipyrad/
+rm -r ipyrad/
+```
+`scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/ipyrad.gz .`  
+
+#### Variant Filtering
+###### 06.11.18
