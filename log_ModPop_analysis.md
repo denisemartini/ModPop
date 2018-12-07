@@ -506,11 +506,11 @@ The job was still not starting, so I investigated a bit more the NeSI partitions
 #SBATCH --ntasks=1              # number of tasks (e.g. MPI)
 #SBATCH --partition=prepost	  # specify a partition
 ```
-The memory associated with each core is much larger on the prepost partition, so 1 core should be enough.
+The memory associated with each core is much larger on the prepost partition, so 1 core should be enough. *Edit, one core was not enough, increased to 4 and to 3hrs time*
 ```
 scancel 1182413
 sbatch GBS_ipyrad.sh
-Submitted batch job 1192301
+Submitted batch job 1193080
 ```
 Like this it started right away, now it's to hoping that ipyrad actually is fast enough.
 
@@ -546,7 +546,8 @@ I also want to count the number of snps called by each pipeline, pre-filtering.
 ```bash
 for f in $(ls *.vcf)
 do
-  grep '#' $f | wc -l
+  echo $f
+  grep -v '#' $f | wc -l
 done
 ```
 And I was forgetting that I will need to do some extra changes to these files before merging, so might as well do them now.
