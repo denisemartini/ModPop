@@ -572,7 +572,16 @@ do
   echo $f
   grep -v '#' $f | wc -l
 done
-
+GATK_output.vcf
+71177
+ipyrad_output.vcf
+178684
+platypus_output.vcf
+393609
+stacks_output.vcf
+279162
+tassel_output.vcf
+120338
 ```
 Putting the biallelic/indels filtering commands in a quick script, to keep the log in the same place for all samples as well.
 The script is called `GBS_biall_filtering.sh`. Prepared it to loop through the vcfs in the filtering directory. It is also setup to run in the prepost partition.
@@ -580,7 +589,7 @@ Moving to NeSI and starting it.
 ```bash
 scp ModPop_repo/GBS_biall_filtering.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
 sbatch GBS_biall_filtering.sh
-
+Submitted batch job 1196582
 ```
 And I was forgetting that I will need to do some extra changes to these files before merging, so might as well do them now.
 ```bash

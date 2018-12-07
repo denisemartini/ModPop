@@ -19,7 +19,7 @@ module load VCFtools
 # repeating above command to loop through my files:
 for f in $(ls *.vcf)
 do
-  vcftools --vcf ${f}.vcf \
+  vcftools --vcf ${f} \
   --min-alleles 2 --max-alleles 2 \
   --remove-indels \
   --remove-filtered-all --recode \
