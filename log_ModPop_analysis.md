@@ -591,24 +591,33 @@ scp ModPop_repo/GBS_biall_filtering.sh mahuika:/nesi/nobackup/uoo02327/denise/Mo
 sbatch GBS_biall_filtering.sh
 Submitted batch job 1196582
 ```
-And I was forgetting that I will need to do some extra changes to these files before merging, so might as well do them now.
+As expected, the program that lost more loci was platypus.
+Quickly fixing the file names:
+```bash
+for f in $(ls *.recode.vcf)
+do
+  mv $f $(echo $f | sed 's/.vcf_biall_snps.recode./_biall_snps./')
+done
+```
+And I was forgetting that I will need to do some extra changes to the tassel file before merging, so might as well do them now.
 ```bash
 # to fix reference names in tassel output
-sed -i 's/^PS_CH/ps_ch/' tassel_output.vcf
-sed -i 's/^UN_SSC/un_ssc/' tassel_output.vcf
+sed -i 's/^PS_CH/ps_ch/' tassel_output_biall_snps.vcf
+sed -i 's/^UN_SSC/un_ssc/' tassel_output_biall_snps.vcf
 # to remove extra samples from tassel output:
 module load VCFtools
-vcftools --vcf tassel_output.vcf \
+vcftools --vcf tassel_output_biall_snps.vcf \
 --remove-indv "GBSNEG1" --remove-indv "GBSNEG2" --remove-indv "SI_FIO01" \
 --remove-filtered-all \
---recode --out tassel_output
-mv tassel_output.recode.vcf tassel_output.vcf
-rm tassel_output.log
+--recode --out tassel_output_biall_snps
+mv tassel_output_biall_snps.recode.vcf tassel_output_biall_snps.vcf
+rm tassel_output_biall_snps.log
 # to reorder sample names in tassel output
-bgzip tassel_output.vcf
-tabix -p vcf tassel_output.vcf.gz
-bgzip platypus_output.vcf
-tabix -p vcf platypus_output.vcf
+for f in $(ls *_biall_snps.vcf)
+do
+  bgzip $f
+  tabix -p vcf $f.gz
+done
 /opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-shuffle-cols -t platypus_output.vcf.gz tassel_output.vcf.gz > fixed_tassel_output.vcf
 mv fixed_tassel_output.vcf tassel_output.vcf
 module unload VCFtools
