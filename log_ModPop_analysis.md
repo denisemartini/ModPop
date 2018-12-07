@@ -512,7 +512,26 @@ scancel 1182413
 sbatch GBS_ipyrad.sh
 Submitted batch job 1193080
 ```
-Like this it started right away, now it's to hoping that ipyrad actually is fast enough.
+Since this was incurably stuck (NeSI is not happy with me lately, it seems), I ended up transferring everything to boros.
+```
+scp -r mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/ipyrad/ .
+scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/params* .
+scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/ipyrad_barcodes.txt .
+```
+Then, to actually make it work there I had to fix all the paths in all instances where they appeared, both in the params files and in the assembly (.json) files:
+```bash
+sed -i 's/nesi\/nobackup\/uoo02327/data/' ipyrad/ipyrad.json
+sed -i 's/scale_wlg_nobackup\/filesets\/nobackup\/uoo02327/data/' ipyrad/ipyrad.json
+sed -i 's/nesi\/nobackup\/uoo02327/data/' ipyrad/ipyrad_sub.json
+sed -i 's/scale_wlg_nobackup\/filesets\/nobackup\/uoo02327/data/' ipyrad/ipyrad_sub.json
+sed -i 's/nesi\/nobackup\/uoo02327/data/' params-ipyrad_filter.txt
+sed -i 's/nesi\/nobackup\/uoo02327/data/' params-ipyrad_sub.txt
+sed -i 's/nesi\/nobackup\/uoo02327/data/' params-ipyrad.txt
+```
+Finally, I was able to run:  
+`module load ipyrad`
+`ipyrad -p params-ipyrad_filter.txt -s 7 -c 20 --MPI`
+To be honest this was quite fast in boros now, since I am using full 20 cpus because no one else is using it...I need to remember that when NeSI clogs up for me this is still a possibility.
 
 Moving results back to HPC, in the ModPop_analysis directory.
 ```bash
@@ -552,10 +571,29 @@ done
 ```
 And I was forgetting that I will need to do some extra changes to these files before merging, so might as well do them now.
 ```bash
+# to remove non-reference loci from ipyrad output
 grep -v "locus_" ipyrad_output.vcf > fixed_ipyrad_output.vcf
 mv fixed_ipyrad_output.vcf ipyrad_output.vcf
+# to fix reference names in tassel output
 sed -i 's/^PS_CH/ps_ch/' tassel_output.vcf
 sed -i 's/^UN_SSC/un_ssc/' tassel_output.vcf
+# to remove extra samples from tassel output:
+module load VCFtools
+vcftools --vcf tassel_output.vcf \
+--remove-indv "GBSNEG1" --remove-indv "GBSNEG2" --remove-indv "SI_FIO01" \
+--remove-filtered-all \
+--recode --out tassel_output
+mv tassel_output.recode.vcf tassel_output.vcf
+rm tassel_output.log
+# to reorder sample names in tassel output
+bgzip tassel_output.vcf
+tabix -p vcf tassel_output.vcf.gz
+bgzip platypus_output.vcf
+tabix -p vcf platypus_output.vcf
+/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-shuffle-cols -t platypus_output.vcf.gz tassel_output.vcf.gz > fixed_tassel_output.vcf
+mv fixed_tassel_output.vcf tassel_output.vcf
+module unload VCFtools
+
 ```
 Putting the biallelic/indels filtering commands in a quick script, to keep the log in the same place for all samples as well.
 The script is called `GBS_biall_filtering.sh`. Prepared it to loop through the vcfs in the filtering directory. It is also setup to run in the prepost partition.
@@ -565,3 +603,4 @@ scp ModPop_repo/GBS_biall_filtering.sh mahuika:/nesi/nobackup/uoo02327/denise/Mo
 sbatch GBS_biall_filtering.sh
 
 ```
+Putting together the comparing and merging pipelines code in another script, that I am calling `GBS_pipeline_merge.sh`.
