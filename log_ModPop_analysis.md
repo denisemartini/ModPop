@@ -531,12 +531,12 @@ sed -i 's/nesi\/nobackup\/uoo02327/data/' params-ipyrad.txt
 Finally, I was able to run:  
 `module load ipyrad`
 `ipyrad -p params-ipyrad_filter.txt -s 7 -c 20 --MPI`
-To be honest this was quite fast in boros now, since I am using full 20 cpus because no one else is using it...I need to remember that when NeSI clogs up for me this is still a possibility.
+To be honest this was quite fast in boros now (~10 mins), since I am using full 20 cpus because no one else is using it...I need to remember that when NeSI clogs up for me this is still a possibility.
 
 Moving results back to HPC, in the ModPop_analysis directory.
 ```bash
 cd /data/denise/ModPop_analysis/
-cp ipyrad/ipyrad_filter/ipyrad_filter.vcf ./ipyrad_output.vcf
+cp ipyrad/ipyrad_filter_outfiles/ipyrad_filter.vcf ./ipyrad_output.vcf
 mv ipyrad_barcodes.txt ipyrad/
 mv ipyrad_log.txt ipyrad/
 mv GBS_ipyrad.sh ipyrad/
@@ -544,7 +544,7 @@ mv params* ipyrad/
 tar -zcvf ipyrad.gz ipyrad/
 rm -r ipyrad/
 ```
-`scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/ipyrad.gz .`  
+`scp boros:/data/denise/ModPop_analysis/ipyrad.gz .`  
 
 #### Variant Filtering
 ###### 06.11.18
@@ -563,17 +563,27 @@ scp ./* mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/vcf_filtering
 ###### 07.11.18
 I also want to count the number of snps called by each pipeline, pre-filtering.
 ```bash
+# first, to remove non-reference loci from ipyrad output
+grep -v "locus_" ipyrad_output.vcf > fixed_ipyrad_output.vcf
+mv fixed_ipyrad_output.vcf ipyrad_output.vcf
+# then, the actual counts
 for f in $(ls *.vcf)
 do
   echo $f
   grep -v '#' $f | wc -l
 done
+
+```
+Putting the biallelic/indels filtering commands in a quick script, to keep the log in the same place for all samples as well.
+The script is called `GBS_biall_filtering.sh`. Prepared it to loop through the vcfs in the filtering directory. It is also setup to run in the prepost partition.
+Moving to NeSI and starting it.
+```bash
+scp ModPop_repo/GBS_biall_filtering.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
+sbatch GBS_biall_filtering.sh
+
 ```
 And I was forgetting that I will need to do some extra changes to these files before merging, so might as well do them now.
 ```bash
-# to remove non-reference loci from ipyrad output
-grep -v "locus_" ipyrad_output.vcf > fixed_ipyrad_output.vcf
-mv fixed_ipyrad_output.vcf ipyrad_output.vcf
 # to fix reference names in tassel output
 sed -i 's/^PS_CH/ps_ch/' tassel_output.vcf
 sed -i 's/^UN_SSC/un_ssc/' tassel_output.vcf
@@ -593,14 +603,5 @@ tabix -p vcf platypus_output.vcf
 /opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-shuffle-cols -t platypus_output.vcf.gz tassel_output.vcf.gz > fixed_tassel_output.vcf
 mv fixed_tassel_output.vcf tassel_output.vcf
 module unload VCFtools
-
-```
-Putting the biallelic/indels filtering commands in a quick script, to keep the log in the same place for all samples as well.
-The script is called `GBS_biall_filtering.sh`. Prepared it to loop through the vcfs in the filtering directory. It is also setup to run in the prepost partition.
-Moving to NeSI and starting it.
-```bash
-scp ModPop_repo/GBS_biall_filtering.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
-sbatch GBS_biall_filtering.sh
-
 ```
 Putting together the comparing and merging pipelines code in another script, that I am calling `GBS_pipeline_merge.sh`.
