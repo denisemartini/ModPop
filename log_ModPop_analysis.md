@@ -11,7 +11,8 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
   - [x] stacks
   - [x] tassel 5
   - [x] GATK
-  - [x] ipyrad
+  - [x] <del>ipyrad</del>
+  - [ ] samtools
 - [ ] Filter and merge results, vcftools and VennDiagram
 - [ ] Population structure tests:
   - [ ] admixture
@@ -546,6 +547,17 @@ rm -r ipyrad/
 ```
 `scp boros:/data/denise/ModPop_analysis/ipyrad.gz .`  
 
+##### SAMTOOLS
+###### 08.12.18
+Putting the previously used samtools/bcftools commands in a script, called GBS_samtools.sh and added to repo. Fixing the script for NeSI, adjusting a few quality and output values. Transferring to NeSI, creating a bamlist.txt and starting script.
+```
+scp ModPop_repo/GBS_samtools.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
+ls alignment/*.bam > bamlist.txt
+sbatch GBS_samtools.sh
+Submitted batch job 1205275
+```
+
+
 #### Variant Filtering
 ###### 06.12.18
 I have decided on a few filtering steps that I will be performing on this dataset. First I need to make all datasets a bit more comparable before I compare them. Stacks excludes indels and non-biallelic SNPs by default, so it would probably make sense to do the same on the other pipelines' outputs. This would also already reduce ipyrad's noise, even though there are a lot of multisite loci in that pipeline that would not be in the others, like Tassel...but that's one of the reasons why I am comparing the pipelines in the firstplace. But while I don't need indels and non-biallelic sites for later analysis, some of the multisite loci might be fine, so I am keeping them for now. Platypus and GATK I believe allow some of that, so I will too.
@@ -640,4 +652,4 @@ vcftoolsdir=/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/
 ${vcftoolsdir}vcf-compare -g *_biall_snps.vcf.gz > vcf-compare5.txt
 module unload VCFtools
 ```
-There is a problem, when I went to look at the vcf-compare results: ipyrad's call are 98% shared with anyone else. This calls for some investigation, because it sounds very unlikely. My first guess would be that there is something wrong in the way the position is recorded in the vcf output. It looks very much like the positions recorded in ipyrad are somehow shifted from the ones called in all the other programs. The shift is not always the same though, so it is not an easy fix. One thing to figure out is if the different position comes from a difference in the vcf output or in the initial assembly, that seems to be done with a different assembler in ipyrad than in anything else. I went and checked the assembly files that ipyrad outputs at step 3, opened them in tablet and there is nothing wrong with them: the positions where variants are visible correspond exactly with the snp positions called by other programs, like platypus, but ipyrad's call are all wrong...to the point that even the reference base is called wrong. And inconsistently, not like there is a shift that is always the same. I see snps for a sample called at positions where that samples should have a certain depth, following the vcf file, but there are no reads there in the bam files. This is all very suspicious, and I would like to let them know, because they probably have a bug...but not today, I already lost enough time for now. BACK TO VARIANT CALLING, using samtools instead. 
+There is a problem, when I went to look at the vcf-compare results: ipyrad's call are 98% shared with anyone else. This calls for some investigation, because it sounds very unlikely. My first guess would be that there is something wrong in the way the position is recorded in the vcf output. It looks very much like the positions recorded in ipyrad are somehow shifted from the ones called in all the other programs. The shift is not always the same though, so it is not an easy fix. One thing to figure out is if the different position comes from a difference in the vcf output or in the initial assembly, that seems to be done with a different assembler in ipyrad than in anything else. I went and checked the assembly files that ipyrad outputs at step 3, opened them in tablet and there is nothing wrong with them: the positions where variants are visible correspond exactly with the snp positions called by other programs, like platypus, but ipyrad's call are all wrong...to the point that even the reference base is called wrong. And inconsistently, not like there is a shift that is always the same. I see snps for a sample called at positions where that samples should have a certain depth, following the vcf file, but there are no reads there in the bam files. This is all very suspicious, and I would like to let them know, because they probably have a bug...but not today, I already lost enough time for now. BACK TO VARIANT CALLING, using samtools instead.
