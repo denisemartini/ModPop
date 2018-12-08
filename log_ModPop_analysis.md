@@ -599,7 +599,7 @@ do
   mv $f $(echo $f | sed 's/.vcf_biall_snps.recode./_biall_snps./')
 done
 ```
-And I was forgetting that I will need to do some extra changes to the tassel file before merging, so might as well do them now.
+And I was forgetting that I will need to do some extra changes to the files before merging, so might as well do them now.
 ```bash
 # to fix reference names in tassel output
 sed -i 's/^PS_CH/ps_ch/' tassel_output_biall_snps.vcf
@@ -618,8 +618,17 @@ do
   bgzip $f
   tabix -p vcf $f.gz
 done
-/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-shuffle-cols -t platypus_output.vcf.gz tassel_output.vcf.gz > fixed_tassel_output.vcf
-mv fixed_tassel_output.vcf tassel_output.vcf
+/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-shuffle-cols -t platypus_output_biall_snps.vcf.gz tassel_output_biall_snps.vcf.gz > fixed_tassel_output.vcf
+mv fixed_tassel_output.vcf tassel_output_biall_snps.vcf
+# the stacks output also needs to be sorted before tabix works:
+/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-sort stacks_output_biall_snps.vcf.gz > sorted_stacks_output.vcf
+mv sorted_stacks_output.vcf stacks_output_biall_snps.vcf
+# re bgzip and tabix the fixed tassel and stacks files
+for f in $(ls *_biall_snps.vcf)
+do
+  bgzip $f
+  tabix -p vcf $f.gz
+done
 module unload VCFtools
 ```
 Putting together the comparing and merging pipelines code in another script, that I am calling `GBS_pipeline_merge.sh`.
