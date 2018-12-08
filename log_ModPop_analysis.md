@@ -450,7 +450,7 @@ Because it was not clear at what stage the run had gotten so far, I deleted all 
 sbatch GBS_ipyrad.sh
 Submitted batch job 1059729
 ```
-###### 05.11.18
+###### 05.12.18
 In the end ipyrad took ~12hrs to comlete the run. There is something confusing in the way the output vcf is formatted: there is first a list of loci that in place of the chrom and position columns are named `locus_####  #` (where # are numbers). Only after these the actual loci with position info start.
 
 I have been examining the ipyrad results and I have come to a few conclusions:
@@ -467,7 +467,7 @@ vcftools --vcf ipyrad_sub.vcf --non-ref-ac 3 --remove-filtered-all --recode --ou
 Outputting VCF file...
 After filtering, kept 286358 out of a possible 821695 Sites
 ```
-###### 06.11.18
+###### 06.12.18
 On further examination though, this does not seem to eliminate the problem of tri and tetra allelic sites.
 ```
 vcftools --vcf ipyrad_sub.vcf --min-alleles 2 --max-alleles 2
@@ -497,7 +497,7 @@ Submitted batch job 1182413
 ```
 I also reduced the time and memory requirements of the job, since it only needs to do the last step.
 
-###### 07.11.18
+###### 07.12.18
 
 The job was still not starting, so I investigated a bit more the NeSI partitions and queuing system and I had forgotten about the prepost partition for small pre and post processing jobs. So, I modified the job requirements in the script to run there:
 ```
@@ -547,7 +547,7 @@ rm -r ipyrad/
 `scp boros:/data/denise/ModPop_analysis/ipyrad.gz .`  
 
 #### Variant Filtering
-###### 06.11.18
+###### 06.12.18
 I have decided on a few filtering steps that I will be performing on this dataset. First I need to make all datasets a bit more comparable before I compare them. Stacks excludes indels and non-biallelic SNPs by default, so it would probably make sense to do the same on the other pipelines' outputs. This would also already reduce ipyrad's noise, even though there are a lot of multisite loci in that pipeline that would not be in the others, like Tassel...but that's one of the reasons why I am comparing the pipelines in the firstplace. But while I don't need indels and non-biallelic sites for later analysis, some of the multisite loci might be fine, so I am keeping them for now. Platypus and GATK I believe allow some of that, so I will too.
 Creating a directory for this in NeSI and HPC and moving all the output files there.
 ```bash
@@ -560,7 +560,7 @@ mv ../platypus_output.vcf .
 mv ../tassel_output.vcf .
 scp ./* mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/vcf_filtering
 ```
-###### 07.11.18
+###### 07.12.18
 I also want to count the number of snps called by each pipeline, pre-filtering.
 ```bash
 # first, to remove non-reference loci from ipyrad output
@@ -631,4 +631,13 @@ do
 done
 module unload VCFtools
 ```
+###### 08.12.18
 Putting together the comparing and merging pipelines code in another script, that I am calling `GBS_pipeline_merge.sh`.
+But first, I need to take a look at a few comparisons and see what kind of incompatibilies I have, to decide from which pipelines to pick the common snps.
+```bash
+module load VCFtools
+vcftoolsdir=/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/
+${vcftoolsdir}vcf-compare -g *_biall_snps.vcf.gz > vcf-compare5.txt
+module unload VCFtools
+```
+There is a problem, when I went to look at the vcf-compare results: ipyrad's call are 98% shared with anyone else. This calls for some investigation, because it sounds very unlikely. My first guess would be that there is something wrong in the way the position is recorded in the vcf output. It looks very much like the positions recorded in ipyrad are somehow shifted from the ones called in all the other programs. The shift is not always the same though, so it is not an easy fix. One thing to figure out is if the different position comes from a difference in the vcf output or in the initial assembly, that seems to be done with a different assembler in ipyrad than in anything else. I went and checked the assembly files that ipyrad outputs at step 3, opened them in tablet and there is nothing wrong with them: the positions where variants are visible correspond exactly with the snp positions called by other programs, like platypus, but ipyrad's call are all wrong...to the point that even the reference base is called wrong. And inconsistently, not like there is a shift that is always the same. I see snps for a sample called at positions where that samples should have a certain depth, following the vcf file, but there are no reads there in the bam files. This is all very suspicious, and I would like to let them know, because they probably have a bug...but not today, I already lost enough time for now. BACK TO VARIANT CALLING, using samtools instead. 
