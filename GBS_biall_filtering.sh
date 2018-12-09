@@ -23,5 +23,6 @@ do
   --min-alleles 2 --max-alleles 2 \
   --remove-indels \
   --remove-filtered-all --recode \
+  --recode-INFO-all \
   --out ${f}_biall_snps
 done

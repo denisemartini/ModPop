@@ -562,9 +562,13 @@ That went quite fast, but the result is a bit overabundant, as usual with samtoo
 scp ModPop_repo/GBS_samtools.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
 rm samtools_output.vcf
 sbatch GBS_samtools.sh
-Submitted batch job 1212969
+Submitted batch job 1216345
 ```
-
+Moving results back to HPC, in the ModPop_analysis directory.
+```bash
+cd /data/denise/ModPop_analysis/vcf_filtering
+scp mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/samtools_output.vcf .
+```
 
 #### Variant Filtering
 ###### 06.12.18
@@ -661,3 +665,59 @@ ${vcftoolsdir}vcf-compare -g *_biall_snps.vcf.gz > vcf-compare5.txt
 module unload VCFtools
 ```
 There is a problem, when I went to look at the vcf-compare results: ipyrad's call are 98% shared with anyone else. This calls for some investigation, because it sounds very unlikely. My first guess would be that there is something wrong in the way the position is recorded in the vcf output. It looks very much like the positions recorded in ipyrad are somehow shifted from the ones called in all the other programs. The shift is not always the same though, so it is not an easy fix. One thing to figure out is if the different position comes from a difference in the vcf output or in the initial assembly, that seems to be done with a different assembler in ipyrad than in anything else. I went and checked the assembly files that ipyrad outputs at step 3, opened them in tablet and there is nothing wrong with them: the positions where variants are visible correspond exactly with the snp positions called by other programs, like platypus, but ipyrad's call are all wrong...to the point that even the reference base is called wrong. And inconsistently, not like there is a shift that is always the same. I see snps for a sample called at positions where that samples should have a certain depth, following the vcf file, but there are no reads there in the bam files. This is all very suspicious, and I would like to let them know, because they probably have a bug...but not today, I already lost enough time for now. BACK TO VARIANT CALLING, using samtools instead.
+
+###### 09.12.18
+Resuming this after going back and working on using samtools instead of ipyrad. So, some clean up:
+```bash
+cd vcf_filtering
+mv ../samtools_output.vcf .
+rm ipyrad*
+grep -v '#' samtools_output.vcf | wc -l
+412080
+```
+After comparing the vcf files from last time I noticed that recoding with vcftools strips off the info fields from files, unless I specify that it shouldn't do it with the `--recode-INFO-all` option. So, deleting the old filtered files and repeating that again, plus all the following mods on the tassel and stacks files, same steps as above.
+```bash
+rm *_biall_snps*
+scp ModPop_repo/GBS_biall_filtering.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
+sbatch GBS_biall_filtering.sh
+Submitted batch job 1216573
+```
+Quickly fixing the file names:
+```bash
+for f in $(ls *.recode.vcf)
+do
+  mv $f $(echo $f | sed 's/.vcf_biall_snps.recode./_biall_snps./')
+done
+```
+And I was forgetting that I will need to do some extra changes to the files before merging, so might as well do them now.
+```bash
+# to fix reference names in tassel output
+sed -i 's/^PS_CH/ps_ch/' tassel_output_biall_snps.vcf
+sed -i 's/^UN_SSC/un_ssc/' tassel_output_biall_snps.vcf
+# to remove extra samples from tassel output:
+module load VCFtools
+vcftools --vcf tassel_output_biall_snps.vcf \
+--remove-indv "GBSNEG1" --remove-indv "GBSNEG2" --remove-indv "SI_FIO01" \
+--remove-filtered-all \
+--recode --recode-INFO-all \
+--out tassel_output_biall_snps
+mv tassel_output_biall_snps.recode.vcf tassel_output_biall_snps.vcf
+rm tassel_output_biall_snps.log
+# to reorder sample names in tassel output
+for f in $(ls *_biall_snps.vcf)
+do
+  bgzip $f
+  tabix -p vcf $f.gz
+done
+/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-shuffle-cols -t platypus_output_biall_snps.vcf.gz tassel_output_biall_snps.vcf.gz > fixed_tassel_output.vcf
+mv fixed_tassel_output.vcf tassel_output_biall_snps.vcf
+# the stacks output also needs to be sorted before tabix works:
+/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/vcf-sort stacks_output_biall_snps.vcf.gz > sorted_stacks_output.vcf
+mv sorted_stacks_output.vcf stacks_output_biall_snps.vcf
+# re bgzip and tabix the fixed tassel and stacks files
+for f in $(ls *_biall_snps.vcf)
+do
+  bgzip $f
+  tabix -p vcf $f.gz
+done
+module unload VCFtools

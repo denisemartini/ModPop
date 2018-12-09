@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #SBATCH --job-name=GBS_samtools      # job name (shows up in the queue)
 #SBATCH --account=uoo02327     # Project Account
-#SBATCH --time=03:00:00         # Walltime (HH:MM:SS)
+#SBATCH --time=02:00:00         # Walltime (HH:MM:SS)
 #SBATCH --cpus-per-task=4      # number of cores per task
 #SBATCH --mem-per-cpu=1500      # memory/cpu (in MB)
 #SBATCH --ntasks=1              # number of tasks (e.g. MPI)
@@ -25,10 +25,10 @@ ref=$datadir/pseudochromosomes.fasta
 # final filter on only calling snps with a minimum of 6 bases overall
 
 samtools mpileup -min-MQ 20 --min-BQ 20 --BCF \
---uncompressed --output-tags DP,AD,INFO/AD,INFO/DPR \
+--uncompressed --output-tags DP,AD,INFO/AD \
 --fasta-ref $ref \
 --bam-list bamlist.txt | bcftools call \
 --format-fields GQ,GP --variants-only \
 --multiallelic-caller \
 --output-type u - | bcftools filter \
---exclude '%INFO/DP<6' --output-type v - --output samtools_output.vcf
+--exclude 'INFO/DP<6' --output-type v - --output samtools_output.vcf
