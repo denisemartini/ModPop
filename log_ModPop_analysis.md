@@ -556,6 +556,14 @@ ls alignment/*.bam > bamlist.txt
 sbatch GBS_samtools.sh
 Submitted batch job 1205275
 ```
+###### 09.12.18
+That went quite fast, but the result is a bit overabundant, as usual with samtools, I need to apply a couple of extra filter to the script. Specifically, I will add a filter command at the end of the pipe, to filter based on a minimum depth of 6 reads. It is a bare minimum filter, only to make the pipelines more comparable to start with. I also modified the job requirements, since I verified that the script takes little time.
+```
+scp ModPop_repo/GBS_samtools.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis
+rm samtools_output.vcf
+sbatch GBS_samtools.sh
+Submitted batch job 1212969
+```
 
 
 #### Variant Filtering
