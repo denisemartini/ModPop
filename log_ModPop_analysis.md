@@ -12,7 +12,7 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
   - [x] tassel 5
   - [x] GATK
   - [x] <del>ipyrad</del>
-  - [ ] samtools
+  - [x] samtools
 - [ ] Filter and merge results, vcftools and VennDiagram
 - [ ] Population structure tests:
   - [ ] admixture
@@ -721,3 +721,33 @@ do
   tabix -p vcf $f.gz
 done
 module unload VCFtools
+```
+Now, to quickly check the comparisons:
+```bash
+module load VCFtools
+vcftoolsdir=/opt/nesi/mahuika/VCFtools/0.1.14-gimkl-2017a-Perl-5.24.1/bin/
+${vcftoolsdir}vcf-compare -g *_biall_snps.vcf.gz > vcf-compare5.txt
+module unload VCFtools
+```
+I want to quickly check the levels of missingness of the datasets:
+```bash
+module load VCFtools
+for f in $(ls *_biall_snps.vcf.gz)
+do
+  echo $f
+  vcftools --gzvcf $f \
+  --max-missing 0.1
+done
+module unload VCFtools
+```
+I also ran a few tests to check for the level of missing data in single individuals and that varies a lot between programs, so I will not add it to the merging script for now.
+```bash
+vcftools --gzvcf stacks_output_biall_snps.vcf.gz --missing-indv --out stac_indv_test
+less stac_indv_test.imiss
+```
+There is really only one problematic individual and I will deal with it later. The merge pipeline script os ready, so:
+```bash
+scp ModPop_repo/GBS_pipeline_merge.sh mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/
+sbatch GBS_pipeline_merge.sh
+Submitted batch job 1216736
+```
