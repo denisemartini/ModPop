@@ -1,0 +1,146 @@
+---
+title: "Visualising the overlap between GBS pipelines"
+author: "Denise Martini"
+date: "10 December 2018"
+output: 
+  html_document: 
+    keep_md: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I am using two different R packages and plot types to visualise the overlap between the tested GBS pipelines.
+
+```{r packages, message=FALSE}
+library(UpSetR)
+library(VennDiagram)
+```
+
+First of all, I need to input the number of loci shared between the pipelines, that I obtained from vcftools/vcf-compare.
+
+```{r input}
+expressionInput <- c(GATK = 926, Platypus = 26907, Samtools = 149769, Stacks = 57691, Tassel5 = 8978,
+                     `GATK&Tassel5` = 8, `GATK&Platypus&Tassel5` = 8, 
+                     `GATK&Stacks&Tassel5` = 41, `GATK&Platypus&Stacks&Tassel5` = 47,
+                     `Platypus&Tassel5` = 61, `GATK&Platypus&Stacks` = 163, 
+                     `GATK&Samtools&Tassel5` = 183, `GATK&Stacks` = 222,
+                     `Samtools&Tassel5` = 283, `GATK&Platypus` = 814, 
+                     `Stacks&Tassel5` = 1196, `GATK&Samtools&Stacks&Tassel5` = 1236,
+                     `Platypus&Samtools&Tassel5` = 1414, `GATK&Samtools&Stacks` = 1440, 
+                     `Samtools&Stacks&Tassel5` = 3261, `GATK&Platypus&Samtools&Tassel5` = 3592, 
+                     `GATK&Samtools` = 6287, `GATK&Platypus&Samtools&Stacks` = 10313,
+                     `Samtools&Stacks` = 12737, `Platypus&Stacks&Tassel5` = 13878, 
+                     `GATK&Platypus&Samtools` =20364, `GATK&Platypus&Samtools&Stacks&Tassel5` = 23526, 
+                     `Platypus&Samtools&Stacks` = 41009, `Platypus&Stacks` = 41142,
+                     `Platypus&Samtools` = 48481, `Platypus&Samtools&Stacks&Tassel5` = 58579)
+
+```
+
+I need to rework those numbers significantly to use them in VennDiagram, because this program does not take as input the number of loci shared _exclusively_ by two sets, but all the loci shared between them, and so on for all intersections. I wrote down how these calculations go from the input above to the necessary input for the VennDiagram plot, they are present in the R code but set up as hidden in this output, you can look them up in the original Rmarkdown file. 
+
+```{r maths, echo=FALSE}
+a=expressionInput[["GATK"]]
+b=expressionInput[["Platypus"]]
+c=expressionInput[["Samtools"]]
+d=expressionInput[["Stacks"]]
+e=expressionInput[["Tassel5"]]
+ab=expressionInput[["GATK&Platypus"]]
+ac=expressionInput[["GATK&Samtools"]]
+ad=expressionInput[["GATK&Stacks"]]
+ae=expressionInput[["GATK&Tassel5"]]
+bc=expressionInput[["Platypus&Samtools"]]
+bd=expressionInput[["Platypus&Stacks"]]
+be=expressionInput[["Platypus&Tassel5"]]
+cd=expressionInput[["Samtools&Stacks"]]
+ce=expressionInput[["Samtools&Tassel5"]]
+de=expressionInput[["Stacks&Tassel5"]]
+abc=expressionInput[["GATK&Platypus&Samtools"]]
+abd=expressionInput[["GATK&Platypus&Stacks"]]
+abe=expressionInput[["GATK&Platypus&Tassel5"]]
+acd=expressionInput[["GATK&Samtools&Stacks"]]
+ace=expressionInput[["GATK&Samtools&Tassel5"]]
+ade=expressionInput[["GATK&Stacks&Tassel5"]]
+bcd=expressionInput[["Platypus&Samtools&Stacks"]]
+bce=expressionInput[["Platypus&Samtools&Tassel5"]]
+bde=expressionInput[["Platypus&Stacks&Tassel5"]]
+cde=expressionInput[["Samtools&Stacks&Tassel5"]]
+abcd=expressionInput[["GATK&Platypus&Samtools&Stacks"]]
+abce=expressionInput[["GATK&Platypus&Samtools&Tassel5"]]
+abde=expressionInput[["GATK&Platypus&Stacks&Tassel5"]]
+acde=expressionInput[["GATK&Samtools&Stacks&Tassel5"]]
+bcde=expressionInput[["Platypus&Samtools&Stacks&Tassel5"]]
+abcde=expressionInput[["GATK&Platypus&Samtools&Stacks&Tassel5"]]
+
+area1=a+ab+ac+ad+ae+abc+abd+abe+acd+ace+ade+abcd+abce+abde+acde+abcde
+area2=b+ab+bc+bd+be+abc+abd+abe+bce+bde+bcd+abcd+abce+abde+bcde+abcde
+area3=c+ac+bc+cd+ce+abc+acd+ace+bcd+bce+cde+abcd+abce+acde+bcde+abcde
+area4=d+ad+bd+cd+de+acd+abd+ade+bde+bcd+cde+abcd+abde+acde+bcde+abcde
+area5=e+ae+be+ce+de+abe+ace+ade+bce+bde+cde+abce+abde+acde+bcde+abcde
+n12=ab+abc+abd+abe+abcd+abce+abde+abcde
+n13=ac+abc+acd+ace+abcd+abce+acde+abcde
+n14=ad+abd+acd+ade+abcd+abde+acde+abcde
+n15=ae+abe+ace+ade+abce+abde+acde+abcde
+n23=bc+abc+bce+bcd+abcd+abce+bcde+abcde
+n24=bd+abd+bde+bcd+abcd+abde+bcde+abcde
+n25=be+abe+bce+bde+abce+abde+bcde+abcde
+n34=cd+acd+bcd+cde+abcd+acde+bcde+abcde
+n35=ce+ace+bce+cde+abce+acde+bcde+abcde
+n45=de+ade+bde+cde+abde+acde+bcde+abcde
+n123=abc+abcd+abce+abcde
+n124=abd+abcd+abde+abcde
+n125=abe+abce+abde+abcde
+n134=acd+abcd+acde+abcde
+n135=ace+abce+acde+abcde
+n145=ade+abde+acde+abcde
+n234=bcd+abcd+bcde+abcde
+n235=bce+abce+bcde+abcde
+n245=bde+abde+bcde+abcde
+n345=cde+acde+bcde+abcde
+n1234=abcd+abcde
+n1235=abce+abcde
+n1245=abde+abcde
+n1345=acde+abcde
+n2345=bcde+abcde
+n12345=abcde
+```
+
+With the input set I can plot the Venn Diagram for the pipeline overlap:
+
+```{r venn, echo=FALSE, fig.height=9, fig.width=9, message=FALSE, dpi=300}
+venn.plot <- draw.quintuple.venn(area1=69170, area2=290298, area3=382474, area4=266481, area5=116291, 
+                                 n12=58827, n13=66941, n14=36988, n15=28641, n23=207278, n24=188657, n25=101105, 
+                                 n34=152101, n35=92074, n45=101764, n123=57795, n124=34049, n125=27173, n134=36515, 
+                                 n135=28537, n145=24850, n234=133427, n235=87111, n245=96030, n345=86602, n1234=33839, 
+                                 n1235=27118, n1245=23573, n1345=24762, n2345=82105, n12345=23526,
+  category = c("GATK","Platypus","Samtools","Stacks", "Tassel5"), 
+  fill = c("#D7191C", "#FDAE61", "#FFFFBF", "#A6D96A", "#1A9641"), 
+  col = "#FFFFBF",                                       # color of the edge line
+  alpha = 0.5,
+  lwd = 0.5,                                             # width of the outer edge line
+  lty = 1,
+  fontface = 1,
+  fontfamily = "serif",
+  cex = c(1, 1, 1, 1, 1, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8,
+          1, 0.7, 1, 0.7, 1, 0.7, 1, 0.7, 1, 0.7, 1.8, 2, 2, 2, 2, 3), 
+  cat.cex = 2, 
+  cat.col = "black",
+  cat.dist = c(0.08, 0.08, 0.09, 0.07, 0.1),
+  cat.pos = c(320, 200, 185, 150, 10),                  # position of the outer labels (in angle degrees around the centre)
+  cat.fontface = 4,
+  cat.fontfamily = "serif",
+  margin = 0.05,
+  rotation.centre = c(0.5, 0.5),                        # to rotate the centre of the figure slightly
+  rotation.degree = 50
+)
+```
+
+Samtools has a lot of unique loci not shared with any other pipeline, but it is also the pipeline that called more loci in general. GATK has very few private loci but it is the pipeline that called less in general. There is very good overlap between all five pipelines. 
+The problem of reading a VennDiagram like this is that the size of the intersections is not proportional to the numbers they contain, so it is not immediately clear where the bigger intersections are. For this reason I decided to complement this with UpSetR, which has been created for exactly this purpose.
+
+```{r upset, echo=FALSE, fig.height=5, fig.width=9, message=FALSE, dpi=300}
+upset(fromExpression(expressionInput), order.by = "freq", shade.color= "#A6D96A", 
+      mainbar.y.label = "Intersection Size", sets.x.label = "Dataset Size", 
+      text.scale = c(1.3, 1.3, 1.2, 1.2, 1.5, 0.75), mb.ratio = c(0.70, 0.30))
+```
+
