@@ -1,0 +1,33 @@
+---
+title: "Exploring missing data with vcfR"
+author: "Denise Martini"
+date: "10 December 2018"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Exploratory analysis of the SNP dataset, using the common snps between 3 out of 5 pipelines, after filtering for 10% missing data. 
+I am using the package vcfR to check the data distribution, in order to determine whether other filtering is necessary.
+
+```{r packages}
+library(vcfR)
+library(ggplot2)
+library(reshape2)
+```
+
+Loading the data and extracting the depth information (per sample and per locus, from the FORMAT field in the vcf file).
+
+```{r data}
+setwd("/Volumes/osms-anatomy-dept-3/Users/D/Denise Martini/Denise/ModPop_analysis/vcf_filtering")
+vcf <- read.vcfR('maxmiss90_common_snps_fixed.vcf')
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+dp[1:4,1:6]
+```
+
+
+First, I am checking the average depth per locus at each sample.
+```{r pressure, echo=FALSE}
+plot(pressure)
+```

@@ -751,3 +751,23 @@ scp ModPop_repo/GBS_pipeline_merge.sh mahuika:/nesi/nobackup/uoo02327/denise/Mod
 sbatch GBS_pipeline_merge.sh
 Submitted batch job 1216736
 ```
+###### 10.12.18
+The script ran fine, the final output is a file named `maxmiss90_common_snps.recode.vcf`. Taking a look at this and at the pre-filtering results:
+```bash
+grep -v '#' maxmiss90_common_snps.recode.vcf | wc -l
+161431
+zcat common_snps.vcf.gz | grep -v '#' | wc -l
+179054
+vcftools --vcf maxmiss90_common_snps.recode.vcf --missing-indv --out maxmiss90_indv
+```
+I have a lot more snps this time compared to last time. The individual missingness looks good, there is only one individual (SI_FIO04) which has ~75% missing data and could be excluded by the analysis. I want to plot the missing data with vcfR, but before that I need to conform the platypus calls in the file to the others, specifically I need a DP field in the FORMAT column. The information is there, but it is called NR. To modify that (and only that):
+```bash
+cp maxmiss90_common_snps.recode.vcf maxmiss90_common_snps_fixed.vcf
+sed -i 's/GQ:NR:NV/GQ:DP:NV/' maxmiss90_common_snps_fixed.vcf
+```
+All the other pipelines had that information already encoded, so no need to fix anything else.
+The other thing I want to do is a VennDiagram plot of the pipeline comparison. I should be able to get all the necessary numbers from the `vcf-compare5.txt` file. I would like to put this in a proper piece of code rather than just copy the numbers over, even if that would be faster right now...  
+I am preparing two R scripts:
+- one to plot the missingness of the data, in a heatmap and with information per individual (depth and missing data), using vcfR
+- the other one to plot the intersection between pipelines, with VennDiagram and UpSetR
+This part of the analysis is in separate reports, in .Rmd format, because I wrote it directly in RStudio.
