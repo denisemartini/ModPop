@@ -6,14 +6,13 @@ output:
   html_document: 
     keep_md: yes
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 Exploratory analysis of the SNP dataset, using the common snps between 3 out of 5 pipelines, after filtering for 10% missing data. 
 I am using the package vcfR to check the data distribution, in order to determine whether other filtering is necessary.
 
-```{r packages, message=FALSE}
+
+```r
 library(vcfR)
 library(ggplot2)
 library(reshape2)
@@ -21,79 +20,57 @@ library(reshape2)
 
 Loading the data and extracting the depth information (per sample and per locus, from the FORMAT field in the vcf file).
 
-```{r data, results='hide'}
+
+```r
 setwd("/Volumes/osms-anatomy-dept-3/Users/D/Denise Martini/Denise/ModPop_analysis/vcf_filtering")
 vcf <- read.vcfR('maxmiss90_common_snps_fixed.vcf')
 ```
-```{r peek}
+
+```r
 dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
 dp[1:4,1:6]
 ```
 
+```
+##               NI_KAP01 NI_KAP02 NI_KAP03 NI_KAP04 NI_KAP05 NI_KAP06
+## ps_ch_1_9925        10        4       14        3        0        6
+## ps_ch_1_10540        8        4        5        6        6        2
+## ps_ch_1_23215        1        4        1        0        1        2
+## ps_ch_1_23281        3        7        1        0        2        3
+```
+
 First, I am checking the average depth per locus at each sample.
 
-```{r depth, echo=FALSE, warning=FALSE, fig.height=7, fig.width=12, dpi=300}
-dpf <- melt(dp, varnames=c('Index', 'Sample'), value.name = 'Depth', na.rm=TRUE)
-palette=rep_len(c("#F46D43", "#FDAE61", "#FEE08B", "#D9EF8B", "#A6D96A", "#66BD63"), 93)
-ggplot(dpf, aes(x=Sample, y=Depth)) + geom_boxplot(fill=palette) + theme_bw() +
-  theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1)) +
-  scale_y_continuous(trans=scales::log2_trans(), expand = c(0,0), breaks=c(1, 10, 100, 1000, 5000), 
-                       minor_breaks=c(1:10, 2:10*10, 2:10*100, 2:5*1000)) +
-  theme(panel.grid.major.y=element_line(color = "#A9A9A9", size=0.6)) +
-  theme(panel.grid.minor.y=element_line(color = "#C0C0C0", size=0.2))
-```
+![](Missing_data_vcfR_files/figure-html/depth-1.png)<!-- -->
 
 From this plot I can see that there are some outlier loci that have a very high depth per sample: this could be indicative of alignments in repetitive regions, which would not be very reliable. It would be worth applying a max depth filter to this dataset. Note that missing data is not shown in this plot, because I had to apply a logarithmic scale to the depth in order to visualise it properly.
 
 
 Then, on to explore the missing data itself. I want to first take a look at the overall levels of missing data, but since the dataset is quite big I am randomly subsetting 1000 loci to take a first look at, over all samples. The heatmap plots the coverage level at the subsampled loci for each sample. 
 
-```{r heatmap, echo=FALSE, fig.height=9, fig.width=12, message=FALSE, dpi=300}
-heatmap.bp(dp[(sample(nrow(dp),1000)),], rlabels = FALSE, rbarplot = FALSE)
-```
+![](Missing_data_vcfR_files/figure-html/heatmap-1.png)<!-- -->
 
 There is lower coverage overall, which confirms that those very high depth snps are not overabundant in the dataset. It is also to be expected of GBS data. But in general there doesn't seem to be that much missing data, so what about the missingness per sample?
 
-```{r missingness, echo=FALSE, fig.height=7, fig.width=12, message=FALSE, dpi=300}
-myMiss <- apply(dp, MARGIN = 2, function(x){ sum(is.na(x)) })
-myMiss <- myMiss/nrow(vcf)
-myMiss <- data.frame((levels(dpf$Sample)), myMiss)
-colnames(myMiss) <- c('Sample', 'Missing')
-palette=rep_len(c("#F46D43", "#FDAE61", "#FEE08B", "#D9EF8B", "#A6D96A", "#66BD63"), 93)
-ggplot(myMiss, aes(x=Sample, y=Missing)) + geom_col(fill=palette) + theme_bw() +
-  labs(y='Missingness (%)') +
-  theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1)) +
-  scale_y_continuous(expand = c(0,0))
-```
+![](Missing_data_vcfR_files/figure-html/missingness-1.png)<!-- -->
 
 There is only one sample that has higher levels of missing data compared to the rest, but it is still only at ~2%.
 But this is all based on the depth at each locus, which is not necessarily representative of missing data: a locus with only 1-2 reads at one sample should be coded as a missing genotype for that sample (at least in Platypus calls). So, this is probably an underrepresentation of the real missingness.
 
 I need to apply a transformation to the data, to properly code as missing all sites with a depth per sample of less than 2.
 
-```{r data fix}
+
+```r
 dp2 <- dp
 dp2[dp2 < 2] <- NA
 ```
 
 If I now reproduce the heatmap again, I get:
 
-```{r heatmap2, echo=FALSE, fig.height=11, fig.width=12, message=FALSE, dpi=300}
-heatmap.bp(dp2[(sample(nrow(dp2),1000)),], rlabels = FALSE, rbarplot = FALSE)
-```
+![](Missing_data_vcfR_files/figure-html/heatmap2-1.png)<!-- -->
 
 This looks much closer to the real dataset. I can now clearly see that sample with higher level of missingness standing out, and a few other samples are not great either. If I check the per sample level of missingness:
 
-```{r missingness2, echo=FALSE, fig.height=7, fig.width=12, message=FALSE, dpi=300}
-myMiss2 <- apply(dp2, MARGIN = 2, function(x){ sum(is.na(x)) })
-myMiss2 <- myMiss2/nrow(vcf)
-myMiss2 <- data.frame((levels(dpf$Sample)), myMiss2)
-colnames(myMiss2) <- c('Sample', 'Missing')
-palette=rep_len(c("#F46D43", "#FDAE61", "#FEE08B", "#D9EF8B", "#A6D96A", "#66BD63"), 93)
-ggplot(myMiss2, aes(x=Sample, y=Missing)) + geom_col(fill=palette) + theme_bw() +
-  labs(y='Missingness (%)') +
-  theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1)) +
-  scale_y_continuous(expand = c(0,0))
-```
+![](Missing_data_vcfR_files/figure-html/missingness2-1.png)<!-- -->
 
 I can now see that sample SI_FIO04 has ~75% missing data. This is also what vcftools was reporting for this sample, so I believe it would be a good idea to exclude it from the analysis.
