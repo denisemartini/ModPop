@@ -13,7 +13,7 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
   - [x] GATK
   - [x] <del>ipyrad</del>
   - [x] samtools
-- [ ] Filter and merge results, vcftools and VennDiagram
+- [x] Filter and merge results, vcftools and VennDiagram
 - [ ] Population structure tests:
   - [ ] admixture
   - [ ] dapc in adegenet
@@ -771,3 +771,33 @@ I am preparing two R scripts:
 - one to plot the missingness of the data, in a heatmap and with information per individual (depth and missing data), using vcfR
 - the other one to plot the intersection between pipelines, with VennDiagram and UpSetR
 This part of the analysis is in separate reports, in .Rmd format, because I wrote it directly in RStudio.
+
+###### 11.12.18
+After the exploratory analysis from yesterday I decided on a couple extra quick filters to apply before proceeding with the HWE and LD tests. Specifically, I noticed a few SNPs with very high depth per sample, which I reckon might be alignments in repetitive regions, a bit dubious.
+I have looked into these sites in R, extracting them from the overall dataset and then checking what IDs they have:
+```R
+library(vcfR)
+library(reshape2)
+setwd("../vcf_filtering")
+vcf <- read.vcfR('maxmiss90_common_snps_fixed.vcf')
+dp <- extract.gt(vcf, element = "DP", as.numeric=TRUE)
+dpf <- melt(dp, varnames=c('Index', 'Sample'), value.name = 'Depth', na.rm=TRUE)
+dpf[(dpf$Depth>=1000),] -> dpf1000
+unique(dpf1000$Index) -> indexes
+indexes
+ps_ch_5_71257870 ps_ch_5_71257924 ps_ch_5_71257944 un_sc_4773_6038  un_sc_4773_6011  ps_ch_23_566199  ps_ch_1_9316184  ps_ch_5_3264366 ps_ch_5_3264399
+```
+It looks like it really is just a handful of loci (close together, so on the same even fewer reads).
+Excluding them will be quick. Even if I repeat the search setting the limit at 500 reads per sample I get only ~25 loci, for ~16 reads. Over 100 reads per sample we have 184 loci, again probably from not so many reads. I am honestly inclined to exclude all of these. To do so, though, I am reminded from the vcf file that I will need identifiers for these SNPS, if I want to ask vcftools to exclude them. The way that vcfR gives them IDs automatically is quite neat: they are assigned an ID that is made of `scaffold_position`. That would make it quite easy for me to recognise them even later on. So I think I need to apply another quick fix to this vcf file after all:
+```bash
+grep "#" maxmiss90_common_snps_fixed.vcf > header.vcf
+grep -v "#" maxmiss90_common_snps_fixed.vcf | awk '{OFS="\t"}{$3 = $1"_"$2; print}' > data.vcf
+cat header.vcf data.vcf >> maxmiss90_common_snps_withID.vcf
+```
+It is not going to be that quick on my desktop, but well...
+In R I am reading in the file again, with the IDs all set this time (I was having problems with some loci that had a stacks ID before, instead of the position), then I am extracting the IDs of loci with >100 reads per sample and I am writing them in a separate file, one ID per line.
+```R
+dpf[(dpf$Depth>=100),] -> dpf100
+unique(dpf100$Index) -> indexes
+lapply(indexes, write, "high_depth_snp_IDs.txt", append=TRUE, ncolumns=1)
+```
