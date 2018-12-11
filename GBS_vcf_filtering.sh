@@ -4,18 +4,16 @@ exec 1>vcf_postprocess.log 2>&1
 # Script to put together a few filtering steps on the common SNP dataset, after pipeline merging and some dataset exploration.
 # VCFtools is the main tool used here and it needs to be in your PATH for this to work.
 
+#set inputs
 
-#set working directory and inputs
-
-datadir=/Volumes/osms-anatomy-dept/Users/D/Denise Martini/Denise/ModPop_analysis/vcf_filtering/
 vcffile=maxmiss90_common_snps_withID.vcf
 popfile=population.txt
 IDfile=high_depth_snp_IDs.txt
 indv_file=high_missing_samples.txt
 
-cd $datadir
+pwd
 # setting up a logfile
-echo "Logfile for vcf postprocessing run on "`date`
+echo "Logfile for vcf postprocessing run on "$(date)
 logfile=${datadir}/vcf_postprocess.log
 
 # working variables
@@ -40,9 +38,10 @@ vcftools --vcf ${basename}.recode.vcf \
 
 # produce HWE and LD stats for each population in the population.txt file
 poplist=$(awk '{print $2}' $popfile | sort -u)
-echo "Producing HWE and LD stats for $pop population"
+
 for pop in $poplist
 do
+  echo "Producing HWE and LD stats for $pop population"
   awk -v var="$pop" '$0~var{print $1}' $popfile > indv.tmp
   vcftools --vcf ${basename}_thinned.recode.vcf \
   --keep indv.tmp \
@@ -53,3 +52,5 @@ do
   --geno-r2 --min-r2 0.5 --ld-window 20 \
   --out ${pop}
 done
+
+echo "Done at "$(date)

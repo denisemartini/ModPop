@@ -802,4 +802,10 @@ unique(dpf100$Index) -> indexes100
 indexes100 <- as.character(indexes100)
 lapply(indexes100, write, "high_depth_snp_IDs.txt", append=TRUE, ncolumns=1)
 ```
-Then, putting the rest of the filtering in a `GBS_vcf_filtering.sh` script. 
+Then, putting the rest of the filtering in a `GBS_vcf_filtering.sh` script.  
+Running it on my desktop because vcftools is generally quite fast. To test it first:
+```bash
+vcftools --vcf maxmiss90_common_snps_withID.vcf --chr ps_ch_4A --remove-filtered-all --recode --recode-INFO-all --out test
+bash ../ModPop_repo/GBS_vcf_filtering.sh
+```
+There were a couple of fixes to make (wrong directory setup, error in sample names in population.txt), but it seemed to have worked fine. Set up the correct input file in the script and running again as above.
