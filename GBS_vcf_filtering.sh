@@ -37,3 +37,19 @@ vcftools --vcf ${basename}.recode.vcf \
 --remove-filtered-all --recode \
 --recode-INFO-all \
 --out ${basename}_thinned
+
+# produce HWE and LD stats for each population in the population.txt file
+poplist=$(awk '{print $2}' $popfile | sort -u)
+echo "Producing HWE and LD stats for $pop population"
+for pop in $poplist
+do
+  awk -v var="$pop" '$0~var{print $1}' $popfile > indv.tmp
+  vcftools --vcf ${basename}_thinned.recode.vcf \
+  --keep indv.tmp \
+  --hardy \
+  --out ${pop}
+  vcftools --vcf ${basename}_thinned.recode.vcf \
+  --keep indv.tmp \
+  --geno-r2 --min-r2 0.5 --ld-window 20 \
+  --out ${pop}
+done
