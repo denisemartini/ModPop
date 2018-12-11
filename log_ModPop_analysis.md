@@ -768,8 +768,8 @@ sed -i 's/GQ:NR:NV/GQ:DP:NV/' maxmiss90_common_snps_fixed.vcf
 All the other pipelines had that information already encoded, so no need to fix anything else.
 The other thing I want to do is a VennDiagram plot of the pipeline comparison. I should be able to get all the necessary numbers from the `vcf-compare5.txt` file. I would like to put this in a proper piece of code rather than just copy the numbers over, even if that would be faster right now...  
 I am preparing two R scripts:
-- one to plot the missingness of the data, in a heatmap and with information per individual (depth and missing data), using vcfR
-- the other one to plot the intersection between pipelines, with VennDiagram and UpSetR
+- one to plot the missingness of the data, in a heatmap and with information per individual (depth and missing data), using vcfR [`Missing_data_vcfR.Rmd`]
+- the other one to plot the intersection between pipelines, with VennDiagram and UpSetR [`Intersection_pipelines.Rmd`]
 This part of the analysis is in separate reports, in .Rmd format, because I wrote it directly in RStudio.
 
 ###### 11.12.18
@@ -809,3 +809,6 @@ vcftools --vcf maxmiss90_common_snps_withID.vcf --chr ps_ch_4A --remove-filtered
 bash ../ModPop_repo/GBS_vcf_filtering.sh
 ```
 There were a couple of fixes to make (wrong directory setup, error in sample names in population.txt), but it seemed to have worked fine. Set up the correct input file in the script and running again as above.
+
+###### 12.12.18
+I am left with 103,563 loci after the filtering, the bulk of it was in the thinning. For the next bit I am joining the per population HWE and LD stats in R, in order to identify the loci that are in disequilibrium in 3 or more populations and eventually filter them out, too. The report of this analysis is in a separate markdown document, called `HWE_LD_analysis.Rmd`.

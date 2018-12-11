@@ -1,0 +1,12 @@
+---
+title: "Investigation of HWE and LD per population"
+author: "Denise Martini"
+date: "12/12/2018"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
