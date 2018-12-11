@@ -798,6 +798,8 @@ It is not going to be that quick on my desktop, but well...
 In R I am reading in the file again, with the IDs all set this time (I was having problems with some loci that had a stacks ID before, instead of the position), then I am extracting the IDs of loci with >100 reads per sample and I am writing them in a separate file, one ID per line.
 ```R
 dpf[(dpf$Depth>=100),] -> dpf100
-unique(dpf100$Index) -> indexes
-lapply(indexes, write, "high_depth_snp_IDs.txt", append=TRUE, ncolumns=1)
+unique(dpf100$Index) -> indexes100
+indexes100 <- as.character(indexes100)
+lapply(indexes100, write, "high_depth_snp_IDs.txt", append=TRUE, ncolumns=1)
 ```
+Then, putting the rest of the filtering in a `GBS_vcf_filtering.sh` script. 
