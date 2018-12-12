@@ -870,6 +870,7 @@ But admixture does not seem to like these files either. From a quick read on som
 ```
 That fixed it, admixture starts fine. Just out of curiosity I tried using the same recoding command on the vcftools outputs as well and it worked fine. Since the stacks command had removed some loci before outputting the plink files, for reason not clear to me...I am using the vcftools outputs instead.
 Now I want to fix the admixture script so that it runs through the Ks but also so that it runs 5 times with different random seeds. I "picked" 5 number randomly generated online, so that each K can be run with the same random seed and I can compare the different runs a bit more easily. I also need to fix the log names so that they don't overwrite.
+I realised after a quick test run that I also need a way to get the outputs in different folders for each seed or they will overwrite. So I added some directory nesting system to split the outputs from different seeds.
 Moving over to boros and starting.
 ```bash
 scp ../ModPop_repo/admixture.sh boros:/data/denise/ModPop_analysis/pop_structure
