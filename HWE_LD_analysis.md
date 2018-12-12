@@ -297,8 +297,8 @@ Looking good, writing out the IDs of the loci to filter in a format that VCFtool
 
 
 ```r
-write.table(discard, file = "../vcf_filtering/loci_inLD.txt", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
-write.table(keep, file = "../vcf_filtering/loci_inLD_kept.txt", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
+write.table(discard, file = "../vcf_filtering/loci_inLD.txt", sep = "\n", row.names = FALSE, col.names = FALSE, quote = FALSE)
+write.table(keep, file = "../vcf_filtering/loci_inLD_kept.txt", sep = "\n", row.names = FALSE, col.names = FALSE, quote = FALSE)
 ```
 
 

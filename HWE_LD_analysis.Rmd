@@ -180,8 +180,8 @@ n_distinct(pos) == (length(keep)+length(discard))  # sanity check
 Looking good, writing out the IDs of the loci to filter in a format that VCFtools accepts. Also writing out the IDs of the retained loci, in case they are needed later on.
 
 ```{r ld_write}
-write.table(discard, file = "../vcf_filtering/loci_inLD.txt", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
-write.table(keep, file = "../vcf_filtering/loci_inLD_kept.txt", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
+write.table(discard, file = "../vcf_filtering/loci_inLD.txt", sep = "\n", row.names = FALSE, col.names = FALSE, quote = FALSE)
+write.table(keep, file = "../vcf_filtering/loci_inLD_kept.txt", sep = "\n", row.names = FALSE, col.names = FALSE, quote = FALSE)
 ```
 
 

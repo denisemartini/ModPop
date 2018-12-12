@@ -812,3 +812,22 @@ There were a couple of fixes to make (wrong directory setup, error in sample nam
 
 ###### 12.12.18
 I am left with 103,563 loci after the filtering, the bulk of it was in the thinning. For the next bit I am joining the per population HWE and LD stats in R, in order to identify the loci that are in disequilibrium in 3 or more populations and eventually filter them out, too. The report of this analysis is in a separate markdown document, called `HWE_LD_analysis.Rmd`.
+
+In R I finished investigating the loci out of HWE and in LD, the results are the files named: `loci_outofHWE.txt`, `loci_inLD.txt` and `loci_inLD_kept.txt`. I am now goin to filter out the selected loci in two rounds from the final vcf file (in case I want a file without HWE but with LD loci later on).
+```bash
+vcftools --vcf maxmiss90_common_snps_withID_thinned.recode.vcf \
+--exclude loci_outofHWE.txt \
+--remove-filtered-all --recode \
+--recode-INFO-all \
+--out maxmiss90_common_snps_HWE
+After filtering, kept 92 out of 92 Individuals
+Outputting VCF file...
+After filtering, kept 103326 out of a possible 103563 Sites
+Run Time = 119.00 seconds
+
+vcftools --vcf maxmiss90_common_snps_HWE.recode.vcf \
+--exclude loci_inLD.txt \
+--remove-filtered-all --recode \
+--recode-INFO-all \
+--out maxmiss90_common_snps_HWE_LD
+```
