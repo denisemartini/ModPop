@@ -855,3 +855,17 @@ sed -i 's/^SI_FIO[0-9]*/Fiordland/' maxmiss90_common_snps.ped
 sed -i 's/^SI_WES[0-9]*/Westland/' maxmiss90_common_snps.ped
 sed -i 's/^SI_NEL[0-9]*/Nelson/' maxmiss90_common_snps.ped
 ```
+
+###### 13.12.18
+There is an issue with those input files, because admixture throws an error (a very uninformative one) and exits. In the past I have prepared the plink file with stacks populations, so I tried that in boros:
+```bash
+module load stacks
+populations -V maxmiss90_common_snps_HWE_LD.recode.vcf -O . -M population.txt --plink -t 8
+mv maxmiss90_common_snps_HWE_LD.recode.p.plink.map maxmiss90_common_snps.map
+mv maxmiss90_common_snps_HWE_LD.recode.p.plink.ped maxmiss90_common_snps.ped
+```
+But admixture does not seem to like these files either. From a quick read on some help pages, recoding the files in plink should help, but plink is likely going to pain me with my chromosome names being weird. This might work:
+```bash
+/usr/local/plink-1.9/plink --file maxmiss90_common_snps --recode 12 --out maxmiss90_common_snps --allow-extra-chr
+```
+That fixed it, admixture starts fine. Just out of curiosity I tried using the same recoding command on the vcftools outputs as well and it worked fine. Since the stacks command had removed some loci before outputting the plink files, for reason not clear to me...I am using the vcftools outputs instead. 
