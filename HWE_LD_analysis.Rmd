@@ -19,7 +19,7 @@ library(dplyr)
 
 #### HWE
 
-First, trialling with one population only, I want to import the file, select only the columns I need (position and p-value), then filter only loci with a p-value<0.05.
+First, trialling with one population only, I want to import the file, select only the columns I need (position and p-value). The file contains the calculated p-value at ALL sites, so I also need to filter only loci with a p-value<0.05.
 
 ```{r kapiti_hwe}
 kapiti_hwe <- read.table("Kapiti.hwe", header = TRUE) 
@@ -32,7 +32,6 @@ That was easy enough, so writing it out in a loop that does the above filtering 
 
 ```{r pop_hwe}
 hwe_table <- NULL
-
 for (pop in c(list.files(path = ".", pattern = ".hwe"))) {
   pop_hwe <- read.table(pop, header = TRUE)
   pop_hwe <- select(pop_hwe, CHR, POS, P_HWE)
@@ -63,5 +62,42 @@ Looking good, writing out the positions of the filtered loci in a format that VC
 write.table(out_of_hwe[,1:2], file = "positions_outofHWE.txt", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
 ```
 
+#### LD
 
+The input file format here is a bit different, it already only contains significant sites (with an rsq>0.5). There is a column that has the number of individuals that were used for the LD calculation at those two positions (all individuals that had a genotype for both loci). At many positions only few individuals were used for the calculation and I don't think that's right. So, I am filtering out values for which less than 6 individuals were used in the comparisons. After that, I can get rid of that column. Again, trialling first with one population.
+
+```{r kapiti_ld}
+kapiti_ld <- read.table("Kapiti.geno.ld", header = TRUE)
+kapiti_ld <- filter(kapiti_ld, N_INDV>=6)
+kapiti_ld <- select(kapiti_ld, c(CHR, POS1, POS2, R.2))
+head(kapiti_ld)
+```
+
+Everything looks okay, I can loop through the populations and add all results to the same table. 
+
+```{r pop_ld}
+ld_table <- NULL
+for (pop in c(list.files(path = ".", pattern = ".geno.ld"))) {
+  pop_ld <- read.table(pop, header = TRUE)
+  pop_ld <- filter(pop_ld, N_INDV>=6)
+  pop_ld <- select(pop_ld, c(CHR, POS1, POS2, R.2))
+  
+  if(is.null(ld_table)) {
+    ld_table <- pop_ld
+  } else {
+    ld_table <- full_join(ld_table, pop_ld, by=c("CHR", "POS1", "POS2"))
+  }
+}
+```
+
+Again, as before, I am selecting the loci that are in LD in 3 or more populations.
+
+```{r ld_filter}
+ld_table %>% mutate(., popnum=apply(ld_table[4:(dim(ld_table)[2])], 
+                                    MARGIN = 1, function(x){ sum(!is.na(x)) })) -> ld_table
+in_ld <- filter(ld_table, popnum>=3)
+in_ld <- arrange(in_ld, CHR, POS1)
+head(in_ld)
+dim(in_ld)[1] #to check the number of loci found, count the number of rows
+```
 
