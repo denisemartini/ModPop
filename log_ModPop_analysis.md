@@ -831,3 +831,27 @@ vcftools --vcf maxmiss90_common_snps_HWE.recode.vcf \
 --recode-INFO-all \
 --out maxmiss90_common_snps_HWE_LD
 ```
+Finally done with the filtering, too.
+
+#### Population Structure
+##### ADMIXTURE
+###### 12.12.18
+I should be able to use in admixture some .ped plink files, that I can obtain from VCFtools. I am going to set up and run this in boros, because it should be faster and admixture is there already.
+```bash
+mkdir pop_structure
+cd pop_structure/
+scp maxmiss90_common_snps_HWE_LD.recode.vcf boros:/data/denise/ModPop_analysis/pop_structure
+vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+--plink --out maxmiss90_common_snps
+```
+I might be seeing why in the past I used stacks to convert the files instead: vcftools seems to be doing weird things with my chromosome names. Not sure if that's an issue though. The populations are a problem though, so fixing that:
+```bash
+sed -i 's/^NI_KAP[0-9]*/KapitiIsland/' maxmiss90_common_snps.ped
+sed -i 's/^NI_LBI[0-9]*/LittleBarrierIsland/' maxmiss90_common_snps.ped
+sed -i 's/^NI_PUR[0-9]*/Pureora/' maxmiss90_common_snps.ped
+sed -i 's/^NI_ZEA[0-9]*/Zealandia/' maxmiss90_common_snps.ped
+sed -i 's/^SI_COD[0-9]*/CodfishIsland/' maxmiss90_common_snps.ped
+sed -i 's/^SI_FIO[0-9]*/Fiordland/' maxmiss90_common_snps.ped
+sed -i 's/^SI_WES[0-9]*/Westland/' maxmiss90_common_snps.ped
+sed -i 's/^SI_NEL[0-9]*/Nelson/' maxmiss90_common_snps.ped
+```
