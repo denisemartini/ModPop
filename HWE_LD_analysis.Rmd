@@ -10,3 +10,58 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+In this script I am gathering the per population statistics that VCFtools output for Hardy-Weinberg Equilibrium and Linkage Disequilibrium, to identify loci that are out of HWE and/or in LD in more than 3 populations. 
+
+```{r packages, message=FALSE}
+library(dplyr)
+```
+
+#### HWE
+
+First, trialling with one population only, I want to import the file, select only the columns I need (position and p-value), then filter only loci with a p-value<0.05.
+
+```{r kapiti_hwe}
+kapiti_hwe <- read.table("Kapiti.hwe", header = TRUE) 
+kapiti_hwe <- select(kapiti_hwe, CHR, POS, P_HWE)
+kapiti_hwe <- filter(kapiti_hwe, P_HWE<0.05)
+head(kapiti_hwe)
+```
+
+That was easy enough, so writing it out in a loop that does the above filtering for each population file and adds the output to the same table.
+
+```{r pop_hwe}
+hwe_table <- NULL
+
+for (pop in c(list.files(path = ".", pattern = ".hwe"))) {
+  pop_hwe <- read.table(pop, header = TRUE)
+  pop_hwe <- select(pop_hwe, CHR, POS, P_HWE)
+  pop_hwe <- filter(pop_hwe, P_HWE<0.05)
+  
+  if(is.null(hwe_table)) {
+    hwe_table <- pop_hwe
+  } else {
+    hwe_table <- full_join(hwe_table, pop_hwe, by=c("CHR", "POS"))
+  }
+}
+```
+
+I then just need to filter only the loci that are out of HWE (have a p-value rather than NA) in 3 or more populations. 
+
+```{r hwe_filter}
+hwe_table %>% mutate(., popnum=apply(hwe_table[3:(dim(hwe_table)[2])], 
+                                     MARGIN = 1, function(x){ sum(!is.na(x)) })) -> hwe_table
+out_of_hwe <- filter(hwe_table, popnum>=3)
+out_of_hwe <- arrange(out_of_hwe, c(CHR, POS))
+head(out_of_hwe)
+dim(out_of_hwe)[1] #to check the number of loci found, count the number of rows
+```
+
+Looking good, writing out the positions of the filtered loci in a format that VCFtools accepts.
+
+```{r hwe_write}
+write.table(out_of_hwe[,1:2], file = "positions_outofHWE.txt", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
+```
+
+
+
