@@ -1,0 +1,44 @@
+---
+title: "Analysis with adegenet"
+author: "Denise Martini"
+date: "12/14/2018"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Using the adegenet package in R  to run some tests on my GBS dataset. Hopefully some interesting and nice plots as well. 
+Loading all the packages I need.
+
+```{r packages}
+library(adegenet)
+library(ape)
+library(RColorBrewer)
+```
+
+I prepared the input in the pop_structure directory, they are `.raw` Plink files, that you can obtain with the PLINK `--recode A` command.
+Importing the input file:
+
+```{r input}
+GBS <- read.PLINK(file="../pop_structure/maxmiss90_common_snps.raw", map.file = "../pop_structure/maxmiss90_common_snps.map")
+```
+
+Tha reminds me that `parallel` is also a required package. Luckily enough, adegenet look for it and loads it on its own. A few checks on the dataset before stary=ting:
+
+```{r checks, fig.height=5, fig.width=7, out.width=850px}
+# checking that population and individual names are fine
+GBS@pop
+indNames(GBS)
+# checking missing data and allele frequency distributions
+glPlot(GBS)
+```
+
+Everything as expected. 
+
+
+
+
