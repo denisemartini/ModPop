@@ -877,3 +877,11 @@ scp ../ModPop_repo/admixture.sh boros:/data/denise/ModPop_analysis/pop_structure
 screen -S ADMIX
 bash admixture.sh
 ```
+
+###### 14.12.18
+Admixture ran fine, best K is always 1 in all random seed replicates. There is some variation between replicates, but it is quite minimal. I will plot the first 4 Ks to check that it is the same as last time. (Well, not K=1 of course...that would be silly). Choosing the random seed that had the lowest overall CV values, #11. Later on I will plot the CV values from the different runs.
+```bash
+scp boros:/data/denise/ModPop_analysis/pop_structure/admix_11/*.Q ./admix_11
+cp ../../Kaka_GBS/GBS_scripts/admixture_plots.R ../ModPop_repo/
+```
+Everything looks exactly like the first time. 
