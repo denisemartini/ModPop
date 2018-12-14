@@ -884,4 +884,16 @@ Admixture ran fine, best K is always 1 in all random seed replicates. There is s
 scp boros:/data/denise/ModPop_analysis/pop_structure/admix_11/*.Q ./admix_11
 cp ../../Kaka_GBS/GBS_scripts/admixture_plots.R ../ModPop_repo/
 ```
-Everything looks exactly like the first time. 
+Everything looks exactly like the first time.
+I will come back to this and fix the script so that it also produces a CV plot and so that the plots are made easily for each K.
+For now, on to the next analysis.
+
+##### DAPC/ADEGENET
+###### 14.12.18
+I copied to the repo the script I used before to run adegenet for my GBS data. Quickly using it to plot some DAPC analysis.
+I need a file in the PLINK `.raw` format, so I am producing that from the previous plink file that is still sitting in boros, then moving it over here.
+```bash
+/usr/local/plink-1.9/plink --file maxmiss90_common_snps --recode A --out maxmiss90_common_snps --allow-extra-chr
+scp boros:/data/denise/ModPop_analysis/pop_structure/maxmiss90_common_snps.raw .
+scp boros:/data/denise/ModPop_analysis/pop_structure/maxmiss90_common_snps.map .
+```
