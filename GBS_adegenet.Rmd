@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Using the adegenet package in R  to run some tests on my GBS dataset. Hopefully some interesting and nice plots as well. 
 Loading all the packages I need.
 
-```{r packages}
+```{r packages, message=FALSE}
 library(adegenet)
 library(ape)
 library(RColorBrewer)
@@ -27,7 +27,7 @@ Importing the input file:
 GBS <- read.PLINK(file="../pop_structure/maxmiss90_common_snps.raw", map.file = "../pop_structure/maxmiss90_common_snps.map")
 ```
 
-Tha reminds me that `parallel` is also a required package. Luckily enough, adegenet look for it and loads it on its own. A few checks on the dataset before stary=ting:
+That reminds me that `parallel` is also a required package. Luckily enough, adegenet look for it and loads it on its own. A few checks on the dataset before starting:
 
 ```{r checks, fig.height=5, fig.width=7, out.width=850px}
 # checking that population and individual names are fine
@@ -35,9 +35,33 @@ GBS@pop
 indNames(GBS)
 # checking missing data and allele frequency distributions
 glPlot(GBS)
+myFreq <- glMean(GBS)
+myFreq <- c(myFreq, 1-myFreq)
+hist(myFreq, proba=TRUE, col="#A6D96A", xlab="Allele frequencies",
+     main="Distribution of allele frequencies", nclass=20)
+temp <- density(myFreq, bw=.05)
+lines(temp$x, temp$y*2,lwd=3)
 ```
 
-Everything as expected. 
+Everything as expected.
+First, I can plot a tree, from distances calculated from allele frequencies. 
+
+```{r tree, fig.height=5, fig.width=7, out.width=850px}
+tre <- nj(dist(as.matrix(GBS)))
+palette=(c(rep("#D9EF8B", 13), rep("#1A9850", 14), rep("#66BD63", 10), rep("#A6D96A", 12), 
+           rep("#D73027", 7), rep("#F46D43", 11), rep("#FEE08B", 8), rep("#FDAE61", 17)))
+plot(tre, "p", cex=0.5, no.margin = TRUE, tip.col=palette, font=4, node.pos=2, edge.width=1.2)
+# branch length is quite long, and very shallow, so it is difficult to see the deep relations, also plotting without branch lengths:
+plot(tre, "p", cex=0.5, FALSE, no.margin = TRUE, tip.col=palette, font=4, node.pos=1, edge.width=1.2)
+```
+
+Now, I want to try and see if we can identify some clusters within this data without using the a priori population information. To make it less computationally expensive, I am first performing the PCA calculations. I am keeping 100 PCA components at this stage (which includes all of them), so I can see how many of them actually contribute to the variation. Then, I am retaining a high number of clusters (`max.n.clust=40`) to test at first. A BIC test is used to evaluate the likelihood of each number of clusters.
+
+```{r clusters}
+GBS_pca <- glPca(GBS, useC = FALSE, parallel = TRUE)
+grp <- find.clusters(GBS, max.n.clust=40, glPca = GBS_pca)
+```
+
 
 
 
