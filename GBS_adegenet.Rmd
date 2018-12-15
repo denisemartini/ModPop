@@ -62,7 +62,21 @@ GBS_pca <- glPca(GBS, useC = FALSE, parallel = TRUE)
 grp <- find.clusters(GBS, max.n.clust=40, glPca = GBS_pca)
 ```
 
+I can see that the most likely number of clusters is 2 (the lowest BIC) and I can check what individuals correspond to what group:
 
+```{r clusters2}
+table(pop(GBS), grp$grp)
+```
 
+So, in this analysis too, the only group that stands out from the rest of the samples is Kapiti Island, much like in the ADMIXTURE tests.
+What would be more significative then is to use DAPC to figure out what the discriminants between the 8 populations are. In practice, DAPC gets the a priori information that we have 8 clusters in our dataset and looks for the discriminants that better explain those clusters. The number of PC components that are kept for the DAPC is quite important though: too many PCs and you overfit the data, overdiscriminating the clusters. Example, if I were to keep all PC components:
+
+```{r overDAPC, fig.height=5, fig.width=7, out.width=850px}
+dapc_pops <- dapc(GBS, glPca = GBS_pca, n.da = 10, n.pca = 100)
+myCol <- c("#D73027", "#F46D43", "#D9EF8B", "#1A9850", "#FEE08B", "#66BD63", "#FDAE61", "#A6D96A")
+scatter(dapc_pops, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, leg=TRUE, posi.da="bottomright")
+```
+ 
 
 
