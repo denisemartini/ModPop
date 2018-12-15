@@ -57,7 +57,7 @@ plot(tre, "p", cex=0.5, FALSE, no.margin = TRUE, tip.col=palette, font=4, node.p
 
 Now, I want to try and see if we can identify some clusters within this data without using the a priori population information. To make it less computationally expensive, I am first performing the PCA calculations. I am keeping 100 PCA components at this stage (which includes all of them), so I can see how many of them actually contribute to the variation. Then, I am retaining a high number of clusters (`max.n.clust=40`) to test at first. A BIC test is used to evaluate the likelihood of each number of clusters.
 
-```{r clusters}
+```{r clusters, fig.height=5, fig.width=7, out.width=850px}
 GBS_pca <- glPca(GBS, useC = FALSE, parallel = TRUE)
 grp <- find.clusters(GBS, max.n.clust=40, glPca = GBS_pca)
 ```
@@ -78,5 +78,15 @@ scatter(dapc_pops, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, so
         cex=3, clab=0, leg=TRUE, posi.da="bottomright")
 ```
  
+There are some tests implemented in adegenet to actually make sure to keep the right number of PCs. 
+
+```{r PC_optimization, fig.height=5, fig.width=7, out.width=850px}
+temp <- optim.a.score(dapc_pops)
+mat <- tab(GBS, NA.method="mean")
+xval <- xvalDapc(mat, pop(GBS), n.pca.max = 100, training.set = 0.9,
+                 result = "groupMean", center = TRUE, scale = FALSE,
+                 n.pca = NULL, n.rep = 30, xval.plot = TRUE, parallel = "multicore", ncpus = 6)
+xval[2:6]
+```
 
 
