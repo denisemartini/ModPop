@@ -53,6 +53,8 @@ palette=(c(rep("#D9EF8B", 13), rep("#1A9850", 14), rep("#66BD63", 10), rep("#A6D
 plot(tre, "p", cex=0.5, no.margin = TRUE, tip.col=palette, font=4, node.pos=2, edge.width=1.2)
 # branch length is quite long, and very shallow, so it is difficult to see the deep relations, also plotting without branch lengths:
 plot(tre, "p", cex=0.5, FALSE, no.margin = TRUE, tip.col=palette, font=4, node.pos=1, edge.width=1.2)
+# and plotting this way the labels are more visible:
+plot(tre, "r", cex=0.8, FALSE, no.margin = TRUE, tip.col=palette, font=4, node.pos=2, edge.width=1.2)
 ```
 
 Now, I want to try and see if we can identify some clusters within this data without using the a priori population information. To make it less computationally expensive, I am first performing the PCA calculations. I am keeping 100 PCA components at this stage (which includes all of them), so I can see how many of them actually contribute to the variation. Then, I am retaining a high number of clusters (`max.n.clust=40`) to test at first. A BIC test is used to evaluate the likelihood of each number of clusters.
@@ -78,15 +80,42 @@ scatter(dapc_pops, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, so
         cex=3, clab=0, leg=TRUE, posi.da="bottomright")
 ```
  
-There are some tests implemented in adegenet to actually make sure to keep the right number of PCs. 
+There are some tests implemented in adegenet to actually make sure to keep the right number of PCs. The a-score is a measure of _"the trade-off between power of discrimination and overfitting"_. It uses a randomisation of the data to measure when the successful reassignment is due to the analysis and when it is due to random discrimination and it penalises the reassignment score by the number of PCs retained. The second test is the cross-validation, CV, can also be used to find the right spot between too many and too few PCs. It splits the data in a training set and a validation set, and tests the accuracy with which the retained PCs on the training set can predict the assignment of the validation set, and the process is repeated through n replicates. The suggestion is then to keep the number of PCs that gives the lowest Mean Square Error (ideally this would also be the number of PCs that has the Highest Mean Success).
 
 ```{r PC_optimization, fig.height=5, fig.width=7, out.width=850px}
 temp <- optim.a.score(dapc_pops)
 mat <- tab(GBS, NA.method="mean")
-xval <- xvalDapc(mat, pop(GBS), n.pca.max = 100, training.set = 0.9,
+xval <- xvalDapc(mat, pop(GBS), n.pca.max = 100, training.set = 0.8,
                  result = "groupMean", center = TRUE, scale = FALSE,
                  n.pca = NULL, n.rep = 30, xval.plot = TRUE, parallel = "multicore", ncpus = 6)
 xval[2:6]
 ```
 
+Looks like the _"goldilocks point"_ here is around 15-20 PCs. Let's see what this means for the actual DAPC analysis, when I keep those parameters. I can always keep all discriminant functions, since they are only (number_of_groups - 1), so maximum 7 in this case. 
+
+```{r DAPC_opt, fig.height=5, fig.width=7, out.width=850px}
+dapc_opt <- dapc(GBS, glPca = GBS_pca, n.da = 10, n.pca = 20)
+myCol <- c("#D73027", "#F46D43", "#D9EF8B", "#1A9850", "#FEE08B", "#66BD63", "#FDAE61", "#A6D96A")
+scatter(dapc_opt, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, leg=TRUE, posi.da="topleft") # withouth labels, with legend
+```
+
+There you go. With an optimised number of PCs, the first two (and the strongest) discriminant functions only distinguish Kapiti Island and Zealandia from all the rest grouped together, as in other tests. Particularly, D1 (on the x axis) seems to be splitting Kapiti and Zealandia from everything else, while D2 (on the y axis) is separating Kapiti and Zealandia from each other. 
+Let's plot the rest of the components and see what they are picking up.
+
+```{r DAPC_rest, fig.height=9, fig.width=12, out.width=850px}
+par(mfrow=c(3,2))
+p1 <- scatter(dapc_opt, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, leg=TRUE, posi.da="bottomleft", ratio.da = 0.2) 
+p2 <- scatter(dapc_opt, xax = 2, yax = 3, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2)
+p3 <- scatter(dapc_opt, xax = 3, yax = 4, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+p4 <- scatter(dapc_opt, xax = 4, yax = 5, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+p5 <- scatter(dapc_opt, xax = 5, yax = 6, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+p6 <- scatter(dapc_opt, xax = 6, yax = 7, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
+        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+```
 
