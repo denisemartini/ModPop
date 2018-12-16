@@ -15,8 +15,8 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
   - [x] samtools
 - [x] Filter and merge results, vcftools and VennDiagram
 - [ ] Population structure tests:
-  - [ ] admixture
-  - [ ] dapc in adegenet
+  - [x] admixture
+  - [x] dapc in adegenet
   - [ ] tree in treemix
   - [ ] modeling in dadi
 - [ ] Stats for selection outliers (Fst, Tajima's D, etc)
@@ -897,3 +897,5 @@ I need a file in the PLINK `.raw` format, so I am producing that from the previo
 scp boros:/data/denise/ModPop_analysis/pop_structure/maxmiss90_common_snps.raw .
 scp boros:/data/denise/ModPop_analysis/pop_structure/maxmiss90_common_snps.map .
 ```
+###### 17.12.18
+All the tests I ran are in a separate report, called `GBS_adegenet.Rmd`. Nothing particularly new, but I managed to output a phylogenetic tree which looks a bit interesting, because the SI samples seem to "envelop" the NI samples. Not unexpectedly, the Kapiti and Zealandia samples are very nested within the tree (not one within the other though). The other cool thing is that there is a discriminant between the NI and the SI, I extracted the snps that contribute to it and I am looking at where they end up in the annotation.
