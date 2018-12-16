@@ -129,9 +129,9 @@ GBS@ind.names
 ```
 
 There is assignment uncertainty for Pureora and for the SI populations, with some individuals assigned entirely to a different population, others just showing admixture. This is very similar to the plot I got from ADMIXTURE with K=8, maybe with a bit more discriminating power though. 
-I can test this in another way, by excluding some samples from each population from the original analysis and then seeing whether the discriminants can assign them correctly to their population.
+I can test this in another way, by selecting only a part of the samples from each population to perform the analysis, then seeing whether the discriminants can assign the excluded samples correctly to their population.
 
-```{r assigntest, fig.height=15, fig.width=14, out.width=850px }
+```{r assigntest, fig.height=15, fig.width=14, out.width=850px}
 kept.id <- unlist(tapply(1:nInd(GBS), pop(GBS),
                          function(e) sample(e, 6,replace=FALSE)))
 x <- GBS[kept.id]
@@ -147,3 +147,38 @@ table.value(table(pred.sup$assign, pop(x.sup)), col.lab=levels(pop(x.sup)))
 ```
 
 In this table, the original population is on the x axis and the inferred population is on the y axis. Again, the only individuals that are correctly reassigned are Kapiti, Zealandia, and few from Little Barrier Island. The rest are all assigned to a "Nelson" cluster, which not surprisingly was the most indisctinct cluster in the previous plots.
+
+
+Finally, I want to see if I can identify a discriminant between the NI and the SI populations, and what drives it. First I am assigning all populations to either the North or the South Island, then I am running the DAPC analysis again. The number of PCs retained is the same as before, I verified that it is fine with the same optimisation tests. This time there will only be one discriminant, since the number of clusters is 2, and the plot will only have one dimension.
+
+```{r islands, fig.height=15, fig.width=14, out.width=850px}
+islpop <- as.factor(c(rep("NI", 49), rep("SI", 43)))
+dapc_isl <- dapc(GBS, islpop, glPca = GBS_pca, n.pca = 20, n.da = 10)
+scatter(dapc_isl, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=c("#66BD63", "#F46D43"), solid=.6,
+        cex=3, clab=0, leg=TRUE)
+compoplot(dapc_isl, posi=NULL, lab = "", xlab="individuals", col.pal = c("#66BD63", "#F46D43"))
+```
+
+It seems like this discriminant does separate the individuals quite well, there is only a minimal overlap. And in the assignment plot only one individual seems to have some admixture (and it's from Pureora). I am keen to figure out what alleles are contributing to this discriminant, and I can do that by looking at the "loadings" of the DAPC. I am setting a threshold to identify the outliers, that is the loci that are contributing the most. The threshold here is set up to highlight only the 0.0001% of the most contributing loci (because the dataset is quite big). 
+
+```{r loadings, fig.height=15, fig.width=14, out.width=850px}
+contrib <- loadingplot(dapc_isl_opt$var.contr, axis=1, thres=quantile(dapc_isl_opt$var.contr, 0.9999))
+```
+
+It should be noted that the loading values are quite low in general, but that probably depends on the fact that I am using this many loci.
+The most contributing loci are probably all snps that have different frequency in the NI vs SI populations, maybe even fixed loci. As an example, I am taking a look at the most evident outlier:
+
+```{r outlier}
+tab(GBS[,28872]) -> test_outlier
+mean(test_outlier[1:49])/2 #NI mean allele frequency:
+mean(test_outlier[50:92])/2 #SI mean allele frequency:
+```
+
+Well, not quite as extreme as I expected, but there is a noticeable difference between NI and SI. I will want to investigate these snps more, to see if they end up being in an interesting part of the genome, so I am extracting their IDs and loading value to a text file. 
+
+```{r write_loadings}
+contributions <- cbind(GBS[,c(contrib$var.idx)]@loc.names, contrib$var.values)
+write.table(contributions, file = "../pop_structure/islands_discriminants.txt", 
+            row.names = FALSE, col.names = c("SNP_ID", "LOADING"), quote = FALSE, sep = "\t")
+```
+
