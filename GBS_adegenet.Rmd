@@ -103,19 +103,47 @@ scatter(dapc_opt, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, sol
 There you go. With an optimised number of PCs, the first two (and the strongest) discriminant functions only distinguish Kapiti Island and Zealandia from all the rest grouped together, as in other tests. Particularly, D1 (on the x axis) seems to be splitting Kapiti and Zealandia from everything else, while D2 (on the y axis) is separating Kapiti and Zealandia from each other. 
 Let's plot the rest of the components and see what they are picking up.
 
-```{r DAPC_rest, fig.height=9, fig.width=12, out.width=850px}
+```{r DAPC_rest, echo=FALSE, fig.height=15, fig.width=14, out.width=850px}
 par(mfrow=c(3,2))
 p1 <- scatter(dapc_opt, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
-        cex=3, clab=0, leg=TRUE, posi.da="bottomleft", ratio.da = 0.2) 
+        cex=3, clab=0, leg=TRUE, scree.da = FALSE, sub = "x=D1 \n y=D2", csub =2)
 p2 <- scatter(dapc_opt, xax = 2, yax = 3, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
-        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2)
+        cex=3, clab=0, scree.da = FALSE, sub = "x=D2 \n y=D3", csub =2)
 p3 <- scatter(dapc_opt, xax = 3, yax = 4, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
-        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+        cex=3, clab=0, scree.da = FALSE, sub = "x=D3 \n y=D4", csub =2) 
 p4 <- scatter(dapc_opt, xax = 4, yax = 5, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
-        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+        cex=3, clab=0, scree.da = FALSE, sub = "x=D4 \n y=D5", csub =2) 
 p5 <- scatter(dapc_opt, xax = 5, yax = 6, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
-        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+        cex=3, clab=0, scree.da = FALSE, sub = "x=D5 \n y=D6", csub =2) 
 p6 <- scatter(dapc_opt, xax = 6, yax = 7, scree.pca = FALSE, bg="white", pch=20, cstar=0, col=myCol, solid=.6,
-        cex=3, clab=0, posi.da="bottomleft", ratio.da = 0.2) 
+        cex=3, clab=0, scree.da = FALSE, sub = "x=D6 \n y=D7", csub =2) 
 ```
 
+All the other discriminants seem to be trying to distinguish some of the rest of the group (but in doing so Kapiti and Zealandia end up in the very middle of the undistiguished group). D3 and D4 in particular seem to separate the northern NI and the southern SI. 
+Overall, it does not look like these discriminants would be able to tell all populations apart, but only Kapiti and Zealandia, and maybe Little Barrier Island. I can use a "structure"-like plot to see if that's the case.
+
+```{r compoplot, echo=FALSE, fig.height=15, fig.width=14, out.width=850px}
+compoplot(dapc_opt, posi=NULL, lab = "", xlab="individuals", col.pal = myCol)
+# a reminder of what the order of individuals is
+GBS@ind.names
+```
+
+There is assignment uncertainty for Pureora and for the SI populations, with some individuals assigned entirely to a different population, others just showing admixture. This is very similar to the plot I got from ADMIXTURE with K=8, maybe with a bit more discriminating power though. 
+I can test this in another way, by excluding some samples from each population from the original analysis and then seeing whether the discriminants can assign them correctly to their population.
+
+```{r assigntest, fig.height=15, fig.width=14, out.width=850px }
+kept.id <- unlist(tapply(1:nInd(GBS), pop(GBS),
+                         function(e) sample(e, 6,replace=FALSE)))
+x <- GBS[kept.id]
+x.sup <- GBS[-kept.id]
+nInd(x)
+nInd(x.sup)
+
+x_pca <- glPca(x, useC = FALSE, parallel = TRUE, nf=100)
+dapc_x <- dapc(x, n.pca=20, n.da=10, glPca = x_pca)
+pred.sup <- predict.dapc(dapc_x, newdata=x.sup)
+mean(as.character(pred.sup$assign)==as.character(pop(x.sup)))
+table.value(table(pred.sup$assign, pop(x.sup)), col.lab=levels(pop(x.sup)))
+```
+
+In this table, the original population is on the x axis and the inferred population is on the y axis. Again, the only individuals that are correctly reassigned are Kapiti, Zealandia, and few from Little Barrier Island. The rest are all assigned to a "Nelson" cluster, which not surprisingly was the most indisctinct cluster in the previous plots.
