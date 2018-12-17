@@ -899,3 +899,15 @@ scp boros:/data/denise/ModPop_analysis/pop_structure/maxmiss90_common_snps.map .
 ```
 ###### 17.12.18
 All the tests I ran are in a separate report, called `GBS_adegenet.Rmd`. Nothing particularly new, but I managed to output a phylogenetic tree which looks a bit interesting, because the SI samples seem to "envelop" the NI samples. Not unexpectedly, the Kapiti and Zealandia samples are very nested within the tree (not one within the other though). The other cool thing is that there is a discriminant between the NI and the SI, I extracted the snps that contribute to it and I am looking at where they end up in the annotation.
+
+##### TREEMIX
+###### 17.12.18
+First of all, I need to install this. I decided to use it on boros, so I will try installing it there. I have verified that the two prerequisites mentioned in the manual (boost and GSL) are present in boros. I downloaded the tarball from `https://bitbucket.org/nygcresearch/treemix/downloads/`. Next, I moved it to boros and installed it:
+```bash
+scp -r /Users/denisemartini/Downloads/Treemix/treemix-1.13.tar.gz boros:/home/denise/
+tar -xvf treemix-1.13.tar.gz
+cd treemix-1.13/
+./configure --prefix /home/denise  # specify prefix, otherwise it tries to put the executables in /usr/local and I don't have permission
+make
+make install
+```
