@@ -911,3 +911,51 @@ cd treemix-1.13/
 make
 make install
 ```
+Then, on to prepare input files. They provide a python script with the distribution that converts from a plink frequencies format to the treemix input files. But I need to get that plink first. I need to fix the population file in a format that plink likes, as such:
+```bash
+# it needs to look like:
+FAMILYID  INDVID  CLUSTER
+# so I am adding a column before my individual IDs in the pop file, and I will need that to be the population name, because it is that way in the .ped file
+cat population.txt | awk '{print $2, $1, $2}' > plink_clusters.txt
+sed -i 's/Kapiti/KapitiIsland/g' plink_clusters.txt
+sed -i 's/LittleBarrier/LittleBarrierIsland/g' plink_clusters.txt
+sed -i 's/Codfish/CodfishIsland/g' plink_clusters.txt
+```
+Then the plink conversion should work:
+```bash
+/usr/local/plink-1.9/plink --file maxmiss90_common_snps --freq --missing --within plink_clusters.txt
+# output is in plink.frq.strat
+less plink.frq.strat
+CHR                 SNP     CLST   A1   A2      MAF    MAC  NCHROBS
+  0      un_sc_20349_15 CodfishIsland    1    2        0      0       10
+  0      un_sc_20349_15 Fiordland    1    2    0.125      2       16
+  0      un_sc_20349_15 KapitiIsland    1    2        0      0       26
+  0      un_sc_20349_15 LittleBarrierIsland    1    2        0      0       24
+  0      un_sc_20349_15   Nelson    1    2        0      0       14
+  0      un_sc_20349_15  Pureora    1    2   0.1111      2       18
+  0      un_sc_20349_15 Westland    1    2        0      0       26
+  0      un_sc_20349_15 Zealandia    1    2        0      0       16
+```
+Looking okay. Then, following treemix instructions:
+```bash
+gzip plink.frq.strat
+/home/denise/bin/plink2treemix.py plink.frq.strat.gz treemix.frq.gz
+```
+Seems to have run fine. Let's try with the f3 and f4 statistics now.
+```bash
+/home/denise/bin/threepop -i treemix.frq.gz -k 500 > f3_statistics.txt
+/home/denise/bin/fourpop -i treemix.frq.gz -k 500 > f4_statistics.txt
+```
+Done. I don't see anything negative in the f3 statistics, but there is a lot different from 0 in the f4 statistics.
+I am taking away some extra bits in between, moving the file back to HPC and filtering the significant values.
+```bash
+grep -v "Estimating" f4_statistics.txt > f4_statistics_fixed.txt
+grep -v "total_nsnp" f4_statistics_fixed.txt > f4_statistics_fixed2.txt
+scp boros:/data/denise/ModPop_analysis/pop_structure/f4_statistics_fixed2.txt .
+awk -F' ' '($4>=3.29)' f4_statistics_fixed2.txt > f4_significant_05.txt
+awk -F' ' '($4<=-3.29)' f4_statistics_fixed2.txt >> f4_significant_05.txt
+awk -F' ' '($4>=3.71)' f4_statistics_fixed2.txt > f4_significant_01.txt
+awk -F' ' '($4<=-3.71)' f4_statistics_fixed2.txt >> f4_significant_01.txt
+```
+MAYBE, after seeing these stats, the admixture is not so generalised that I can't see it in the treemix tree.
+I am going to try. 
