@@ -958,4 +958,26 @@ awk -F' ' '($4>=3.71)' f4_statistics_fixed2.txt > f4_significant_01.txt
 awk -F' ' '($4<=-3.71)' f4_statistics_fixed2.txt >> f4_significant_01.txt
 ```
 MAYBE, after seeing these stats, the admixture is not so generalised that I can't see it in the treemix tree.
-I am going to try. 
+I am going to try.
+```bash
+/home/denise/bin/treemix -i treemix.frq.gz -o kaka_nomig
+```
+Then to visualise the tree and residues:
+```R
+source("/home/denise/treemix-1.13/src/plotting_funcs.R")
+plot_tree("kaka_nomig")
+plot_resid("kaka_nomig", "poporder")
+```
+I made the poporder file simply by listing the pops in the population file [`awk '{print $2}' population.txt | sort -u > poporder`].
+There are discrepancies obviously, specifically between LittleBarrierIsland and Zealandia.
+So, let's try adding some migration.
+```bash
+/home/denise/bin/treemix -i treemix.frq.gz -root LittleBarrierIsland -m 6 -o kaka_withmig
+```
+Plotting:
+```R
+source("/home/denise/treemix-1.13/src/plotting_funcs.R")
+plot_tree("kaka_withmig")
+plot_resid("kaka_withmig", "poporder")
+```
+This looks confusing, and it changes a lot if I move the root to a different outgroup. I need a proper outgroup, to do some bootstrap tests and to try removing some missing data. But the program is really fast! =)
