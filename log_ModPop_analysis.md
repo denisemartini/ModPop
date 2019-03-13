@@ -890,8 +890,8 @@ But admixture does not seem to like these files either. From a quick read on som
 ```bash
 /usr/local/plink-1.9/plink --file maxmiss90_common_snps --recode 12 --out maxmiss90_common_snps --allow-extra-chr
 ```
-That fixed it, admixture starts fine. Just out of curiosity I tried using the same recoding command on the vcftools outputs as well and it worked fine. Since the stacks command had removed some loci before outputting the plink files, for reason not clear to me...I am using the vcftools outputs instead.
-Now I want to fix the admixture script so that it runs through the Ks but also so that it runs 5 times with different random seeds. I "picked" 5 number randomly generated online, so that each K can be run with the same random seed and I can compare the different runs a bit more easily. I also need to fix the log names so that they don't overwrite.
+That fixed it, admixture starts fine. Just out of curiosity I tried using the same recoding command on the vcftools outputs as well and it worked fine. Since the stacks command had removed some loci before outputting the plink files, for reasons not clear to me...I am using the vcftools outputs instead.
+Now I want to fix the admixture script so that it runs through the Ks but also so that it runs 5 times with different random seeds. I "picked" 5 numbers randomly generated online, so that each K can be run with the same random seed and I can compare the different runs a bit more easily. I also need to fix the log names so that they don't overwrite.
 I realised after a quick test run that I also need a way to get the outputs in different folders for each seed or they will overwrite. So I added some directory nesting system to split the outputs from different seeds.
 Moving over to boros and starting.
 ```bash
@@ -1003,3 +1003,8 @@ plot_tree("kaka_withmig")
 plot_resid("kaka_withmig", "poporder")
 ```
 This looks confusing, and it changes a lot if I move the root to a different outgroup. I need a proper outgroup, to do some bootstrap tests and to try removing some missing data. But the program is really fast! =)
+
+
+#### Stats for selection outliers
+###### 14.3.19
+Finally back to work on this stuff after being drained of life by the kea project. So, I have done some more reading to decide exactly how to go about this, because there are many options and many programs that do different things, etc...and I have decided that the easiest and fastest way to go about this, considering my current time constraints, is to get the stats I need from VCFtools and some playing with R. Specifically, I am going to consider Fst, π, dxy and Tajima's D. These few stats aren't comprehensive, but they complement each other in ways that should allow me to interpret the patterns sensibly. 
