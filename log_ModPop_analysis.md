@@ -1007,4 +1007,56 @@ This looks confusing, and it changes a lot if I move the root to a different out
 
 #### Stats for selection outliers
 ###### 14.3.19
-Finally back to work on this stuff after being drained of life by the kea project. So, I have done some more reading to decide exactly how to go about this, because there are many options and many programs that do different things, etc...and I have decided that the easiest and fastest way to go about this, considering my current time constraints, is to get the stats I need from VCFtools and some playing with R. Specifically, I am going to consider Fst, π, dxy and Tajima's D. These few stats aren't comprehensive, but they complement each other in ways that should allow me to interpret the patterns sensibly. 
+Finally back to work on this stuff after being drained of life by the kea project. So, I have done some more reading to decide exactly how to go about this, because there are many options and many programs that do different things, etc...and I have decided that the easiest and fastest way to go about this, considering my current time constraints, is to get the stats I need from VCFtools and some playing with R. Specifically, I am going to consider Fst, π, dxy and Tajima's D. These few stats aren't comprehensive, but they complement each other in ways that should allow me to interpret the patterns sensibly. At least I hope so.
+I will plot these stats in comparisons between South Island and North Island, because the idea is that I am looking for specific differentiation between the two subspecies here, as opposed to a general pattern of local adaptation and isolation-by-distance that I will test with the environmental correlations and maybe EEMS.
+First of all, everyone seems to agree that it is important to remove sites with very low minor allele frequency for this kind of tests. It seems to muddle up things and increase the rate of false positives. So, I will take the snps that I have already filtered for the popgen part, and add the MAF filter before proceeding here.
+```bash
+mkdir selection_stats
+cd selection_stats/
+cp ../pop_structure/maxmiss90_common_snps_HWE_LD.recode.vcf .
+# checking how many snps I have in unplaced scaffolds
+grep "^un" maxmiss90_common_snps_HWE_LD.recode.vcf | wc -l
+979
+```
+I think that I will also remove the snps on unplaced scaffolds, for ease of cleanup later: since I plan on windowing all these stats and most of these scaffolds wouldn't be long enough to be included in the windows anyway.
+```bash
+vcftools=/usr/local/vcftools_0.1.15/bin/vcftools # since I am working in boros
+awk 'BEGIN{OFS="\t";} /^un/{print $1,$2}' maxmiss90_common_snps_HWE_LD.recode.vcf > sc_to_exclude.txt
+$vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+--exclude-positions sc_to_exclude.txt --maf 0.05 \
+--remove-filtered-all \
+--recode --recode-INFO-all \
+--out filtered_snps_for_selection_tests
+After filtering, kept 92 out of 92 Individuals
+Outputting VCF file...
+After filtering, kept 47098 out of a possible 101539 Sites
+Run Time = 26.00 seconds
+```
+That's quite harsh, considering that only about ~1000 of those snps are excluded because of the unplaced scaffolds, I have to deduce that the rest have a tiny minor allele frequency in the overall NZ population...I wonder if the MAF is still that low in the single populations, because then they would simply be private alleles which might be quite informative in the case of local adaptation. I see this as more of a problem in the continuous pop comparison, as in the environmental correlation, than in an island comparison. I can also imagine how if the loci are actually under selection though they should be more frequent than that. Just in case, I will keep an additional set at a MAF of 0.02 and see what happens with that one.
+```bash
+$vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+--exclude-positions sc_to_exclude.txt --maf 0.02 \
+--remove-filtered-all \
+--recode --recode-INFO-all \
+--out filtered_snps_for_selection_tests_maf02
+After filtering, kept 92 out of 92 Individuals
+Outputting VCF file...
+After filtering, kept 77318 out of a possible 101539 Sites
+Run Time = 40.00 seconds
+```
+Now, I will output the Fst stats with VCFtools on this set, before splitting it in two for the rest of the stats. BUT I need to define the population file. It seems I only need to specify the individuals present in one population and VCFtools calculates the Fst between this and all the others? --> Wrong, I need to provide two files, one for the individuals of each pop. Can get this from my ever useful population.txt file.
+```bash
+cp ../pop_structure/population.txt .
+awk '/North/{print $1}' population.txt > NI.txt
+awk '/South/{print $1}' population.txt > SI.txt
+$vcftools --vcf filtered_snps_for_selection_tests.recode.vcf \
+--weir-fst-pop NI.txt --weir-fst-pop SI.txt \
+--out NI_vs_SI
+Outputting Weir and Cockerham Fst estimates.
+Weir and Cockerham mean Fst estimate: 0.025244
+Weir and Cockerham weighted Fst estimate: 0.030833
+After filtering, kept 47098 out of a possible 47098 Sites
+Run Time = 2.00 seconds
+```
+Not the overall lowest Fst possible, but still pretty low, which suggests a condition very very close to panmixia. I see quite a few negative values in the output and the internet tells me that "In principle Fst scores are not impossible, as they mean that there is more variation within the population than between the two populations compared. In general, I believe it is common practice to change all the negative Fst scores to 0 and basically consider them as loci for which there is no population differentiation." from https://www.biostars.org/p/132253/ and others.
+Again, this does not sound impossible to me. 
