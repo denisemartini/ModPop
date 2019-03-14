@@ -1004,6 +1004,32 @@ plot_resid("kaka_withmig", "poporder")
 ```
 This looks confusing, and it changes a lot if I move the root to a different outgroup. I need a proper outgroup, to do some bootstrap tests and to try removing some missing data. But the program is really fast! =)
 
+##### Genetic diversity stats
+###### 14.3.19
+I just thought that it would be nice to have a table or something with the average heterozygosity and minor allele frequency (and nucleotide diversity?) per population. Maybe rates of shared or fixed polymorphic sites as well?
+So, I will prepare a file with the individuals from each pop and use VCFtools to extract stats for each pop, then average them and put them all in a table.
+```bash
+mkdir gen_diversity
+cd gen_diversity
+pops="Kapiti LittleBarrier Pureora Zealandia Codfish Nelson Fiordland Westland"
+for p in $pops
+do
+awk -v var="$p" '$0~var{print $1}' ../population.txt > $p.txt
+done
+```
+Then to get stats:
+```bash
+cp ../maxmiss90_common_snps_HWE_LD.recode.vcf .
+vcftools=/usr/local/vcftools_0.1.15/bin/vcftools # since I am working in boros
+$vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+--het --out all_het # this is individual, I don't need to use the split pops for this
+for p in $pops
+do
+$vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+--keep ${p}.txt --freq2 --out ${p}
+done
+```
+I think this is all I need to do some manipulation in R. Log in `GBS_gendiversity_stats.Rmd`.
 
 #### Stats for selection outliers
 ###### 14.3.19
