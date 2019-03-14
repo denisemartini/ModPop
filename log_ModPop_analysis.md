@@ -1151,4 +1151,14 @@ $vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
 $vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
 --TajimaD 250000 --out SI_maf02_250kb
 ```
-I could probably simply count the number of SNPs per window and decide the split on that. 
+I could probably simply count the number of SNPs per window and decide the split on that.
+Just a quick check on the allele frequency files tells me that the reference allele is always output first in these files, which is very nice, because it means I have the same first allele and second allele in the two files and I can use them for calculations without troubles. I will give a quick fix to these frequency files before importing them in R, I only want numbers and not genotypes:
+```bash
+list="A C G T"
+for i in $list
+do
+sed -i 's/'"${i}"'://' NI_maf02.frq
+sed -i 's/'"${i}"'://' SI_maf02.frq
+done
+```
+Perfect, the rest of this work will be in R, log in `GBS_plotting_outlier_stats.Rmd`.
