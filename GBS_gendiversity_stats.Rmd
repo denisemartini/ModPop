@@ -1,0 +1,8 @@
+---
+title: "Working on some genetic diversity stats from the GBS data"
+author: "Denise Martini"
+date: "3/14/2019"
+output: html_document
+---
+
+I will use this log to experiment on how to get the specific stats I want from the files I have, then loop this over all populations in a separate script. 

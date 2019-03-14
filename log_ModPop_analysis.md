@@ -1030,6 +1030,8 @@ $vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
 done
 ```
 I think this is all I need to do some manipulation in R. Log in `GBS_gendiversity_stats.Rmd`.
+Moving the files to desktop so I can work in R over there.
+`scp -r boros:/data/denise/ModPop_analysis/pop_structure/gen_diversity ./pop_structure`
 
 #### Stats for selection outliers
 ###### 14.3.19
@@ -1188,3 +1190,5 @@ sed -i 's/'"${i}"'://' SI_maf02.frq
 done
 ```
 Perfect, the rest of this work will be in R, log in `GBS_plotting_outlier_stats.Rmd`.
+Moving files on desktop, so I can work in RStudio there:
+`scp -r boros:/data/denise/ModPop_analysis/selection_stats .`
