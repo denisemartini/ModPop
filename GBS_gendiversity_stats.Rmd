@@ -6,3 +6,62 @@ output: html_document
 ---
 
 I will use this log to experiment on how to get the specific stats I want from the files I have, then loop this over all populations in a separate script. 
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+```
+
+So, first of all, I think I can get the heterozygosity measures, which at this stage I mean as average proportion of sites at which an individual of that population was heterozygous. I have a file with the per-individual homozygosity and number of sites, I just need to extract this info for all the individuals in a population and average it across them.
+First, let's load the files with the individuals in a population (Kapiti here) and heterozygosity.
+
+```{r}
+read.table("../pop_structure/gen_diversity/Kapiti.txt", header = FALSE) -> indv
+read.table("../pop_structure/gen_diversity/all_het.het", header = TRUE) -> het
+```
+
+I can very quickly take from the het file only the rows that are in common with the indv file, then attach another column that is the proportion of het on available sites (1-hom/all). The mean of this new column is the value I want.
+
+```{r}
+pop_het <- left_join(indv, het, by=c("V1"="INDV"))
+pop_het <- mutate(pop_het, prop_het=(1-(pop_het$O.HOM./pop_het$N_SITES)))
+mean(pop_het$prop_het)
+```
+
+Done. Now, a bit more complicated, I need the proportion of fixed sites and the average minor allele frequencies of the sites that are polymorphic in each population. First, loading the allele frequencies file.
+
+```{r}
+read.table("../pop_structure/gen_diversity/Kapiti.frq", header = TRUE, row.names = NULL) -> freq
+colnames(freq) <- c("CHROM", "POS", "N_ALLELES", "N_CHR", "FREQ_REF", "FREQ_ALT")
+nrow(freq) -> total_snps
+```
+
+Now, I need to filter out all rows with missing values in the allele frequencies, then filter out all homozygous sites. I also need the counts of the homozygous and missing sites.
+
+```{r}
+freq %>% filter(., is.na(FREQ_REF)) -> missing
+nrow(missing) -> missing_snps
+missing_snps/total_snps #proportion of missing snps
+freq %>% filter(., !is.na(FREQ_REF)) -> freq
+freq %>% filter(., FREQ_REF >=1 | FREQ_REF <= 0) -> hom
+nrow(hom) -> hom_snps
+hom_snps/total_snps #proportion of snps fixed in this population
+freq %>% filter(., !(FREQ_REF >=1 | FREQ_REF <= 0)) -> freq
+nrow(freq) -> het_snps
+het_snps/total_snps
+```
+
+Finally, the average minor allele frequency. I will need to choose the minimum value from the last two rows, then calculate the mean.
+
+```{r}
+apply(freq[,5:6], 1, FUN=min) -> maf
+mean(maf)
+```
+
+I will also output the positions of ALT hom and het sites of each population, so I can compare them and find sites that are private of one pop.
+
+```{r}
+hom %>% filter(., FREQ_REF <= 0)  %>% select(., CHROM, POS) -> sites
+bind_rows(sites, freq[,1:2]) %>% arrange(., CHROM, POS) -> sites
+write.table(sites, "../pop_structure/gen_diversity/Kapiti_sites.txt", col.names = FALSE, row.names = FALSE, sep = "\t", quote = FALSE)
+```
+
