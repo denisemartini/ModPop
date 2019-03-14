@@ -1059,4 +1059,96 @@ After filtering, kept 47098 out of a possible 47098 Sites
 Run Time = 2.00 seconds
 ```
 Not the overall lowest Fst possible, but still pretty low, which suggests a condition very very close to panmixia. I see quite a few negative values in the output and the internet tells me that "In principle Fst scores are not impossible, as they mean that there is more variation within the population than between the two populations compared. In general, I believe it is common practice to change all the negative Fst scores to 0 and basically consider them as loci for which there is no population differentiation." from https://www.biostars.org/p/132253/ and others.
-Again, this does not sound impossible to me. 
+Again, this does not sound impossible to me.
+I forgot to mention that I am getting all these stats on a per-site basis, because I will bin them in R. BUT, I can't do that for the Tajima's D, since it is a stat that is by default calculated over bp windows. I will use the windows from this stat to fix all the others as well, deciding which ones to exclude due to too few polymorphisms or end of a scaffold which doesn't reach the required size.
+Anyway, first I will split the vcf into the two pops.
+```bash
+$vcftools --vcf filtered_snps_for_selection_tests.recode.vcf \
+--keep NI.txt \
+--remove-filtered-all \
+--recode --recode-INFO-all \
+--out NI_pop_for_stats
+$vcftools --vcf filtered_snps_for_selection_tests.recode.vcf \
+--keep SI.txt \
+--remove-filtered-all \
+--recode --recode-INFO-all \
+--out SI_pop_for_stats
+```
+There are 49 individuals kept in the NI and 43 in the SI. I think the sample sizes are fairly even.
+From these two files I will calculate Tajima's D, π and allele frequencies to use in R for dxy. These stats need to be population specific, that's why I am doing it this way.
+```bash
+$vcftools --vcf NI_pop_for_stats.recode.vcf \
+--freq --out NI
+$vcftools --vcf NI_pop_for_stats.recode.vcf \
+--site-pi --out NI
+$vcftools --vcf NI_pop_for_stats.recode.vcf \
+--TajimaD 50000 --out NI
+$vcftools --vcf SI_pop_for_stats.recode.vcf \
+--freq --out SI
+$vcftools --vcf SI_pop_for_stats.recode.vcf \
+--site-pi --out SI
+$vcftools --vcf SI_pop_for_stats.recode.vcf \
+--TajimaD 50000 --out SI
+```
+Taking a quick peek at the Tajima's D values, I think I will have to get rid of quite a few bins that have no SNPs. I am still wondering if it makes sense to eliminate the MAF for this specific stat, since it is based on low frequency alleles. But most of all, probably I should increase the window size? This is were I think that being a bit less conservative on the MAF might be beneficial after all.
+```bash
+$vcftools --vcf filtered_snps_for_selection_tests_maf02.recode.vcf \
+--weir-fst-pop NI.txt --weir-fst-pop SI.txt \
+--out NI_vs_SI_maf02
+Outputting Weir and Cockerham Fst estimates.
+Weir and Cockerham mean Fst estimate: 0.022555
+Weir and Cockerham weighted Fst estimate: 0.029324
+After filtering, kept 47098 out of a possible 47098 Sites
+Run Time = 2.00 seconds
+```
+I expected these numbers to go up rather than down with more minor alleles. But clearly there are some minor alleles in both populations still.
+Ergo, probably not under selection.
+```bash
+$vcftools --vcf filtered_snps_for_selection_tests_maf02.recode.vcf \
+--keep NI.txt \
+--remove-filtered-all \
+--recode --recode-INFO-all \
+--out NI_pop_for_stats_maf02
+$vcftools --vcf filtered_snps_for_selection_tests_maf02.recode.vcf \
+--keep SI.txt \
+--remove-filtered-all \
+--recode --recode-INFO-all \
+--out SI_pop_for_stats_maf02
+# and the stats:
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--freq --out NI_maf02
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--site-pi --out NI_maf02
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 50000 --out NI_maf02
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--freq --out SI_maf02
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--site-pi --out SI_maf02
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 50000 --out SI_maf02
+```
+Number of SNPs per window is still pretty low in the Tajima's D calculations though, I think I do need to increase the window size or perform a sliding window or find a way of having similar numbers of SNPs in every window (changing the window size accordingly). I think I will increase the window size...I will lose resolution, but probably not too much, considering these stats are calculated on the number of segregating sites, not on the size of the window overall. I think what I could do is perform the Tajima's D on a few step sizes, then pick in R the windows with a certain number of SNPs only. Let's try that:
+```bash
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 25000 --out NI_maf02_25kb
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 25000 --out SI_maf02_25kb
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 100000 --out NI_maf02_100kb
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 100000 --out SI_maf02_100kb
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 150000 --out NI_maf02_150kb
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 150000 --out SI_maf02_150kb
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 200000 --out NI_maf02_200kb
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 200000 --out SI_maf02_200kb
+$vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 250000 --out NI_maf02_250kb
+$vcftools --vcf SI_pop_for_stats_maf02.recode.vcf \
+--TajimaD 250000 --out SI_maf02_250kb
+```
+I could probably simply count the number of SNPs per window and decide the split on that. 
