@@ -218,3 +218,35 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
 }
 ```
 
+Getting dxy is going to be just slightly more complicated, because there are some calculations to perform. Importing both populations allele frequencies to get them ready.
+
+```{r}
+NI_frq <- read.table("../selection_stats/NI_maf02.frq", header=T, row.names = NULL)
+SI_frq <- read.table("../selection_stats/SI_maf02.frq", header=T, row.names = NULL)
+colnames(NI_frq) <- c(c("CHROM", "POS", "N_ALLELES", "N_CHR", "NI_p", "NI_q"))
+colnames(SI_frq) <- c(c("CHROM", "POS", "N_ALLELES", "N_CHR", "SI_p", "SI_q"))
+NI_frq <- NI_frq[,1:2-5:6]
+SI_frq <- SI_frq[,1:2-5:6]
+```
+
+Joining them and calculating per site dxy, following the formula: 
+dxy = (p1 \* q2) + (p2 \* q1)
+
+```{r}
+all_frq <- full_join(NI_frq, SI_frq)
+all_frq %>% mutate(., dxy=((NI_p*SI_q)+(SI_p*NI_q))) -> all_frq
+```
+
+Finally, getting the mean dxy across windows:
+
+```{r}
+all_frq %>% arrange(match(CHROM, chromosomes)) -> all_frq  # rearrange the chromosome order
+left_join(all_frq, coordinate_scaler) -> all_frq
+all_frq %>% mutate(., newPOS=POS+tot) -> all_frq # scale to the new positions
+mean_dxy <- c()
+for (i in seq(1, to=(nrow(new_bins)), by=1)) {
+  mean_dxy <- c(mean_dxy, mean(all_frq %>% filter(., newPOS >= new_bins$newSTART[i] & newPOS <= new_bins$newEND[i]) %>% 
+                                     pull(., dxy)))
+}
+```
+
