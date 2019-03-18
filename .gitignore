@@ -7,3 +7,4 @@ GBS_adegenet_cache/
 _mdwriter.cson
 .Rhistory
 GBS_gendiversity_stats.html
+GBS_plotting_outlier_stats.html
