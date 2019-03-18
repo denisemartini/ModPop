@@ -142,3 +142,29 @@ GENOME.class.split@Tajima.D[,2] -> SI_Tajima
 ```
 
 Very well, now I only need to repeat this in a loop for all other chromosomes. O.O
+
+```{r}
+as.character(unique(new_bins$CHROM)) -> chromosomes
+for (i in seq(2, to=(length(chromosomes)), by=1)) {
+  chr <- paste0(chromosomes[i])
+  chrend <- max(new_bins %>% filter(.,CHROM==chr) %>% select(., END))
+  GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests_maf02.recode.vcf.gz", 
+                          tid=chr, frompos = 1, topos = chrend, include.unknown=TRUE, numcols = 10000)
+  GENOME.class <- set.populations(GENOME.class,
+                                  list(NI_pop,SI_pop), diploid=TRUE)
+  new_bins %>% filter(.,CHROM==chr) %>% select(., END) -> range_end
+  new_bins %>% filter(.,CHROM==chr) %>% select(., START) -> range_start
+  range <- list()
+  for (j in seq(1,to=(length(range_end$END)),by=1)) {
+    range[[j]] <- c(range_start$START[j]:range_end$END[j])
+  }
+  GENOME.class.split <- splitting.data(GENOME.class,
+                                       positions=range, type=2)
+  GENOME.class.split <- neutrality.stats(GENOME.class.split)
+  NI_Tajima <- c(NI_Tajima, GENOME.class.split@Tajima.D[,1])
+  SI_Tajima <- c(SI_Tajima, GENOME.class.split@Tajima.D[,2])
+}
+```
+
+That actually went fairly quick. Now that Tajima is done, I can dedicate myself to the other stats that need binning and averaging.
+
