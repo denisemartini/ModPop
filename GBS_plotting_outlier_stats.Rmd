@@ -1,0 +1,99 @@
+---
+title: "Plotting stats to identify outliers"
+author: "Denise Martini"
+date: "16 March 2019"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+I want to plot the Fst, dxy, pi, and Tajima's D statistics on windows across the genome. I hit the problem that my SNPs are not particularly abundant across the whole genome, so to have enough snps per window I would need fairly large windows. At the same time, some areas contain more snps than others, so I would end up with a lot of snps accumulated in some windows, and that would probably smooth out any outliers in that space. So, I think the best compromise would be to split the snps in different-sized windows, so that every window contains a similar amount of SNPs. I think ~10 SNPs per window should be all right and I think I can split them using info on the chromosome and position. I say ~10 and not exactly 10 because I plan on rounding the windows boundaries to be at the lowest around 25kbp splits. So, since I have already produced windows of 25Kbp for Tajima's D values, I will use those positions to merge together windows with less than 10 SNPs. 
+I will import that file first and see what I can do with it. 
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+read.table("../selection_stats/NI_maf02_25kb.Tajima.D", header = T) -> starting_bins
+starting_bins <- starting_bins[,1:3]
+starting_bins %>% mutate(., BIN_END=BIN_START+25000) -> starting_bins
+```
+
+Now I have to find bin sizes based on the number of SNPs in a region. I am using a function I got from Biostars to reset the cumulative sum of snps every time it surpasses 10.  
+
+```{r}
+sum_reset_at <- function(thresh) {
+  function(x) {
+    purrr::accumulate(x, ~if_else(.x>=thresh, .y, .x+.y))
+  }  
+}
+starting_bins %>% group_by(., CHROM) %>% mutate(c = sum_reset_at(10)(N_SNPS)) -> starting_bins
+```
+
+Then I keep only the rows where the cumsum is over 10, so I have the end positions. From those I can calculate the start position, with some fixing. 
+
+```{r}
+starting_bins %>% filter(., c>=10) -> bins # here I get end positions
+bins %>% mutate(., BIN_START=BIN_END) %>% pull(.,BIN_START) -> bins_start # making up the start positions
+bins_start <- c(0,bins_start)
+bins_start <- bins_start[1:5809] # bit of fixing of first and last records
+bins <- tibble(bins$CHROM, bins$c, bins_start, bins$BIN_END) # re-merging with the original dataset
+colnames(bins) <- c("CHROM", "SNPS", "START", "END")
+bins %>% mutate(., START=replace(START,START>END, 0)) -> bins # fixing records at the start of chromosomes
+```
+
+Quickly checking what sizes of windows I get:
+
+```{r}
+bins %>% mutate(., SIZE=END-START) -> bins
+ggplot(bins, aes(SIZE)) +
+  geom_bar()
+bins %>% count(., SIZE) -> bin_sizes
+bin_sizes %>% mutate(., SUM=cumsum(n)/sum(n)) -> bin_sizes
+kable(bin_sizes[1:25,])
+```
+
+Not great, some of these windows are way too big to be of any importance, the SNPs will be too sparse. But 90% of windows are under or at 400kbp, so I will set my limit there and remove all others.
+
+```{r}
+bins %>% filter(., SIZE <= 400000) -> bins
+ggplot(bins, aes(SIZE)) +
+  geom_bar()
+mean(bins$SIZE)
+```
+
+That's better. Now, there are two thing I need to fix next: first, I want the chromosomes to be in the correct order in the table, second I will need the bins start and end positions to be concatenated, for ease of plotting later. 
+
+```{r}
+bins %>% arrange(match(CHROM, c("ps_ch_1","ps_ch_1A","ps_ch_1B","ps_ch_2","ps_ch_3","ps_ch_4",
+                         "ps_ch_4A","ps_ch_5","ps_ch_6","ps_ch_7","ps_ch_8","ps_ch_9",
+                         "ps_ch_10","ps_ch_11","ps_ch_12","ps_ch_13","ps_ch_14","ps_ch_15",
+                         "ps_ch_17","ps_ch_18","ps_ch_19","ps_ch_20","ps_ch_21","ps_ch_22",
+                         "ps_ch_23","ps_ch_24","ps_ch_25","ps_ch_26","ps_ch_27","ps_ch_28",
+                         "ps_ch_LG2","ps_ch_LGE22","ps_ch_Z"))) -> bins
+
+new_bins <- bins %>% 
+  
+  # Compute chromosome size
+  group_by(CHROM) %>% 
+  summarise(chr_len=max(END)) %>% 
+  arrange(match(CHROM, c("ps_ch_1","ps_ch_1A","ps_ch_1B","ps_ch_2","ps_ch_3","ps_ch_4",
+                         "ps_ch_4A","ps_ch_5","ps_ch_6","ps_ch_7","ps_ch_8","ps_ch_9",
+                         "ps_ch_10","ps_ch_11","ps_ch_12","ps_ch_13","ps_ch_14","ps_ch_15",
+                         "ps_ch_17","ps_ch_18","ps_ch_19","ps_ch_20","ps_ch_21","ps_ch_22",
+                         "ps_ch_23","ps_ch_24","ps_ch_25","ps_ch_26","ps_ch_27","ps_ch_28",
+                         "ps_ch_LG2","ps_ch_LGE22","ps_ch_Z"))) %>% 
+  
+    # Calculate cumulative position of each chromosome
+  mutate(tot=cumsum(chr_len)-chr_len) %>%
+  select(-chr_len) %>%
+  
+  # Add this info to the initial dataset
+  left_join(bins, ., by=c("CHROM"="CHROM")) %>%
+  
+  # Add a cumulative position of each SNP
+  mutate(newSTART=START+tot) %>% mutate(newEND=END+tot)
+new_bins %>% mutate(., newEND=newEND-1) -> new_bins
+```
+
+The bins are ready. 
