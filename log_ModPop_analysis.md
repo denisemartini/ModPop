@@ -1192,3 +1192,35 @@ done
 Perfect, the rest of this work will be in R, log in `GBS_plotting_outlier_stats.Rmd`.
 Moving files on desktop, so I can work in RStudio there:
 `scp -r boros:/data/denise/ModPop_analysis/selection_stats .`
+
+###### 18.3.19
+While working in R to get those bin sizes, I realised that the files I produces in VCFtools for Tajima's D would not work, because they could not possibly cover all the combinations of start and end of the bins that I have. I need a sliding window approach to actually be able to do that. So, I am installing VCF-kit to use their sliding window utility for Tajima's D.
+It has quite a lot of dependencies, and needs to be installed in Python2.7.
+```
+source activate python2.7
+pip install yahmm
+pip install matplotlib
+pip install VCF-kit
+/Users/denisemartini/miniconda3/envs/python2.7/bin/vk tajima
+```
+This was still giving me errors, so I had to fix a couple of lines in one of the scripts:
+```
+nano /Users/denisemartini/miniconda3/envs/python2.7/lib/python2.7/site-packages/vcfkit/utils/vcf.py
+import sys # added this
+np.set_printoptions(threshold=sys.maxsize) # changed this
+```
+Now it runs, but we will need to see if it works:
+```
+cd /Volumes/Denise/ModPop_analysis/selection_stats/
+/Users/denisemartini/miniconda3/envs/python2.7/bin/vk tajima
+usage:
+  vk tajima [--no-header --extra] <window-size> <step-size> <vcf>
+  vk tajima [--no-header --extra] <window-size> --sliding <vcf>
+```
+Let's make some space and try:
+```bash
+rm *_maf02_*0kb.*
+/Users/denisemartini/miniconda3/envs/python2.7/bin/vk tajima 50000 25000 NI_pop_for_stats_maf02.recode.vcf
+KeyError: 'AC'
+```
+Looks like we need the AC info in the INFO field. Which is not going to work for me, since my platypus files don't have that field. Will need to go back to the B plan and calculate Tajima's D some other way, using ANGSD or something else. I will think about it, for now I will just plot the other stats.
