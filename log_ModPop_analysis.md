@@ -1224,3 +1224,18 @@ rm *_maf02_*0kb.*
 KeyError: 'AC'
 ```
 Looks like we need the AC info in the INFO field. Which is not going to work for me, since my platypus files don't have that field. Will need to go back to the B plan and calculate Tajima's D some other way, using ANGSD or something else. I will think about it, for now I will just plot the other stats.
+I had a quick thought: maybe I could restrict VCFtools to operate within certain regions and give it the right window size for the Tajima's D calculations and see if it does what I want...testing out:
+```bash
+# put these regions in a bed file:
+ps_ch_1 125000 250000
+ps_ch_1 775000 900000
+ps_ch_1 1150000 1275000
+ps_ch_1 1275000 1400000
+ps_ch_1 1625000 1750000
+# then run:
+vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
+--bed regions.bed \
+--TajimaD 125000 --out NI_maf02_125kb
+```
+Nope, it only uses the snps in the specified regions, but it still starts and ends at the regular chromosome positions. No good.
+I think I will try PopGenome in R instead, which sounds promising.
