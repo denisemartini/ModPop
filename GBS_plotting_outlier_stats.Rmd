@@ -194,3 +194,27 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
 }
 ```
 
+Quick rinse and repeat for the NI and SI mean nucleotide diversity, pi.
+
+```{r}
+NI_pi <- read.table("../selection_stats/NI_maf02.sites.pi", header=T)
+NI_pi %>% arrange(match(CHROM, chromosomes)) -> NI_pi  # rearrange the chromosome order
+left_join(NI_pi, coordinate_scaler) -> NI_pi
+NI_pi %>% mutate(., newPOS=POS+tot) -> NI_pi # scale to the new positions
+mean_NI_pi <- c()
+for (i in seq(1, to=(nrow(new_bins)), by=1)) {
+  mean_NI_pi <- c(mean_NI_pi, mean(NI_pi %>% filter(., newPOS >= new_bins$newSTART[i] & newPOS <= new_bins$newEND[i]) %>% 
+                                 pull(., PI)))
+}
+
+SI_pi <- read.table("../selection_stats/SI_maf02.sites.pi", header=T)
+SI_pi %>% arrange(match(CHROM, chromosomes)) -> SI_pi  # rearrange the chromosome order
+left_join(SI_pi, coordinate_scaler) -> SI_pi
+SI_pi %>% mutate(., newPOS=POS+tot) -> SI_pi # scale to the new positions
+mean_SI_pi <- c()
+for (i in seq(1, to=(nrow(new_bins)), by=1)) {
+  mean_SI_pi <- c(mean_SI_pi, mean(SI_pi %>% filter(., newPOS >= new_bins$newSTART[i] & newPOS <= new_bins$newEND[i]) %>% 
+                                     pull(., PI)))
+}
+```
+
