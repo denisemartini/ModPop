@@ -167,4 +167,30 @@ for (i in seq(2, to=(length(chromosomes)), by=1)) {
 ```
 
 That actually went fairly quick. Now that Tajima is done, I can dedicate myself to the other stats that need binning and averaging.
+I will prepare a "coordinate scaler" that I can use to fix the positions of all other variables to plot.
+
+```{r}
+coordinate_scaler <- tibble(new_bins$CHROM, new_bins$tot)
+unique(coordinate_scaler) -> coordinate_scaler
+colnames(coordinate_scaler) <- c("CHROM", "tot")
+```
+
+Then, let's read in and prepare the Fst stats.
+
+```{r}
+Fst_all <- read.table("../selection_stats/NI_vs_SI_maf02.weir.fst", header=T)
+Fst_all %>% arrange(match(CHROM, chromosomes)) -> Fst_all  # rearrange the chromosome order
+left_join(Fst_all, coordinate_scaler) -> Fst_all
+Fst_all %>% mutate(., newPOS=POS+tot) -> Fst_all # scale to the new positions
+```
+
+And let's get the averages over the windows I chose.
+
+```{r}
+mean_Fst <- c()
+for (i in seq(1, to=(nrow(new_bins)), by=1)) {
+  mean_Fst <- c(mean_Fst, mean(Fst_all %>% filter(., newPOS >= new_bins$newSTART[i] & newPOS <= new_bins$newEND[i]) %>% 
+                                 pull(., WEIR_AND_COCKERHAM_FST)))
+}
+```
 
