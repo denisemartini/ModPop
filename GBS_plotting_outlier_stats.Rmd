@@ -182,6 +182,9 @@ Fst_all <- read.table("../selection_stats/NI_vs_SI_maf02.weir.fst", header=T)
 Fst_all %>% arrange(match(CHROM, chromosomes)) -> Fst_all  # rearrange the chromosome order
 left_join(Fst_all, coordinate_scaler) -> Fst_all
 Fst_all %>% mutate(., newPOS=POS+tot) -> Fst_all # scale to the new positions
+# fix negative Fst values (they should be 0)
+Fst_all %>% mutate(., WEIR_AND_COCKERHAM_FST=replace(WEIR_AND_COCKERHAM_FST,
+                                                     WEIR_AND_COCKERHAM_FST<=0, 0)) -> Fst_all
 ```
 
 And let's get the averages over the windows I chose.
@@ -248,5 +251,192 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
   mean_dxy <- c(mean_dxy, mean(all_frq %>% filter(., newPOS >= new_bins$newSTART[i] & newPOS <= new_bins$newEND[i]) %>% 
                                      pull(., dxy)))
 }
+```
+
+I have everything I need, so let's put everything together. 
+
+```{r}
+outlier_stats <- tibble(new_bins$CHROM, new_bins$newSTART, new_bins$newEND, mean_Fst, 
+                        mean_NI_pi, mean_SI_pi, mean_dxy, NI_Tajima, SI_Tajima)
+colnames(outlier_stats) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
+                             "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")
+outlier_stats %>% mutate(., BIN_MIDDLE=BIN_START + ((BIN_END-BIN_START)/2)) -> outlier_stats
+```
+
+Plotting Fst.
+
+```{r}
+ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
+  
+  # Show all points
+  geom_line( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
+  scale_color_manual(values = rep(c("#A6D96A"), 80)) +
+  
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  # adding threshold line
+  geom_hline(yintercept=(quantile(outlier_stats$Fst, probs = 0.999, na.rm = TRUE)), linetype="dashed", color = "#D73027") +
+  labs(x = "bp", y="Fst") +
+  
+  # Custom theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+
+ggsave("../selection_stats/Fst.png", width=8, height=4, dpi=300)
+```
+
+Plotting pi.
+
+```{r}
+ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
+  
+  # Show all points
+  geom_line(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  labs(x = "bp", y="pi") +
+  
+  # Custom the theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+ggsave("../selection_stats/NI_pi.png", width=8, height=4, dpi=300)
+
+ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
+  
+  # Show all points
+  geom_line(aes(y=SI_pi), alpha=0.8, size=0.8, color="#A6D96A") +
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  labs(x = "bp", y="pi") +
+  
+  # Custom the theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+ggsave("../selection_stats/SI_pi.png", width=8, height=4, dpi=300)
+
+ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
+  
+  # Show all points
+  geom_line(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_line(aes(y=SI_pi), alpha=0.5, size=0.8, color="#A6D96A") +
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  labs(x = "bp", y="pi") +
+  
+  # Custom the theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+ggsave("../selection_stats/both_pi.png", width=8, height=4, dpi=300)
+```
+
+Then dxy.
+
+```{r}
+ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
+  
+  # Show all points
+  geom_line( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
+  scale_color_manual(values = rep(c("#FDAE61"), 80)) +
+  
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  labs(x = "bp", y="Dxy") +
+  
+  # Custom theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+ggsave("../selection_stats/dxy.png", width=8, height=4, dpi=300)
+```
+
+Finally, Tajima's D.
+
+```{r}
+ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
+  
+  # Show all points
+  geom_line(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  labs(x = "bp", y="pi") +
+  
+  # Custom the theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+ggsave("../selection_stats/NI_tajima.png", width=8, height=4, dpi=300)
+
+ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
+  
+  # Show all points
+  geom_line(aes(y=SI_Tajima), alpha=0.8, size=0.8, color="#A6D96A") +
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  labs(x = "bp", y="pi") +
+  
+  # Custom the theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+ggsave("../selection_stats/SI_tajima.png", width=8, height=4, dpi=300)
+
+ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
+  
+  # Show all points
+  geom_line(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_line(aes(y=SI_Tajima), alpha=0.5, size=0.8, color="#A6D96A") +
+  scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
+  scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
+  
+  labs(x = "bp", y="Tajima's D") +
+  
+  # Custom the theme:
+  theme_bw() +
+  theme( 
+    legend.position="none",
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  )
+ggsave("../selection_stats/both_tajima.png", width=8, height=4, dpi=300)
 ```
 
