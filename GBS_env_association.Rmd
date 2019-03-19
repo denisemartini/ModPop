@@ -1,0 +1,8 @@
+---
+title: "Environmental association analysis on GBS data"
+author: "Denise Martini"
+date: "19 March 2019"
+output: 
+  html_document: 
+    keep_md: yes
+---
