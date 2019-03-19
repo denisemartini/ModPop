@@ -269,7 +269,7 @@ Plotting Fst.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
   
   # Show all points
-  geom_line( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
+  geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
   scale_color_manual(values = rep(c("#A6D96A"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
@@ -297,7 +297,7 @@ Plotting pi.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -316,7 +316,7 @@ ggsave("../selection_stats/NI_pi.png", width=8, height=4, dpi=300)
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=SI_pi), alpha=0.8, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=SI_pi), alpha=0.8, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -335,8 +335,8 @@ ggsave("../selection_stats/SI_pi.png", width=8, height=4, dpi=300)
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
-  geom_line(aes(y=SI_pi), alpha=0.5, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=SI_pi), alpha=0.5, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -359,7 +359,7 @@ Then dxy.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
   
   # Show all points
-  geom_line( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
+  geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
   scale_color_manual(values = rep(c("#FDAE61"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
@@ -384,7 +384,7 @@ Finally, Tajima's D.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -403,7 +403,7 @@ ggsave("../selection_stats/NI_tajima.png", width=8, height=4, dpi=300)
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=SI_Tajima), alpha=0.8, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=SI_Tajima), alpha=0.8, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -422,8 +422,8 @@ ggsave("../selection_stats/SI_tajima.png", width=8, height=4, dpi=300)
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
-  geom_line(aes(y=SI_Tajima), alpha=0.5, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=SI_Tajima), alpha=0.5, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   

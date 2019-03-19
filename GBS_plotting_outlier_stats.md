@@ -222,7 +222,7 @@ GENOME.class.split <- neutrality.stats(GENOME.class.split)
 ```
 
 ```
-## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpgiPQ8a/ff1665615690cd2.ff
+## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpqxiKbg/ff173e246bc0233.ff
 ```
 
 ```
@@ -435,7 +435,7 @@ Plotting Fst.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
   
   # Show all points
-  geom_line( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
+  geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
   scale_color_manual(values = rep(c("#A6D96A"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
@@ -455,10 +455,18 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
   )
 ```
 
+```
+## Warning: Removed 14 rows containing missing values (geom_point).
+```
+
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/Fst.png", width=8, height=4, dpi=300)
+```
+
+```
+## Warning: Removed 14 rows containing missing values (geom_point).
 ```
 
 Plotting pi.
@@ -468,7 +476,7 @@ Plotting pi.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -482,17 +490,27 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank()
   )
+```
+
+```
+## Warning: Removed 2 rows containing missing values (geom_point).
 ```
 
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/NI_pi.png", width=8, height=4, dpi=300)
+```
 
+```
+## Warning: Removed 2 rows containing missing values (geom_point).
+```
+
+```r
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=SI_pi), alpha=0.8, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=SI_pi), alpha=0.8, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -506,18 +524,28 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank()
   )
+```
+
+```
+## Warning: Removed 12 rows containing missing values (geom_point).
 ```
 
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-2.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/SI_pi.png", width=8, height=4, dpi=300)
+```
 
+```
+## Warning: Removed 12 rows containing missing values (geom_point).
+```
+
+```r
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
-  geom_line(aes(y=SI_pi), alpha=0.5, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=NI_pi), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=SI_pi), alpha=0.5, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -533,10 +561,24 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   )
 ```
 
+```
+## Warning: Removed 2 rows containing missing values (geom_point).
+```
+
+```
+## Warning: Removed 12 rows containing missing values (geom_point).
+```
+
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-3.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/both_pi.png", width=8, height=4, dpi=300)
+```
+
+```
+## Warning: Removed 2 rows containing missing values (geom_point).
+
+## Warning: Removed 12 rows containing missing values (geom_point).
 ```
 
 Then dxy.
@@ -546,7 +588,7 @@ Then dxy.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
   
   # Show all points
-  geom_line( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
+  geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
   scale_color_manual(values = rep(c("#FDAE61"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
@@ -564,10 +606,18 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
   )
 ```
 
+```
+## Warning: Removed 14 rows containing missing values (geom_point).
+```
+
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/dxy.png", width=8, height=4, dpi=300)
+```
+
+```
+## Warning: Removed 14 rows containing missing values (geom_point).
 ```
 
 Finally, Tajima's D.
@@ -577,7 +627,7 @@ Finally, Tajima's D.
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -601,7 +651,7 @@ ggsave("../selection_stats/NI_tajima.png", width=8, height=4, dpi=300)
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=SI_Tajima), alpha=0.8, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=SI_Tajima), alpha=0.8, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
@@ -625,8 +675,8 @@ ggsave("../selection_stats/SI_tajima.png", width=8, height=4, dpi=300)
 ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   
   # Show all points
-  geom_line(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
-  geom_line(aes(y=SI_Tajima), alpha=0.5, size=0.8, color="#A6D96A") +
+  geom_point(aes(y=NI_Tajima), alpha=0.8, size=0.8, color="#FDAE61") +
+  geom_point(aes(y=SI_Tajima), alpha=0.5, size=0.8, color="#A6D96A") +
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
