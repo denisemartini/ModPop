@@ -17,9 +17,10 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
 - [ ] Population structure tests:
   - [x] admixture
   - [x] dapc in adegenet
-  - [ ] tree in treemix
+  - [x] <del>tree in treemix</del>
   - [ ] modeling in dadi
-- [ ] Stats for selection outliers (Fst, Tajima's D, etc)
+  - [ ] tree in BEAST
+- [x] Stats for selection outliers (Fst, Tajima's D, etc)
 - [ ] Environmental correlations
 - [ ] Inbreeding tests
 
@@ -1239,3 +1240,15 @@ vcftools --vcf NI_pop_for_stats_maf02.recode.vcf \
 ```
 Nope, it only uses the snps in the specified regions, but it still starts and ends at the regular chromosome positions. No good.
 I think I will try PopGenome in R instead, which sounds promising.
+That actually did work fine. The rest of the log on this topic is in the same outlier stats markdown document.
+
+#### Environmental correlations
+###### 19.3.19
+For the environmental association tests I decided to use the R package LEA (http://membres-timc.imag.fr/Olivier.Francois/LEA/software.htm), which uses the lfmm method and has been used quite a lot. I downloaded the environmental variables from WorldClim (http://worldclim.org/version2), because they seem to be quite accurate and they include several biologically relevant variables in the bioclim section. I am also going to use the info from this tutorial (http://evomics.org/learning/population-and-speciation-genomics/2018-population-and-speciation-genomics/environmental-correlation-analysis/#sec4) to extract the variables I need for my samples and put together the input files in R. The only thing I need to prepare then is the snp file, which they suggest should be cleaned up of maf < .05 and is easier to deal with if in .ped format. I can do this with VCFtools once again. I think I will be conservative and only remove maf < .02 for now. I will use the file I prepared for the selection stats and convert that.
+```bash
+cd env_correlations
+VCFtools --gzvcf ../selection_stats/filtered_snps_for_selection_tests_maf02.recode.vcf.gz \
+--plink --out snps_for_env_tests
+```
+I forgot that the plink format screws up a bit when you have chromosome names different from integers, but it does not matter, because I had used the chromosome name and position as SNP IDs, so I can retrace the snp identity from the .map file. LEA does not use that information anyway.
+The rest of the work for this part is going to be in `GBS_env_association.Rmd`.
