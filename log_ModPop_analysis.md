@@ -1108,6 +1108,84 @@ Matrix
 END;
 ```
 Saving as final_snp_matrix.nex
+Now I am moving this in boros, because I can start BEAST over there.
+```bash
+cd ..
+scp -r SNAPP_tree boros:/data/denise/ModPop_analysis
+module load beast/2.5.0
+beauti
+beast -seed 777 -beagle -beagle_CPU -beagle_double -window -threads 12
+```
+###### 21.3.19
+Right, so that is not going to work. Well, it is, but in about two months, which is not ideal right now. Let's restrict the dataset still.
+First, I am going back to that selected samples file and leaving only the first two, then repeating the following selections.
+```bash
+awk '{print $1}' sorted_indv_missingness.txt > selected_indv.txt
+VCFtools --vcf ../vcf_filtering/maxmiss90_common_snps_HWE_LD.recode.vcf \
+--keep selected_indv.txt --maf 0.1 --max-missing 1 --recode --out selected_indv_snps
+After filtering, kept 11099 out of a possible 101539 Sites
+```
+Now picking only 2500 SNPs.
+```bash
+grep -v '#' selected_indv_snps.recode.vcf > snps_to_sample.vcf
+wc -l snps_to_sample.vcf
+11099
+grep '#' selected_indv_snps.recode.vcf > vcf_header.txt
+cat snps_to_sample.vcf | awk 'BEGIN {srand()} !/^$/ { if (rand() <= .225) print $0}' > sampled_snps.txt
+# I had to play and rerun the command above a few time to get close to a number I was happy with,
+# since it randomly extracts a proportion of lines (<= .373), not a fixed number
+wc -l sampled_snps.txt
+2505
+# I just removed 5 extra random lines to get to 5000 SNPs, then put the file back together:
+cat vcf_header.txt sampled_snps.txt > final_sampled_snps.vcf
+```
+Finally, getting the right output from VCFtools.
+```bash
+VCFtools --vcf final_sampled_snps.vcf \
+--012 --out final_sampled_snps
+cat final_sampled_snps.012 | cut -f 2- | tr -d '\t' > fixed_final_sampled_snps.012
+paste final_sampled_snps.012.indv fixed_final_sampled_snps.012 > final_snp_matrix.012
+```
+Fixed the file in the nexus format as above, then moved to boros. I noticed that BEAST is also installed in NeSI, so I will try using it over there, but I don't think I have access to the graphical interface over there, so I will still prepare the .xml file in beauti in boros and then move it to NeSI, after figuring out how much time I might need as well.
+```bash
+module load beast/2.5.0
+beauti
+sed -i 's/totalcount="4"/totalcount="3"/' final_snp_matrix.xml #beauti for some reason messes up with my diploid data, so I need to add this fix before running beast
+beast -seed 777 -beagle -beagle_CPU -beagle_double -window -threads 12
+```
+I am running it briefly, just to see how long it still takes to do a series of samples, so I can maybe estimate how to use it in NeSI. The good thing is that BEAST does save the states as it goes, so if it gets interrupted it doesn't have to start from the beginning I think.
+While that runs I will see how I can make this work in NeSI.
+```bash
+module load BEAST/2.4.7
+beast
+```
+Turns out, that when I typed beast I did get the GUI popping up. Which is fantastic, because it means I don't have to go crazy with figuring out how to install SNAPP without beauti. So, I did that. It would still be less than optimal to use the GUI in NeSI, so I will forget about that and remove the "-window" option from my beast command. I will put this in a NeSI script:
+```
+#!/bin/bash -e
+#SBATCH --job-name=BEAST      # job name (shows up in the queue)
+#SBATCH --account=uoo02327     # Project Account
+#SBATCH --time=24:00:00         # Walltime (HH:MM:SS)
+#SBATCH --cpus-per-task=24      # number of cores per task
+#SBATCH --mem-per-cpu=1500      # memory/cpu (in MB)
+#SBATCH --ntasks=2              # number of tasks (e.g. MPI)
+#SBATCH --partition=large       # specify a partition
+#SBATCH --hint=nomultithread    # don't use hyperthreading
+#SBATCH --chdir=/nesi/nobackup/uoo02327/denise/ModPop_analysis/SNAPP_tree   # directory where you run the job
+#SBATCH --output=%x-%j.out      # %x and %j are replaced by job name and ID
+#SBATCH --mail-type=ALL         # Optional: Send email notifications
+#SBATCH --mail-user=marde569@student.otago.ac.nz     # Use with --mail-type option
+
+module load BEAST/2.4.7
+beast -seed 777 -beagle -beagle_CPU -beagle_double -threads 48 final_snp_matrix.xml
+```
+And let's just see what happens when I run this.
+```bash
+sbatch nesi_beast.sh
+Submitted batch job 2877945
+```
+Because in the meantime, on boros, beast ran 1500 samples in ~20 minutes. Which I believe would still take ~15 days.
+Comparatively, in the last ~5 minutes on NeSI beast has already run 2700 samples. I am optimistic. I think it will still take about 2 days, but that's still a huge improvement. Hopefully the chain is long enough to reach convergence.
+
 
 
 

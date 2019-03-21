@@ -129,15 +129,16 @@ In the documentation they recommend running the test with different Ks around th
 
 ```{r}
 obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
-                K = 2, repetitions = 10, iterations = 6000, burnin = 3000, project="new", CPU = 8)
+                K = 2, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
-                K = 3, repetitions = 10, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
+                K = 3, repetitions = 5, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
 obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
-                K = 4, repetitions = 10, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
+                K = 4, repetitions = 5, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
 obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
-                K = 5, repetitions = 10, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
+                K = 5, repetitions = 5, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
 ```
 
+This takes a VERY LONG time.
 Then I need to adjust the p-values combining the repetitions from each run, and choose the appropriate run based on the shape of the p-value histogram, which "should be flat, with a peak close to zero".
 
 ```{r}
