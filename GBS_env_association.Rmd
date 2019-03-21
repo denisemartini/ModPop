@@ -27,7 +27,7 @@ library(dplyr)
 Loading and fixing my locations file, because I realised the order of the coordinates was wrong. These packages like to have longitude before latitude.
 
 ```{r}
-kakalocs <- read.table("../env_correlations/samples_locations.txt", sep="\t", header=T)
+kakalocs <- read.table("samples_locations.txt", sep="\t", header=T)
 kakalocs <- tibble(kakalocs$SampleID, kakalocs$Longitude, kakalocs$Latitude)
 colnames(kakalocs) <- c("SAMPLE", "LONG", "LAT")
 ```
@@ -35,14 +35,14 @@ colnames(kakalocs) <- c("SAMPLE", "LONG", "LAT")
 Loading the bioclimatic variables files.
 
 ```{r}
-files <- list.files("../env_correlations/env_variables/wc2.0_2.5m_bio/", pattern='tif', full.names=TRUE)
+files <- list.files("env_variables/wc2.0_2.5m_bio/", pattern='tif', full.names=TRUE)
 bioclim2.5 <- stack(files)
 ```
 
 Solar radiation is in a stack of its own (wd) and needs to be synthesized in a single layer if I want to have one value for the annual solar radiation, rather than twelve monthly values. I decided to go for a mean value.
 
 ```{r, cache=TRUE}
-files_wd <- list.files("../env_correlations/env_variables/wc2.0_2.5m_srad/", pattern='tif', full.names=TRUE)
+files_wd <- list.files("env_variables/wc2.0_2.5m_srad/", pattern='tif', full.names=TRUE)
 wd <- stack(files_wd)
 mean(wd) -> mean_srad
 ```
@@ -51,36 +51,123 @@ Now I can extract the values for my locations from the variables I want. And I c
 Annual mean temperature.
 
 ```{r}
-mean_temp <- tibble(kakalocs$SAMPLE, extract(bioclim2.5[[1]], kakalocs[,2:3]))
+mean_temp <- extract(bioclim2.5[[1]], kakalocs[,2:3])
 plot(bioclim2.5, 1, xlim=c(160,180), ylim=c(-48,-34))
 points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
-write.table(mean_temp, "../env_correlations/mean_temp.env", col.names = F, row.names = F, quote = F)
+write.table(mean_temp, "mean_temp.env", col.names = F, row.names = F, quote = F)
 ```
 
 Minimum temperature of the coldest month.
 
 ```{r}
-coldest_month <- tibble(kakalocs$SAMPLE, extract(bioclim2.5[[6]], kakalocs[,2:3]))
+coldest_month <- extract(bioclim2.5[[6]], kakalocs[,2:3])
 plot(bioclim2.5, 6, xlim=c(160,180), ylim=c(-48,-34))
 points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
-write.table(coldest_month, "../env_correlations/coldest_month.env", col.names = F, row.names = F, quote = F)
+write.table(coldest_month, "coldest_month.env", col.names = F, row.names = F, quote = F)
 ```
 
 Annual precipitation.
 
 ```{r}
-ann_prec <- tibble(kakalocs$SAMPLE, extract(bioclim2.5[[12]], kakalocs[,2:3]))
+ann_prec <- extract(bioclim2.5[[12]], kakalocs[,2:3])
 plot(bioclim2.5, 12, xlim=c(160,180), ylim=c(-48,-34))
 points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
-write.table(ann_prec, "../env_correlations/ann_prec.env", col.names = F, row.names = F, quote = F)
+write.table(ann_prec, "ann_prec.env", col.names = F, row.names = F, quote = F)
 ```
 
 Solar radiation.
 
 ```{r}
-ann_srad <- tibble(kakalocs$SAMPLE, extract(mean_srad, kakalocs[,2:3]))
+ann_srad <- extract(mean_srad, kakalocs[,2:3])
 plot(mean_srad, xlim=c(160,180), ylim=c(-48,-34))
 points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
-write.table(ann_srad, "../env_correlations/ann_srad.env", col.names = F, row.names = F, quote = F)
+write.table(ann_srad, "ann_srad.env", col.names = F, row.names = F, quote = F)
+```
+
+Now, on to use LEA for the correlations, real quick.
+Nope, not on this version of R. -.-
+So, sicne I can't update R on my desktop, because the OS is too out of date, I will finish writing up this script and run it in boros instead, where I have my nice R 3.5 installed and I already checked that LEA works fine.
+
+```{r eval=FALSE}
+install.packages("devtools")
+devtools::install_github("bcm-uga/LEA")
+```
+
+Loading packages and snp files, that I need to quickly convert in other formats.
+
+```{r message=FALSE}
+library(LEA)
+library(RColorBrewer)
+snpfile = ped2lfmm("snps_for_env_tests.ped")
+genotype = lfmm2geno("snps_for_env_tests.lfmm")
+```
+
+Testing the population structure (this is a similar thing to admixture), just to check that the signal is the same as usual.
+
+```{r}
+obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU = 8)
+plot(obj.snmf)
+barplot(t(Q(obj.snmf, K = 4)), col = c(values=brewer.pal(4, "RdYlGn")))
+```
+
+Everything seems to be as usual, so I am running the imputation for missing data, to check that everything is fine again and because they specify that it is recommended before the environmental associations.
+
+```{r}
+obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
+                       entropy = TRUE, repetitions = 10,
+                       project = "new", CPU = 8)
+# select the run with the lowest cross-entropy value
+best = which.min(cross.entropy(obj.snmf, K = 4))
+barplot(t(Q(obj.snmf, K = 4, run = best)), col = c(values=brewer.pal(4, "RdYlGn")))
+# Impute the missing genotypes
+impute(obj.snmf, "snps_for_env_tests.lfmm",
+       method = 'mode', K = 4, run = best)
+```
+
+Now, time to finally run those association tests on this dataset. Starting with the mean temp variable.
+In the documentation they recommend running the test with different Ks around the value identified with snmf, with multiple repetitions for each K (repetitions=5-10), a decent number of cycles (e.g. -i 6000) and half of that as burning cycles (-b 3000). So, here we go.
+
+```{r}
+obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
+                K = 2, repetitions = 10, iterations = 6000, burnin = 3000, project="new", CPU = 8)
+obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
+                K = 3, repetitions = 10, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
+obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
+                K = 4, repetitions = 10, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
+obj.lfmm = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
+                K = 5, repetitions = 10, iterations = 6000, burnin = 3000, project="continue", CPU = 8)
+```
+
+Then I need to adjust the p-values combining the repetitions from each run, and choose the appropriate run based on the shape of the p-value histogram, which "should be flat, with a peak close to zero".
+
+```{r}
+p_2 = lfmm.pvalues(obj.lfmm, K = 2)
+p_3 = lfmm.pvalues(obj.lfmm, K = 3)
+p_4 = lfmm.pvalues(obj.lfmm, K = 4)
+p_5 = lfmm.pvalues(obj.lfmm, K = 5)
+par(mfrow = c(2,2))
+hist(p_2$pvalues, col = "#D73027")
+hist(p_3$pvalues, col = "#D9EF8B")
+hist(p_4$pvalues, col = "#1A9850")
+hist(p_5$pvalues, col = "#FDAE61")
+```
+
+Once confirmed that K=4 is as usual our best guess, we can go on and plot the p-values of that run and see if we have any outliers.
+
+```{r}
+plot(-log10(p_4$pvalues), pch = 19, col = "#1A9850", cex = .7)
+```
+
+Then let's apply a multiple testing correction (FDR with Benjamini-Hochberg method) and extract the candidates.
+
+```{r}
+L = length(p_4$pvalues)
+q = .05
+# return a list of candidates with expected FDR .05
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = order(p_4$pvalues)[w]
+write.table(candidates, sig_mean_temp.txt, sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
 ```
 
