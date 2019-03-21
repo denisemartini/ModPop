@@ -1034,6 +1034,83 @@ I think this is all I need to do some manipulation in R. Log in `GBS_gendiversit
 Moving the files to desktop so I can work in R over there.
 `scp -r boros:/data/denise/ModPop_analysis/pop_structure/gen_diversity ./pop_structure`
 
+##### Tree using SNAPP/BEAST
+###### 21.3.19
+I need to do some filtering on my SNPs, because SNAPP is super computationally intensive. I will have to limit my number of samples to 3 from each population (24 total) and might still be too many. I will decide which individuals to keep based on their levels of missing data. I can obtain this information from VCFtools.
+```bash
+mkdir SNAPP_tree
+cd SNAPP_tree
+VCFtools --vcf ../vcf_filtering/maxmiss90_common_snps_HWE_LD.recode.vcf \
+--missing-indv --out missingness_indv
+awk '{print $1,$5}' missingness_indv.imiss | sed 's/\([A-Z]*_[A-Z]*\)\([0-9]*\) /\1\2 \1 /' | sort -k2,3 > sorted_indv_missingness.txt
+```
+Deleting all but the first three individuals from each pop in nano. One of the Nelson individuals still has 1/3 missing sites unfortunately, but that will probably not be a problem when I am done reducing the dataset. For now, let's put these individuals in a file, filter everything else out with VCFtools and keep only what still is a polymorphic site.
+```bash
+awk '{print $1}' sorted_indv_missingness.txt > selected_indv.txt
+VCFtools --vcf ../vcf_filtering/maxmiss90_common_snps_HWE_LD.recode.vcf \
+--keep selected_indv.txt --maf 0.001 --recode --out selected_indv_snps
+After filtering, kept 80317 out of a possible 101539 Sites
+```
+That is still way too many, so let's restrict the missing sites as well.
+```bash
+VCFtools --vcf ../vcf_filtering/maxmiss90_common_snps_HWE_LD.recode.vcf \
+--keep selected_indv.txt --maf 0.001 --max-missing 1 --recode --out selected_indv_snps
+After filtering, kept 36425 out of a possible 101539 Sites
+```
+Still a lot! I can probably increase the maf a bit still: with 24 individuals and 48 alleles, without missing data at all, if I want at least 4 alleles to be the minor allele, that's a maf of 0.083.
+```bash
+VCFtools --vcf ../vcf_filtering/maxmiss90_common_snps_HWE_LD.recode.vcf \
+--keep selected_indv.txt --maf 0.08 --max-missing 1 --recode --out selected_indv_snps
+After filtering, kept 13551 out of a possible 101539 Sites
+```
+Getting there, I guess...I really only want to keep ~5000 SNPs. Short of randomly sampling them, the only other thing I can think of is the site quality. But this would not be even across the different programs I used. So, let's go for random, but I will need to do some roundabout trick.
+```bash
+grep -v '#' selected_indv_snps.recode.vcf > snps_to_sample.vcf
+wc -l snps_to_sample.vcf
+13551
+grep '#' selected_indv_snps.recode.vcf > vcf_header.txt
+cat snps_to_sample.vcf | awk 'BEGIN {srand()} !/^$/ { if (rand() <= .373) print $0}' > sampled_snps.txt
+# I had to play and rerun the command above a few time to get close to a number I was happy with,
+# since it randomly extracts a proportion of lines (<= .373), not a fixed number
+wc -l sampled_snps.txt
+5004
+# I just removed 4 extra random lines to get to 5000 SNPs, then put the file back together:
+cat vcf_header.txt sampled_snps.txt > final_sampled_snps.vcf
+```
+Now I can use VCFtools to convert this to a .ped file, which I can then make into a fasta alignment.
+```bash
+VCFtools --vcf final_sampled_snps.vcf \
+--plink --out final_sampled_snps
+cut -f 1,7- final_sampled_snps.ped | tr -d '\t' | sed 's/\([A-Z]*_[A-Z]*\)\([0-9][0-9]\)/>\1\2 /' | tr ' ' '\n' > final_snp_alignment.fasta
+cat final_snp_alignment.fasta | awk 'NR%2==0' | awk '{print length($1)}' #sanity check
+10000
+10000
+10000
+```
+Nope, I had not considered one important factor: ped files actually have 2 columns per snp, the full genotype. What I need is a binary file, with SNPs coded as 0,1,2s depending on number of non-ref alleles. I think I can use the VCF 012 output and work from there to get my nexus file directly?
+```bash
+VCFtools --vcf final_sampled_snps.vcf \
+--012 --out final_sampled_snps
+cat final_sampled_snps.012 | cut -f 2- | tr -d '\t' > fixed_final_sampled_snps.012
+paste final_sampled_snps.012.indv fixed_final_sampled_snps.012 > final_snp_matrix.012
+```
+Then I am adding in nano the bits at the beginning and at the end that make it a nexus file:
+```
+#NEXUS
+BEGIN Data;
+DIMENSIONS NTAX=24 NCHAR=5000;
+FORMAT DATATYPE=integer INTERLEAVE=no missing=?;
+Matrix
+...<here>...
+...<goes>...
+...<mydata>...
+;
+END;
+```
+Saving as final_snp_matrix.nex
+
+
+
 #### Stats for selection outliers
 ###### 14.3.19
 Finally back to work on this stuff after being drained of life by the kea project. So, I have done some more reading to decide exactly how to go about this, because there are many options and many programs that do different things, etc...and I have decided that the easiest and fastest way to go about this, considering my current time constraints, is to get the stats I need from VCFtools and some playing with R. Specifically, I am going to consider Fst, π, dxy and Tajima's D. These few stats aren't comprehensive, but they complement each other in ways that should allow me to interpret the patterns sensibly. At least I hope so.
