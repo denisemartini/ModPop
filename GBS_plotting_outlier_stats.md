@@ -222,7 +222,7 @@ GENOME.class.split <- neutrality.stats(GENOME.class.split)
 ```
 
 ```
-## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpqxiKbg/ff173e246bc0233.ff
+## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpWmZ3Nu/ff96d8671bc070.ff
 ```
 
 ```
@@ -426,6 +426,7 @@ outlier_stats <- tibble(new_bins$CHROM, new_bins$newSTART, new_bins$newEND, mean
 colnames(outlier_stats) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
                              "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")
 outlier_stats %>% mutate(., BIN_MIDDLE=BIN_START + ((BIN_END-BIN_START)/2)) -> outlier_stats
+write.table(outlier_stats, "../selection_stats/outlier_stats.txt", row.names = F, col.names = T, quote = F, sep = "\t")
 ```
 
 Plotting Fst.
@@ -436,13 +437,14 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
   
   # Show all points
   geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
-  scale_color_manual(values = rep(c("#A6D96A"), 80)) +
+  scale_color_manual(values = rep(c("#A6D96A", "#66BD63"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
   # adding threshold line
   geom_hline(yintercept=(quantile(outlier_stats$Fst, probs = 0.999, na.rm = TRUE)), linetype="dashed", color = "#D73027") +
+  geom_hline(yintercept=(quantile(outlier_stats$Fst, probs = 0.99, na.rm = TRUE)), linetype="dashed", color = "#FDAE61") +
   labs(x = "bp", y="Fst") +
   
   # Custom theme:
@@ -589,7 +591,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
   
   # Show all points
   geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
-  scale_color_manual(values = rep(c("#FDAE61"), 80)) +
+  scale_color_manual(values = rep(c("#FDAE61", "#F46D43"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +

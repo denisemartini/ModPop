@@ -10,7 +10,7 @@ output:
 I want to plot the Fst, dxy, pi, and Tajima's D statistics on windows across the genome. I hit the problem that my SNPs are not particularly abundant across the whole genome, so to have enough snps per window I would need fairly large windows. At the same time, some areas contain more snps than others, so I would end up with a lot of snps accumulated in some windows, and that would probably smooth out any outliers in that space. So, I think the best compromise would be to split the snps in different-sized windows, so that every window contains a similar amount of SNPs. I think ~10 SNPs per window should be all right and I think I can split them using info on the chromosome and position. I say ~10 and not exactly 10 because I plan on rounding the windows boundaries to be at the lowest around 25kbp splits. So, since I have already produced windows of 25Kbp for Tajima's D values, I will use those positions to merge together windows with less than 10 SNPs. 
 I will import that file first and see what I can do with it. 
 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(dplyr)
 library(ggplot2)
 library(knitr)
@@ -261,6 +261,7 @@ outlier_stats <- tibble(new_bins$CHROM, new_bins$newSTART, new_bins$newEND, mean
 colnames(outlier_stats) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
                              "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")
 outlier_stats %>% mutate(., BIN_MIDDLE=BIN_START + ((BIN_END-BIN_START)/2)) -> outlier_stats
+write.table(outlier_stats, "../selection_stats/outlier_stats.txt", row.names = F, col.names = T, quote = F, sep = "\t")
 ```
 
 Plotting Fst.
@@ -270,13 +271,14 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
   
   # Show all points
   geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
-  scale_color_manual(values = rep(c("#A6D96A"), 80)) +
+  scale_color_manual(values = rep(c("#A6D96A", "#66BD63"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
   
   # adding threshold line
   geom_hline(yintercept=(quantile(outlier_stats$Fst, probs = 0.999, na.rm = TRUE)), linetype="dashed", color = "#D73027") +
+  geom_hline(yintercept=(quantile(outlier_stats$Fst, probs = 0.99, na.rm = TRUE)), linetype="dashed", color = "#FDAE61") +
   labs(x = "bp", y="Fst") +
   
   # Custom theme:
@@ -360,7 +362,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
   
   # Show all points
   geom_point( aes(color=as.factor(CHROM)), alpha=0.8, size=0.8) +
-  scale_color_manual(values = rep(c("#FDAE61"), 80)) +
+  scale_color_manual(values = rep(c("#FDAE61", "#F46D43"), 80)) +
   
   scale_y_continuous(expand = c(0, 0)) +     # remove space between plot area and x axis
   scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1100000000, 100000000)) +
