@@ -1407,3 +1407,12 @@ VCFtools --gzvcf ../selection_stats/filtered_snps_for_selection_tests_maf02.reco
 ```
 I forgot that the plink format screws up a bit when you have chromosome names different from integers, but it does not matter, because I had used the chromosome name and position as SNP IDs, so I can retrace the snp identity from the .map file. LEA does not use that information anyway.
 The rest of the work for this part is going to be in `GBS_env_association.Rmd`.
+
+###### 22.3.19
+After some initial testing, I am a bit afraid that I am getting loads of outliers. I think I might try rerunning the analysis on maf > .05.
+Just to avoid some of those false positives.
+```bash
+cd env_correlations
+VCFtools --vcf ../selection_stats/filtered_snps_for_selection_tests.recode.vcf \
+--plink --out snps_for_env_tests
+```
