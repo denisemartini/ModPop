@@ -1416,3 +1416,7 @@ cd env_correlations
 VCFtools --vcf ../selection_stats/filtered_snps_for_selection_tests.recode.vcf \
 --plink --out snps_for_env_tests
 ```
+Then I am moving this to boros, together with the locations file and the rmarkdown script, which I am compiling like:
+```R
+rmarkdown::render("GBS_env_association.Rmd")
+```

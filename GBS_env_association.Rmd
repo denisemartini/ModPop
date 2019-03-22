@@ -128,8 +128,8 @@ file.rename("snps_for_env_tests.lfmm_imputed.lfmm", "snps_for_env_tests_imputed.
 Now, time to finally run those association tests on this dataset. Starting with the mean temp variable.
 In the documentation they recommend running the test with different Ks around the value identified with snmf, with multiple repetitions for each K (repetitions=5-10), a decent number of cycles (e.g. -i 6000) and half of that as burning cycles (-b 3000). So, here we go.
 
-```{r}
-mean_temp = lfmm("snps_for_env_tests.lfmm_imputed.lfmm", "mean_temp.env", 
+```{r cache=TRUE}
+mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env", 
                 K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 ```
 
@@ -171,7 +171,7 @@ write.table(candidates, "sig_mean_temp.txt", sep = "\t", row.names = F,
 
 Running it all for the other variables as well. Annual precipitation.
 
-```{r}
+```{r cache=TRUE}
 ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env", 
                  K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 p_2 = lfmm.pvalues(ann_prec, K = 2)
@@ -202,7 +202,7 @@ write.table(candidates, "sig_ann_prec.txt", sep = "\t", row.names = F,
 
 Then minimum temperature of the coldest month.
 
-```{r}
+```{r cache=TRUE}
 coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env", 
                  K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 p_2 = lfmm.pvalues(coldest_month, K = 2)
@@ -233,7 +233,7 @@ write.table(candidates, "sig_coldest_month.txt", sep = "\t", row.names = F,
 
 Finally mean annual solar radiation.
 
-```{r}
+```{r cache=TRUE}
 ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env", 
                  K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 p_2 = lfmm.pvalues(ann_srad, K = 2)
