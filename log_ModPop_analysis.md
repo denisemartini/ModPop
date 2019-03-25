@@ -1188,7 +1188,56 @@ Comparatively, in the last ~5 minutes on NeSI beast has already run 2700 samples
 
 ##### Migration surfaces with EEMS
 ###### 25.3.19
-EEMS is a pretty cool program that I first heard about at SMBE last year, and the name stands for "estimated effective migration surface" https://github.com/dipetkov/eems. What it does is take SNP information and geographical distribution of samples and plot on a map the migration surfaces for that population/species, allowing you to identify possible barriers to migrations and in general areas within there is more or less gene flow than expected. I am keen to try it out, and I would expect to find no substantial barriers to migration in my dataset. If the pattern is of Isolation-By-Distance, there shouldn't be any real barrier to migration, and basically no migration surfaces plottable because every area interacts with all others just as expected by sheer geography. 
+EEMS is a pretty cool program that I first heard about at SMBE last year, and the name stands for "estimated effective migration surface" https://github.com/dipetkov/eems. What it does is take SNP information and geographical distribution of samples and plot on a map the migration surfaces for that population/species, allowing you to identify possible barriers to migrations and in general areas within there is more or less gene flow than expected. I am keen to try it out, and I would expect to find no substantial barriers to migration in my dataset. If the pattern is of Isolation-By-Distance, there shouldn't be any real barrier to migration, and basically no migration surfaces plottable because every area interacts with all others just as expected by sheer geography.
+I have already checked that boros has the two dependencies (Eigen and Boost) installed and the versions should be fine. I need to download the code from github and compile it.
+```bash
+wget https://github.com/dipetkov/eems/archive/master.zip
+unzip master.zip
+cd eems-master/runeems_snps/src/
+make linux
+```
+That failed, and it seems to be a problem with boost version. So, I saw suggestion online to install EEMS within a conda environment with the correct library versions.
+```bash
+module load conda
+conda create -n eems
+source activate eems
+conda install boost=1.57
+conda install eigen
+cd eems-master/runeems_snps/src/
+nano Makefile # then substitute these bits at the beginning of the file:
+EIGEN_INC = /home/denise/.conda/envs/eems/include/eigen3
+BOOST_LIB = /home/denise/.conda/envs/eems/lib
+BOOST_INC = /home/denise/.conda/envs/eems/include
+# save and
+make linux
+```
+Then, to install the small program that comes with it and that should be used to covert plink files to the format they want:
+```bash
+cd ~
+git clone https://github.com/mfranberg/libplinkio
+cd libplinkio
+git checkout 781e9ee37076
+pip install plinkio
+mkdir build
+cd build
+../configure --prefix=/home/denise/bin/plinkio
+make && make check && make install
+gcc -lplinkio -I/home/denise/bin/plinkio/include -L/home/denise/bin/plinkio/lib source.c
+cd ../../
+cd eems-master/bed2diffs/src-wout-openmp/
+nano Makefile # substitute these lines in the file:
+PLINKIO = /home/denise/bin/plinkio
+CXXFLAGS = -I${PLINKIO}/include -O3 -Wall -Werror
+# save and run
+make linux
+cd ../src/
+nano Makefile # substitute these lines in the file:
+PLINKIO = /home/denise/bin/plinkio
+CXXFLAGS = -I${PLINKIO}/include -O3 -Wall -Werror
+# save and run
+make linux
+```
+
 
 
 #### Stats for selection outliers
