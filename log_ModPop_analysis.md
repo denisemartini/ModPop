@@ -1246,7 +1246,20 @@ cd EEMS
 # now running the eems conversion
 /home/denise/eems-master/bed2diffs/src/bed2diffs_v1 --bfile eems_snp_dataset
 ```
-Seems to have worked fine. 
+Seems to have worked fine.
+Next, I need a file with the coordinates for each sample, one sample per line.
+I prepared a similar file for the environmental correlations a while ago. I need to sort the samples by name, because that was the order of individuals in the .bed file that produced the snp dataset. I also need to have only the longitude and latitude of each sample.
+```bash
+cp ../../env_correlations_maf05/samples_locations.txt .
+tail -n +2 samples_locations.txt | sort | awk -F'\t' '{print $4,$3}' | sed -e "s/\r/\t/g" > eems_snp_dataset.coord
+```
+Now I only need the outer coordinates file, which I need to put together. It needs to have the coordinates of the whole habitat circle, listed counterclockwise and in a closed circle, with the last coordinate being the same as the first.
+I used this online tool https://www.keene.edu/campus/maps/tool/ to get the coordinates surrounding New Zealand (N.B. make sure to position the map correctly, from the US starting point and rotating towards the right, not the left of the map to get to NZ). I decided to include the whole of New Zealand, since that was the kaka distribution until not too long ago. I put these coordinates in a file and fixed them (to remove commas):
+```bash
+nano eems_snp_dataset.outer
+sed -i 's/,//g' eems_snp_dataset.outer
+```
+Now everything should be in place.
 
 
 #### Stats for selection outliers
