@@ -20,9 +20,9 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
   - [x] <del>tree in treemix</del>
   - [ ] modeling in dadi
   - [ ] tree in BEAST
+  - [ ] migration surfaces with EEMS
 - [x] Stats for selection outliers (Fst, Tajima's D, etc)
 - [ ] Environmental correlations
-- [ ] Inbreeding tests
 
 ###### _Technical note_
 Most of the first part of the analysis has already been tested before, and scripts/tips are available from the Kaka_GBS directory. Parts yet to test from that part are ipyrad, treemix, dadi.  
@@ -1186,7 +1186,9 @@ Submitted batch job 2877945
 Because in the meantime, on boros, beast ran 1500 samples in ~20 minutes. Which I believe would still take ~15 days.
 Comparatively, in the last ~5 minutes on NeSI beast has already run 2700 samples. I am optimistic. I think it will still take about 2 days, but that's still a huge improvement. Hopefully the chain is long enough to reach convergence.
 
-
+##### Migration surfaces with EEMS
+###### 25.3.19
+EEMS is a pretty cool program that I first heard about at SMBE last year, and the name stands for "estimated effective migration surface" https://github.com/dipetkov/eems. What it does is take SNP information and geographical distribution of samples and plot on a map the migration surfaces for that population/species, allowing you to identify possible barriers to migrations and in general areas within there is more or less gene flow than expected. I am keen to try it out, and I would expect to find no substantial barriers to migration in my dataset. If the pattern is of Isolation-By-Distance, there shouldn't be any real barrier to migration, and basically no migration surfaces plottable because every area interacts with all others just as expected by sheer geography. 
 
 
 #### Stats for selection outliers
@@ -1420,3 +1422,4 @@ Then I am moving this to boros, together with the locations file and the rmarkdo
 ```R
 rmarkdown::render("GBS_env_association.Rmd")
 ```
+It will probably run for a full day before I see results.
