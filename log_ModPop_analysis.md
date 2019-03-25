@@ -1239,7 +1239,7 @@ make linux
 ```
 Now, to prepare the input file, I first need to convert my dataset to plink binary file. I will use as input the finished plink .ped files that I produced before for admixture.
 ```bash
-cd /data/denise/pop_structure
+cd /data/denise/ModPop_analysis/pop_structure
 mkdir EEMS
 cd EEMS
 /usr/local/plink-1.9/plink --file ../maxmiss90_common_snps --make-bed --out eems_snp_dataset
@@ -1260,6 +1260,28 @@ nano eems_snp_dataset.outer
 sed -i 's/,//g' eems_snp_dataset.outer
 ```
 Now everything should be in place.
+Then I need to prepare three parameter files to run the mcmc chain independently three times. I can copy the files from the eems distribution:
+```bash
+cp /home/denise/eems-master/runeems_snps/src/params-chain*.ini .
+nano params-chain1.ini # and filling with the following parameters:
+datapath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset
+mcmcpath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset-chain1
+nIndiv = 92
+nSites = 101539
+nDemes = 200
+diploid = true
+numMCMCIter = 2000000
+numBurnIter = 1000000
+numThinIter = 9999
+```
+I did the same for the other two parameter files, just changing the number of the chain in the output file name ("mcmcpath").
+Now, to run it:
+```bash
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain1.ini --seed 123
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain2.ini --seed 456
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain3.ini --seed 789
+```
+I started all three iterations in separate tmux windows. It seems to be running pretty fast but it has quite a lot of iterations to go through, so I don't expect it to finish before tomorrow. But no errors at least.
 
 
 #### Stats for selection outliers
