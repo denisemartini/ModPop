@@ -1237,7 +1237,16 @@ CXXFLAGS = -I${PLINKIO}/include -O3 -Wall -Werror
 # save and run
 make linux
 ```
-
+Now, to prepare the input file, I first need to convert my dataset to plink binary file. I will use as input the finished plink .ped files that I produced before for admixture.
+```bash
+cd /data/denise/pop_structure
+mkdir EEMS
+cd EEMS
+/usr/local/plink-1.9/plink --file ../maxmiss90_common_snps --make-bed --out eems_snp_dataset
+# now running the eems conversion
+/home/denise/eems-master/bed2diffs/src/bed2diffs_v1 --bfile eems_snp_dataset
+```
+Seems to have worked fine. 
 
 
 #### Stats for selection outliers
