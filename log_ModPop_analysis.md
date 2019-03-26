@@ -1305,6 +1305,20 @@ Now, to run it:
 ```
 I started all three iterations in separate tmux windows. It seems to be running pretty fast but it has quite a lot of iterations to go through, so I don't expect it to finish before tomorrow. But no errors at least.
 
+###### 26.3.19
+It actually finished running in an hour or so, way faster than I expected. So, I will need to rerun with slightly different parameters, because the first time they were accepted too often (see manual, section 2.1), but first I want to see if the length of the chain was enough to reach convergence, so I need the plotting functions that come from their R package. I need to install a couple of dependencies as well.
+```R
+install.packages("RcppEigen")
+install.packages("rgeos", configure.args = c(
+                    "--with-geos-config=/home/denise/bin/bin/geos-config"))
+setwd("~/eems-master/plotting")
+if (dir.exists("rEEMSplots")) {
+  install.packages("rEEMSplots", repos = NULL, type = "source")
+} else {
+  stop("Move to the directory that contains the rEEMSplots source to install the package.")
+}
+```
+
 
 #### Stats for selection outliers
 ###### 14.3.19
