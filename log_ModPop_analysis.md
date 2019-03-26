@@ -1186,6 +1186,28 @@ Submitted batch job 2877945
 Because in the meantime, on boros, beast ran 1500 samples in ~20 minutes. Which I believe would still take ~15 days.
 Comparatively, in the last ~5 minutes on NeSI beast has already run 2700 samples. I am optimistic. I think it will still take about 2 days, but that's still a huge improvement. Hopefully the chain is long enough to reach convergence.
 
+###### 26.3.19
+Right, so, as expected one day was not enough to run the full chain, so I had resumed the run by changing the nesi command to:
+```bash
+beast -seed 777 -beagle -beagle_CPU -beagle_double -threads 48 -resume final_snp_matrix.xml
+```
+But turns out that when you do that it assumes you just want more chains added and it ignores the previous target. Or I am assuming that that's what happened, because it just kept going...I even restarted the job a third time, and it still kept going...so I stopped it when I saw it had reached about 2.5M chains. Also because I had in the meantime taken a look at the traces and noticed that it had already reached convergence and sufficient ESS values. I installed and launched tracer like so:
+```bash
+wget https://github.com/beast-dev/tracer/releases/download/v1.7.1/Tracer_v1.7.1.tgz
+tar -xzvf Tracer_v1.7.1.tgz
+chmod -R 777 Tracer_v1.7.1
+rm *.tgz
+/nesi/project/uoo02327/programs/Tracer_v1.7.1/bin/tracer
+module load BEAST/2.4.7
+densitree   # and made a tree
+```
+To really ensure convergence, I prepared in beauti another run exactly like the first, but with a different output file, and I am running it like:
+```bash
+beast -seed 345129842 -beagle -beagle_CPU -beagle_double -threads 48 final_snp_matrix_chain2.xml
+```
+This time I am also giving full 48hrs to the script, which should be enough to run the full chain the first time.
+
+
 ##### Migration surfaces with EEMS
 ###### 25.3.19
 EEMS is a pretty cool program that I first heard about at SMBE last year, and the name stands for "estimated effective migration surface" https://github.com/dipetkov/eems. What it does is take SNP information and geographical distribution of samples and plot on a map the migration surfaces for that population/species, allowing you to identify possible barriers to migrations and in general areas within there is more or less gene flow than expected. I am keen to try it out, and I would expect to find no substantial barriers to migration in my dataset. If the pattern is of Isolation-By-Distance, there shouldn't be any real barrier to migration, and basically no migration surfaces plottable because every area interacts with all others just as expected by sheer geography.
