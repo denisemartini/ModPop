@@ -165,7 +165,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 881363857
+## [1] 1631232403
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -173,7 +173,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      881363857
+##         -s (seed random init)                      1631232403
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -193,7 +193,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K1/run1/snps_for_env_tests_r1.1.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  9471298449
+##         -s (seed random init)                  1631232403
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -203,7 +203,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ## Main algorithm:
 ## 
-## Least-square error: 1634091.973069
+## Least-square error: 1634756.886086
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K1/run1/snps_for_env_tests_r1.1.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K1/run1/snps_for_env_tests_r1.1.G:	OK.
 ## 
@@ -221,8 +221,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.63888
-## Cross-Entropy (masked data):	 0.686266
+## Cross-Entropy (all data):	 0.638844
+## Cross-Entropy (masked data):	 0.685418
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -245,7 +245,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K2/run1/snps_for_env_tests_r1.2.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  881363857
+##         -s (seed random init)                  1631232403
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -258,7 +258,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 	[========================]
 ## Number of iterations: 63
 ## 
-## Least-square error: 1587519.213752
+## Least-square error: 1586271.762042
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K2/run1/snps_for_env_tests_r1.2.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K2/run1/snps_for_env_tests_r1.2.G:	OK.
 ## 
@@ -276,8 +276,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.608632
-## Cross-Entropy (masked data):	 0.671644
+## Cross-Entropy (all data):	 0.60861
+## Cross-Entropy (masked data):	 0.672893
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -300,7 +300,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K3/run1/snps_for_env_tests_r1.3.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  4646958352327805841
+##         -s (seed random init)                  2015970894227
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -310,10 +310,10 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[===========================================]
-## Number of iterations: 114
+## 	[======================================]
+## Number of iterations: 102
 ## 
-## Least-square error: 1551277.766918
+## Least-square error: 1550570.915972
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K3/run1/snps_for_env_tests_r1.3.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K3/run1/snps_for_env_tests_r1.3.G:	OK.
 ## 
@@ -331,8 +331,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.585906
-## Cross-Entropy (masked data):	 0.667446
+## Cross-Entropy (all data):	 0.585926
+## Cross-Entropy (masked data):	 0.669246
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -355,7 +355,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run1/snps_for_env_tests_r1.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  881363857
+##         -s (seed random init)                  1631232403
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -365,10 +365,10 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[================]
-## Number of iterations: 43
+## 	[==============]
+## Number of iterations: 37
 ## 
-## Least-square error: 1519194.747165
+## Least-square error: 1519456.423131
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run1/snps_for_env_tests_r1.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run1/snps_for_env_tests_r1.4.G:	OK.
 ## 
@@ -386,8 +386,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565361
-## Cross-Entropy (masked data):	 0.669539
+## Cross-Entropy (all data):	 0.565312
+## Cross-Entropy (masked data):	 0.669583
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -410,7 +410,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K5/run1/snps_for_env_tests_r1.5.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  1869192137617
+##         -s (seed random init)                  1631232403
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -420,10 +420,10 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[====================================]
-## Number of iterations: 97
+## 	[===========================================================================]
+## Number of iterations: 200
 ## 
-## Least-square error: 1497719.505380
+## Least-square error: 1495640.791947
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K5/run1/snps_for_env_tests_r1.5.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K5/run1/snps_for_env_tests_r1.5.G:	OK.
 ## 
@@ -441,8 +441,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.554928
-## Cross-Entropy (masked data):	 0.675271
+## Cross-Entropy (all data):	 0.555088
+## Cross-Entropy (masked data):	 0.671201
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -465,7 +465,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K6/run1/snps_for_env_tests_r1.6.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  881363857
+##         -s (seed random init)                  1631232403
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -475,10 +475,10 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[=================================================================]
-## Number of iterations: 173
+## 	[===========================================================================]
+## Number of iterations: 200
 ## 
-## Least-square error: 1472750.842056
+## Least-square error: 1474292.449114
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K6/run1/snps_for_env_tests_r1.6.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K6/run1/snps_for_env_tests_r1.6.G:	OK.
 ## 
@@ -496,8 +496,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.543835
-## Cross-Entropy (masked data):	 0.681801
+## Cross-Entropy (all data):	 0.545043
+## Cross-Entropy (masked data):	 0.68361
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -520,7 +520,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K7/run1/snps_for_env_tests_r1.7.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  881363857
+##         -s (seed random init)                  4645498201635987859
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -530,10 +530,10 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[==============================================================]
-## Number of iterations: 166
+## 	[===================]
+## Number of iterations: 50
 ## 
-## Least-square error: 1450282.470302
+## Least-square error: 1451133.543218
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K7/run1/snps_for_env_tests_r1.7.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K7/run1/snps_for_env_tests_r1.7.G:	OK.
 ## 
@@ -551,8 +551,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.534933
-## Cross-Entropy (masked data):	 0.684645
+## Cross-Entropy (all data):	 0.533334
+## Cross-Entropy (masked data):	 0.687654
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -575,7 +575,7 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K8/run1/snps_for_env_tests_r1.8.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  881363857
+##         -s (seed random init)                  1631232403
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -585,10 +585,10 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[=========================================================]
-## Number of iterations: 152
+## 	[===========================================================================]
+## Number of iterations: 200
 ## 
-## Least-square error: 1426847.100622
+## Least-square error: 1429124.533319
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K8/run1/snps_for_env_tests_r1.8.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K8/run1/snps_for_env_tests_r1.8.G:	OK.
 ## 
@@ -606,8 +606,8 @@ obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU =
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.524252
-## Cross-Entropy (masked data):	 0.692162
+## Cross-Entropy (all data):	 0.523996
+## Cross-Entropy (masked data):	 0.689634
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -652,7 +652,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 1013618945
+## [1] 1810620828
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -660,7 +660,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      1013618945
+##         -s (seed random init)                      1810620828
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -680,7 +680,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run1/snps_for_env_tests_r1.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  1013618945
+##         -s (seed random init)                  4611686020238008732
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -690,10 +690,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[===============]
-## Number of iterations: 39
+## 	[===================]
+## Number of iterations: 51
 ## 
-## Least-square error: 1520774.323449
+## Least-square error: 1519492.560806
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run1/snps_for_env_tests_r1.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run1/snps_for_env_tests_r1.4.G:	OK.
 ## 
@@ -711,8 +711,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565726
-## Cross-Entropy (masked data):	 0.665955
+## Cross-Entropy (all data):	 0.565442
+## Cross-Entropy (masked data):	 0.668543
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -722,7 +722,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 476703051
+## [1] 1891696672
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -730,7 +730,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      476703051
+##         -s (seed random init)                      1891696672
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -750,7 +750,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run2/snps_for_env_tests_r2.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  476703051
+##         -s (seed random init)                  10481631264
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -760,10 +760,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[=======================]
-## Number of iterations: 61
+## 	[==============]
+## Number of iterations: 37
 ## 
-## Least-square error: 1519455.785658
+## Least-square error: 1520142.563584
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run2/snps_for_env_tests_r2.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run2/snps_for_env_tests_r2.4.G:	OK.
 ## 
@@ -781,8 +781,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565407
-## Cross-Entropy (masked data):	 0.666694
+## Cross-Entropy (all data):	 0.565492
+## Cross-Entropy (masked data):	 0.665577
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -792,7 +792,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 130045960
+## [1] 140216186
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -800,7 +800,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      130045960
+##         -s (seed random init)                      140216186
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -820,7 +820,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run3/snps_for_env_tests_r3.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  130045960
+##         -s (seed random init)                  140216186
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -830,10 +830,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[=======================]
-## Number of iterations: 62
+## 	[==========================]
+## Number of iterations: 69
 ## 
-## Least-square error: 1520065.931132
+## Least-square error: 1520861.234609
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run3/snps_for_env_tests_r3.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run3/snps_for_env_tests_r3.4.G:	OK.
 ## 
@@ -851,8 +851,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565301
-## Cross-Entropy (masked data):	 0.67072
+## Cross-Entropy (all data):	 0.565365
+## Cross-Entropy (masked data):	 0.669374
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -862,7 +862,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 1872405586
+## [1] 1115907141
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -870,7 +870,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      1872405586
+##         -s (seed random init)                      1115907141
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -890,7 +890,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run4/snps_for_env_tests_r4.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  1872405586
+##         -s (seed random init)                  1115907141
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -900,10 +900,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[============================================]
-## Number of iterations: 118
+## 	[=====================]
+## Number of iterations: 55
 ## 
-## Least-square error: 1527296.497341
+## Least-square error: 1520269.208519
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run4/snps_for_env_tests_r4.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run4/snps_for_env_tests_r4.4.G:	OK.
 ## 
@@ -921,8 +921,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.575503
-## Cross-Entropy (masked data):	 0.669046
+## Cross-Entropy (all data):	 0.565496
+## Cross-Entropy (masked data):	 0.665883
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -932,7 +932,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 1872287142
+## [1] 1506716242
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -940,7 +940,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      1872287142
+##         -s (seed random init)                      1506716242
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -960,7 +960,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run5/snps_for_env_tests_r5.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  13876153403754206630
+##         -s (seed random init)                  13826050857534138962
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -970,10 +970,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[===============]
-## Number of iterations: 40
+## 	[==================]
+## Number of iterations: 47
 ## 
-## Least-square error: 1520424.229101
+## Least-square error: 1520528.079404
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run5/snps_for_env_tests_r5.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run5/snps_for_env_tests_r5.4.G:	OK.
 ## 
@@ -991,8 +991,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565465
-## Cross-Entropy (masked data):	 0.667686
+## Cross-Entropy (all data):	 0.565473
+## Cross-Entropy (masked data):	 0.667598
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -1002,7 +1002,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 73746063
+## [1] 1805863061
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -1010,7 +1010,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      73746063
+##         -s (seed random init)                      1805863061
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -1030,7 +1030,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run6/snps_for_env_tests_r6.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  73746063
+##         -s (seed random init)                  1805863061
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -1040,10 +1040,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[======================]
-## Number of iterations: 59
+## 	[===========]
+## Number of iterations: 29
 ## 
-## Least-square error: 1520418.787199
+## Least-square error: 1520704.502273
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run6/snps_for_env_tests_r6.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run6/snps_for_env_tests_r6.4.G:	OK.
 ## 
@@ -1061,8 +1061,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565323
-## Cross-Entropy (masked data):	 0.666916
+## Cross-Entropy (all data):	 0.565556
+## Cross-Entropy (masked data):	 0.666079
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -1072,7 +1072,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 604541045
+## [1] 1006612994
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -1080,7 +1080,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      604541045
+##         -s (seed random init)                      1006612994
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -1100,7 +1100,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run7/snps_for_env_tests_r7.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  604541045
+##         -s (seed random init)                  1006612994
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -1110,10 +1110,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[======================]
-## Number of iterations: 58
+## 	[========================]
+## Number of iterations: 64
 ## 
-## Least-square error: 1519519.707967
+## Least-square error: 1519855.501336
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run7/snps_for_env_tests_r7.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run7/snps_for_env_tests_r7.4.G:	OK.
 ## 
@@ -1131,8 +1131,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565256
-## Cross-Entropy (masked data):	 0.668713
+## Cross-Entropy (all data):	 0.565218
+## Cross-Entropy (masked data):	 0.67049
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -1142,7 +1142,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 22079964
+## [1] 1168608476
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -1150,7 +1150,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      22079964
+##         -s (seed random init)                      1168608476
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -1170,7 +1170,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run8/snps_for_env_tests_r8.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  22079964
+##         -s (seed random init)                  5463575772
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -1180,10 +1180,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[========================]
-## Number of iterations: 64
+## 	[=================]
+## Number of iterations: 45
 ## 
-## Least-square error: 1520119.390066
+## Least-square error: 1519931.328634
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run8/snps_for_env_tests_r8.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run8/snps_for_env_tests_r8.4.G:	OK.
 ## 
@@ -1201,8 +1201,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565478
-## Cross-Entropy (masked data):	 0.666073
+## Cross-Entropy (all data):	 0.565503
+## Cross-Entropy (masked data):	 0.66763
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -1212,7 +1212,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 482309068
+## [1] 1593196739
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -1220,7 +1220,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      482309068
+##         -s (seed random init)                      1593196739
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -1240,7 +1240,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run9/snps_for_env_tests_r9.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  9223372037337084876
+##         -s (seed random init)                  1593196739
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -1250,10 +1250,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[===================]
-## Number of iterations: 52
+## 	[=============]
+## Number of iterations: 35
 ## 
-## Least-square error: 1520583.861751
+## Least-square error: 1520486.968151
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run9/snps_for_env_tests_r9.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run9/snps_for_env_tests_r9.4.G:	OK.
 ## 
@@ -1271,8 +1271,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565311
-## Cross-Entropy (masked data):	 0.672077
+## Cross-Entropy (all data):	 0.565406
+## Cross-Entropy (masked data):	 0.67352
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -1282,7 +1282,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## To remove the project, use:
 ##  remove.snmfProject("snps_for_env_tests.snmfProject")
 ## 
-## [1] 1523987006
+## [1] 1392197177
 ## [1] "*************************************"
 ## [1] "*          create.dataset            *"
 ## [1] "*************************************"
@@ -1290,7 +1290,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ##         -n (number of individuals)                 92
 ##         -L (number of loci)                        47098
-##         -s (seed random init)                      1523987006
+##         -s (seed random init)                      1392197177
 ##         -r (percentage of masked data)             0.05
 ##         -x (genotype file in .geno format)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.geno
 ##         -o (output file in .geno format)           /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
@@ -1310,7 +1310,7 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -g (ancestral frequencies file)        /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run10/snps_for_env_tests_r10.4.G
 ##         -i (number max of iterations)          200
 ##         -a (regularization parameter)          10
-##         -s (seed random init)                  1523987006
+##         -s (seed random init)                  1392197177
 ##         -e (tolerance error)                   1E-05
 ##         -p (number of processes)               8
 ##         - diploid
@@ -1320,10 +1320,10 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ## 
 ## Main algorithm:
 ## 	[                                                                           ]
-## 	[===========================]
-## Number of iterations: 73
+## 	[====================]
+## Number of iterations: 54
 ## 
-## Least-square error: 1519148.712805
+## Least-square error: 1518678.549973
 ## Write individual ancestry coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run10/snps_for_env_tests_r10.4.Q:		OK.
 ## Write ancestral allele frequency coefficient file /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/K4/run10/snps_for_env_tests_r10.4.G:	OK.
 ## 
@@ -1341,8 +1341,8 @@ obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
 ##         -i (with masked genotypes)         /data/denise/ModPop_analysis/env_correlations_maf05/snps_for_env_tests.snmf/masked/snps_for_env_tests_I.geno
 ##         - diploid
 ## 
-## Cross-Entropy (all data):	 0.565418
-## Cross-Entropy (masked data):	 0.665301
+## Cross-Entropy (all data):	 0.565411
+## Cross-Entropy (masked data):	 0.667679
 ## The project is saved into :
 ##  snps_for_env_tests.snmfProject 
 ## 
@@ -1369,7 +1369,7 @@ impute(obj.snmf, "snps_for_env_tests.lfmm",
 
 ```
 ## Missing genotype imputation for K = 4 
-## Missing genotype imputation for run = 10 
+## Missing genotype imputation for run = 2 
 ## Results are written in the file:  snps_for_env_tests.lfmm_imputed.lfmm
 ```
 
@@ -1411,7 +1411,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K2/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5588195795
+##         -s (seed random init)           5416616676
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1434,7 +1434,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.917	 DIC: 4320813.174 
+## 	ED:4333050.96	 DIC: 4320091.459 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K2/run1/snps_for_env_tests_imputed_r1_s1.2.dic.
@@ -1467,7 +1467,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K3/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5588195795
+##         -s (seed random init)           5416616676
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1490,7 +1490,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.489	 DIC: 4332940.083 
+## 	ED:4333048.798	 DIC: 4333014.336 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K3/run1/snps_for_env_tests_imputed_r1_s1.3.dic.
@@ -1523,7 +1523,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K4/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5588195795
+##         -s (seed random init)           5416616676
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1546,7 +1546,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.219	 DIC: 4333074.251 
+## 	ED:4333047.442	 DIC: 4333071.865 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K4/run1/snps_for_env_tests_imputed_r1_s1.4.dic.
@@ -1579,7 +1579,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K5/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5588195795
+##         -s (seed random init)           5416616676
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1602,7 +1602,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.567	 DIC: 4331177.405 
+## 	ED:4333047.579	 DIC: 4331238.619 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K5/run1/snps_for_env_tests_imputed_r1_s1.5.dic.
@@ -1635,7 +1635,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K2/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4602237786
+##         -s (seed random init)           6001046476
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1658,7 +1658,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.93	 DIC: 4318750.743 
+## 	ED:4333050.47	 DIC: 4322360.893 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K2/run2/snps_for_env_tests_imputed_r2_s1.2.dic.
@@ -1691,7 +1691,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K3/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4602237786
+##         -s (seed random init)           6001046476
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1714,7 +1714,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.905	 DIC: 4333075.189 
+## 	ED:4333049.062	 DIC: 4333027.335 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K3/run2/snps_for_env_tests_imputed_r2_s1.3.dic.
@@ -1747,7 +1747,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K4/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4602237786
+##         -s (seed random init)           6001046476
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1770,7 +1770,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.273	 DIC: 4333068.661 
+## 	ED:4333047.392	 DIC: 4333072.667 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K4/run2/snps_for_env_tests_imputed_r2_s1.4.dic.
@@ -1803,7 +1803,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K5/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4602237786
+##         -s (seed random init)           6001046476
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1826,7 +1826,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.947	 DIC: 4330962.099 
+## 	ED:4333050.073	 DIC: 4268643.266 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K5/run2/snps_for_env_tests_imputed_r2_s1.5.dic.
@@ -1859,7 +1859,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K2/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5081372821
+##         -s (seed random init)           5108667628
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1882,7 +1882,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.623	 DIC: 4322539.89 
+## 	ED:4333050.451	 DIC: 4321875.504 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K2/run3/snps_for_env_tests_imputed_r3_s1.2.dic.
@@ -1915,7 +1915,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K3/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5081372821
+##         -s (seed random init)           5108667628
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1938,7 +1938,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.192	 DIC: 4333041.131 
+## 	ED:4333049.291	 DIC: 4333027.043 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K3/run3/snps_for_env_tests_imputed_r3_s1.3.dic.
@@ -1971,7 +1971,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K4/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5081372821
+##         -s (seed random init)           5108667628
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -1994,7 +1994,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.489	 DIC: 4333077.909 
+## 	ED:4333047.735	 DIC: 4333066.467 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K4/run3/snps_for_env_tests_imputed_r3_s1.4.dic.
@@ -2027,7 +2027,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K5/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5081372821
+##         -s (seed random init)           5108667628
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2050,7 +2050,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.115	 DIC: 4252588.776 
+## 	ED:4333050.014	 DIC: 4270749.754 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K5/run3/snps_for_env_tests_imputed_r3_s1.5.dic.
@@ -2083,7 +2083,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K2/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4664843778
+##         -s (seed random init)           5413433777
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2106,7 +2106,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333051.207	 DIC: 4319640.466 
+## 	ED:4333050.406	 DIC: 4322283.224 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K2/run4/snps_for_env_tests_imputed_r4_s1.2.dic.
@@ -2139,7 +2139,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K3/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4664843778
+##         -s (seed random init)           5413433777
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2162,7 +2162,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.752	 DIC: 4333034.101 
+## 	ED:4333048.867	 DIC: 4333049.024 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K3/run4/snps_for_env_tests_imputed_r4_s1.3.dic.
@@ -2195,7 +2195,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K4/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4664843778
+##         -s (seed random init)           5413433777
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2218,7 +2218,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.427	 DIC: 4333064.876 
+## 	ED:4333047.591	 DIC: 4333076.393 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K4/run4/snps_for_env_tests_imputed_r4_s1.4.dic.
@@ -2251,7 +2251,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K5/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4664843778
+##         -s (seed random init)           5413433777
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2274,7 +2274,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.407	 DIC: 4330167.585 
+## 	ED:4333047.519	 DIC: 4330660.381 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K5/run4/snps_for_env_tests_imputed_r4_s1.5.dic.
@@ -2307,7 +2307,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K2/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4748979223
+##         -s (seed random init)           5254869450
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2330,7 +2330,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.275	 DIC: 4318491.467 
+## 	ED:4333050.813	 DIC: 4317131.853 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K2/run5/snps_for_env_tests_imputed_r5_s1.2.dic.
@@ -2363,7 +2363,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K3/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4748979223
+##         -s (seed random init)           5254869450
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2386,7 +2386,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.16	 DIC: 4332914.289 
+## 	ED:4333049.051	 DIC: 4333054.081 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K3/run5/snps_for_env_tests_imputed_r5_s1.3.dic.
@@ -2419,7 +2419,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K4/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4748979223
+##         -s (seed random init)           5254869450
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2442,7 +2442,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.577	 DIC: 4333080.145 
+## 	ED:4333047.806	 DIC: 4333052.243 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K4/run5/snps_for_env_tests_imputed_r5_s1.4.dic.
@@ -2475,7 +2475,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ##         -o (output file)                snps_for_env_tests_imputed_mean_temp.lfmm/K5/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4748979223
+##         -s (seed random init)           5254869450
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              mean_temp.env
@@ -2498,7 +2498,7 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333045.789	 DIC: 4330688.738 
+## 	ED:4333047.765	 DIC: 4330842.218 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_mean_temp.lfmm/K5/run5/snps_for_env_tests_imputed_r5_s1.5.dic.
@@ -2519,11 +2519,6 @@ mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
 ## 
 ## To remove the project, use:
 ##  remove.lfmmProject("snps_for_env_tests_imputed_mean_temp.lfmmProject")
-```
-
-```
-## LFMM uses a very naive imputation method which has low power when 
-##             genotypes are missing: See impute() for a better imputation method.
 ```
 
 This takes a VERY LONG time.
@@ -2568,7 +2563,7 @@ dim(candidates)
 ```
 
 ```
-## [1] 1341    2
+## [1] 1415    2
 ```
 
 ```r
@@ -2605,7 +2600,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K2/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           15260341292426512
+##         -s (seed random init)           14972282714319816
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -2628,7 +2623,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.21	 DIC: 4333046.784 
+## 	ED:4333049.676	 DIC: 4333045.211 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K2/run1/snps_for_env_tests_imputed_r1_s1.2.dic.
@@ -2661,7 +2656,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K3/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           15819984121029904
+##         -s (seed random init)           4611686019378047944
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -2684,7 +2679,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.963	 DIC: 4333045.805 
+## 	ED:4333048.075	 DIC: 4333074.37 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K3/run1/snps_for_env_tests_imputed_r1_s1.3.dic.
@@ -2717,7 +2712,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K4/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           14410423099122960
+##         -s (seed random init)           950660040
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -2740,7 +2735,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.877	 DIC: 4329876.79 
+## 	ED:4333048.836	 DIC: 4330378.84 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K4/run1/snps_for_env_tests_imputed_r1_s1.4.dic.
@@ -2773,7 +2768,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K5/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           16106973835748624
+##         -s (seed random init)           950660040
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -2796,7 +2791,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.12	 DIC: 4324376.506 
+## 	ED:4333049.281	 DIC: 4325594.35 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K5/run1/snps_for_env_tests_imputed_r1_s1.5.dic.
@@ -2829,7 +2824,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K2/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5995418887
+##         -s (seed random init)           906113965
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -2852,7 +2847,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.553	 DIC: 4333047.82 
+## 	ED:4333049.723	 DIC: 4333043.58 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K2/run2/snps_for_env_tests_imputed_r2_s1.2.dic.
@@ -2885,7 +2880,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K3/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1700451591
+##         -s (seed random init)           4611686019333501869
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -2908,7 +2903,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.187	 DIC: 4333061.725 
+## 	ED:4333047.917	 DIC: 4333040.605 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K3/run2/snps_for_env_tests_imputed_r2_s1.3.dic.
@@ -2941,7 +2936,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K4/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1700451591
+##         -s (seed random init)           906113965
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -2964,7 +2959,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED: 4333048.7	 DIC: 4330503.911 
+## 	ED:4333049.075	 DIC: 4330261.658 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K4/run2/snps_for_env_tests_imputed_r2_s1.4.dic.
@@ -2997,7 +2992,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K5/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1700451591
+##         -s (seed random init)           906113965
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3020,7 +3015,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.986	 DIC: 4323311.973 
+## 	ED:4333048.02	 DIC: 4328361.178 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K5/run2/snps_for_env_tests_imputed_r2_s1.5.dic.
@@ -3053,7 +3048,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K2/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           949257049
+##         -s (seed random init)           1335988917
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3076,7 +3071,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.483	 DIC: 4333049.268 
+## 	ED:4333049.501	 DIC: 4333042.767 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K2/run3/snps_for_env_tests_imputed_r3_s1.2.dic.
@@ -3109,7 +3104,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K3/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           949257049
+##         -s (seed random init)           1335988917
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3132,7 +3127,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.446	 DIC: 4333073.832 
+## 	ED:4333048.525	 DIC: 4333023.105 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K3/run3/snps_for_env_tests_imputed_r3_s1.3.dic.
@@ -3165,7 +3160,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K4/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           949257049
+##         -s (seed random init)           1335988917
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3188,7 +3183,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.49	 DIC: 4331674.534 
+## 	ED:4333048.885	 DIC: 4331168.939 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K4/run3/snps_for_env_tests_imputed_r3_s1.4.dic.
@@ -3221,7 +3216,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K5/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           949257049
+##         -s (seed random init)           1335988917
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3244,7 +3239,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.96	 DIC: 4326720.53 
+## 	ED:4333049.073	 DIC: 4325216.48 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K5/run3/snps_for_env_tests_imputed_r3_s1.5.dic.
@@ -3277,7 +3272,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K2/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1562015298
+##         -s (seed random init)           148916695
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3300,7 +3295,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.402	 DIC: 4333047.288 
+## 	ED:4333049.47	 DIC: 4333033.313 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K2/run4/snps_for_env_tests_imputed_r4_s1.2.dic.
@@ -3333,7 +3328,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K3/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1562015298
+##         -s (seed random init)           148916695
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3356,7 +3351,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.086	 DIC: 4333040.423 
+## 	ED:4333047.839	 DIC: 4333054.272 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K3/run4/snps_for_env_tests_imputed_r4_s1.3.dic.
@@ -3389,7 +3384,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K4/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1562015298
+##         -s (seed random init)           148916695
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3412,7 +3407,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.704	 DIC: 4329705.666 
+## 	ED:4333048.666	 DIC: 4330443.693 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K4/run4/snps_for_env_tests_imputed_r4_s1.4.dic.
@@ -3445,7 +3440,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K5/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1562015298
+##         -s (seed random init)           4443883991
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3468,7 +3463,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.966	 DIC: 4324784.181 
+## 	ED:4333048.709	 DIC: 4325236.121 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K5/run4/snps_for_env_tests_imputed_r4_s1.5.dic.
@@ -3501,7 +3496,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K2/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1109436709
+##         -s (seed random init)           1649942288
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3524,7 +3519,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.416	 DIC: 4333044.231 
+## 	ED:4333049.392	 DIC: 4333045.732 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K2/run5/snps_for_env_tests_imputed_r5_s1.2.dic.
@@ -3557,7 +3552,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K3/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1109436709
+##         -s (seed random init)           5944909584
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3580,7 +3575,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.08	 DIC: 4333044.314 
+## 	ED: 4333048.3	 DIC: 4333063.039 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K3/run5/snps_for_env_tests_imputed_r5_s1.3.dic.
@@ -3613,7 +3608,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K4/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1109436709
+##         -s (seed random init)           5944909584
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3636,7 +3631,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.889	 DIC: 4331201.786 
+## 	ED:4333049.187	 DIC: 4331436.422 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K4/run5/snps_for_env_tests_imputed_r5_s1.4.dic.
@@ -3669,7 +3664,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_prec.lfmm/K5/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1109436709
+##         -s (seed random init)           1649942288
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_prec.env
@@ -3692,7 +3687,7 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.539	 DIC: 4322787.728 
+## 	ED:4333048.991	 DIC: 4325605.207 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_prec.lfmm/K5/run5/snps_for_env_tests_imputed_r5_s1.5.dic.
@@ -3713,11 +3708,6 @@ ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
 ## 
 ## To remove the project, use:
 ##  remove.lfmmProject("snps_for_env_tests_imputed_ann_prec.lfmmProject")
-```
-
-```
-## LFMM uses a very naive imputation method which has low power when 
-##             genotypes are missing: See impute() for a better imputation method.
 ```
 
 ```r
@@ -3754,7 +3744,7 @@ dim(candidates)
 ```
 
 ```
-## [1] 1460    2
+## [1] 1476    2
 ```
 
 ```r
@@ -3791,7 +3781,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K2/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5258949740
+##         -s (seed random init)           833984085
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -3814,7 +3804,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.509	 DIC: 4333009.73 
+## 	ED:4333051.391	 DIC: 4329540.497 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K2/run1/snps_for_env_tests_imputed_r1_s1.2.dic.
@@ -3847,7 +3837,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K3/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           963982444
+##         -s (seed random init)           833984085
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -3870,7 +3860,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.742	 DIC: 4333075.793 
+## 	ED:4333048.408	 DIC: 4333043.072 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K3/run1/snps_for_env_tests_imputed_r1_s1.3.dic.
@@ -3903,7 +3893,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K4/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           963982444
+##         -s (seed random init)           833984085
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -3926,7 +3916,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.247	 DIC: 4333062.346 
+## 	ED:4333048.142	 DIC: 4333072.16 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K4/run1/snps_for_env_tests_imputed_r1_s1.4.dic.
@@ -3959,7 +3949,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K5/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           963982444
+##         -s (seed random init)           833984085
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -3982,7 +3972,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.019	 DIC: 4329503.666 
+## 	ED:4333049.012	 DIC: 4329815.113 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K5/run1/snps_for_env_tests_imputed_r1_s1.5.dic.
@@ -4015,7 +4005,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K2/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1129515893
+##         -s (seed random init)           776023149
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4038,7 +4028,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.237	 DIC: 4332815.839 
+## 	ED:4333051.916	 DIC: 4327973.205 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K2/run2/snps_for_env_tests_imputed_r2_s1.2.dic.
@@ -4071,7 +4061,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K3/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1129515893
+##         -s (seed random init)           5070990445
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4094,7 +4084,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.395	 DIC: 4333072.046 
+## 	ED:4333048.521	 DIC: 4333080.526 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K3/run2/snps_for_env_tests_imputed_r2_s1.3.dic.
@@ -4127,7 +4117,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K4/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1129515893
+##         -s (seed random init)           776023149
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4150,7 +4140,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.893	 DIC: 4333057.157 
+## 	ED:4333047.588	 DIC: 4333070.866 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K4/run2/snps_for_env_tests_imputed_r2_s1.4.dic.
@@ -4183,7 +4173,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K5/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1129515893
+##         -s (seed random init)           776023149
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4206,7 +4196,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.55	 DIC: 4329635.002 
+## 	ED:4333049.326	 DIC: 4328816.416 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K5/run2/snps_for_env_tests_imputed_r2_s1.5.dic.
@@ -4239,7 +4229,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K2/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           342974994
+##         -s (seed random init)           1768692020
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4262,7 +4252,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.267	 DIC: 4333049.885 
+## 	ED:4333052.077	 DIC: 4327000.289 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K2/run3/snps_for_env_tests_imputed_r3_s1.2.dic.
@@ -4295,7 +4285,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K3/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           342974994
+##         -s (seed random init)           1768692020
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4318,7 +4308,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.211	 DIC: 4333069.074 
+## 	ED:4333048.457	 DIC: 4333047.012 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K3/run3/snps_for_env_tests_imputed_r3_s1.3.dic.
@@ -4351,7 +4341,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K4/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           342974994
+##         -s (seed random init)           6063659316
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4374,7 +4364,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.881	 DIC: 4333063.847 
+## 	ED:4333047.982	 DIC: 4333078.089 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K4/run3/snps_for_env_tests_imputed_r3_s1.4.dic.
@@ -4407,7 +4397,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K5/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           342974994
+##         -s (seed random init)           1768692020
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4430,7 +4420,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.013	 DIC: 4329291.173 
+## 	ED:4333048.003	 DIC: 4330339.075 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K5/run3/snps_for_env_tests_imputed_r3_s1.5.dic.
@@ -4463,7 +4453,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K2/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           674255294
+##         -s (seed random init)           1437897652
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4486,7 +4476,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.658	 DIC: 4333049.177 
+## 	ED:4333051.733	 DIC: 4330560.397 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K2/run4/snps_for_env_tests_imputed_r4_s1.2.dic.
@@ -4519,7 +4509,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K3/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           674255294
+##         -s (seed random init)           1437897652
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4542,7 +4532,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.62	 DIC: 4333076.842 
+## 	ED:4333048.886	 DIC: 4333078.781 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K3/run4/snps_for_env_tests_imputed_r4_s1.3.dic.
@@ -4575,7 +4565,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K4/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           674255294
+##         -s (seed random init)           1437897652
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4598,7 +4588,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.865	 DIC: 4333066.986 
+## 	ED:4333047.932	 DIC: 4333070.191 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K4/run4/snps_for_env_tests_imputed_r4_s1.4.dic.
@@ -4631,7 +4621,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K5/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           674255294
+##         -s (seed random init)           1437897652
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4654,7 +4644,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.144	 DIC: 4330358.067 
+## 	ED:4333050.357	 DIC: 4319836.832 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K5/run4/snps_for_env_tests_imputed_r4_s1.5.dic.
@@ -4687,7 +4677,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K2/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1422778832
+##         -s (seed random init)           35989878
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4710,7 +4700,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333051.452	 DIC: 4330582.678 
+## 	ED:4333051.729	 DIC: 4331364.596 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K2/run5/snps_for_env_tests_imputed_r5_s1.2.dic.
@@ -4743,7 +4733,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K3/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1422778832
+##         -s (seed random init)           35989878
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4766,7 +4756,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.546	 DIC: 4333077.732 
+## 	ED:4333048.774	 DIC: 4333054.482 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K3/run5/snps_for_env_tests_imputed_r5_s1.3.dic.
@@ -4799,7 +4789,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K4/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5717746128
+##         -s (seed random init)           35989878
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4822,7 +4812,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.749	 DIC: 4333058.03 
+## 	ED:4333047.83	 DIC: 4333062.712 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K4/run5/snps_for_env_tests_imputed_r5_s1.4.dic.
@@ -4855,7 +4845,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ##         -o (output file)                snps_for_env_tests_imputed_coldest_month.lfmm/K5/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1422778832
+##         -s (seed random init)           35989878
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              coldest_month.env
@@ -4878,7 +4868,7 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.634	 DIC: 4328750.216 
+## 	ED: 4333049.4	 DIC: 4325347.271 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_coldest_month.lfmm/K5/run5/snps_for_env_tests_imputed_r5_s1.5.dic.
@@ -4899,11 +4889,6 @@ coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
 ## 
 ## To remove the project, use:
 ##  remove.lfmmProject("snps_for_env_tests_imputed_coldest_month.lfmmProject")
-```
-
-```
-## LFMM uses a very naive imputation method which has low power when 
-##             genotypes are missing: See impute() for a better imputation method.
 ```
 
 ```r
@@ -4940,7 +4925,7 @@ dim(candidates)
 ```
 
 ```
-## [1] 1033    2
+## [1] 1070    2
 ```
 
 ```r
@@ -4977,7 +4962,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K2/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1589905834
+##         -s (seed random init)           511197898
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5000,7 +4985,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.672	 DIC: 4332031.363 
+## 	ED:4333051.316	 DIC: 4330367.756 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K2/run1/snps_for_env_tests_imputed_r1_s1.2.dic.
@@ -5033,7 +5018,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K3/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1589905834
+##         -s (seed random init)           511197898
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5056,7 +5041,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.623	 DIC: 4333069.45 
+## 	ED:4333049.827	 DIC: 4333082.954 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K3/run1/snps_for_env_tests_imputed_r1_s1.3.dic.
@@ -5089,7 +5074,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K4/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1589905834
+##         -s (seed random init)           511197898
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5112,7 +5097,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.897	 DIC: 4333076.927 
+## 	ED:4333048.108	 DIC: 4333033.379 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K4/run1/snps_for_env_tests_imputed_r1_s1.4.dic.
@@ -5145,7 +5130,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K5/run1/snps_for_env_tests_imputed_r1
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1589905834
+##         -s (seed random init)           4607275912159314634
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5168,7 +5153,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333048.973	 DIC: 4252511.618 
+## 	ED:4333047.305	 DIC: 4330088.051 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K5/run1/snps_for_env_tests_imputed_r1_s1.5.dic.
@@ -5201,7 +5186,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K2/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           599207686
+##         -s (seed random init)           1522008265
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5224,7 +5209,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.079	 DIC: 4332244.224 
+## 	ED:4333049.728	 DIC: 4331939.616 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K2/run2/snps_for_env_tests_imputed_r2_s1.2.dic.
@@ -5257,7 +5242,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K3/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           4894174982
+##         -s (seed random init)           1522008265
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5280,7 +5265,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.866	 DIC: 4333043.403 
+## 	ED:4333049.366	 DIC:  4333055.7 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K3/run2/snps_for_env_tests_imputed_r2_s1.3.dic.
@@ -5313,7 +5298,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K4/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           599207686
+##         -s (seed random init)           1522008265
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5336,7 +5321,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.849	 DIC: 4333073.722 
+## 	ED:4333047.574	 DIC: 4333061.099 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K4/run2/snps_for_env_tests_imputed_r2_s1.4.dic.
@@ -5369,7 +5354,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K5/run2/snps_for_env_tests_imputed_r2
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           599207686
+##         -s (seed random init)           1522008265
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5392,7 +5377,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.66	 DIC: 4323454.03 
+## 	ED:4333048.821	 DIC: 4269734.774 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K5/run2/snps_for_env_tests_imputed_r2_s1.5.dic.
@@ -5425,7 +5410,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K2/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5295346042
+##         -s (seed random init)           1554088801
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5448,7 +5433,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333050.145	 DIC: 4331858.654 
+## 	ED:4333050.102	 DIC: 4331659.247 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K2/run3/snps_for_env_tests_imputed_r3_s1.2.dic.
@@ -5481,7 +5466,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K3/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1000378746
+##         -s (seed random init)           1554088801
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5504,7 +5489,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.433	 DIC: 4333066.63 
+## 	ED:4333049.087	 DIC: 4332981.249 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K3/run3/snps_for_env_tests_imputed_r3_s1.3.dic.
@@ -5537,7 +5522,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K4/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           5295346042
+##         -s (seed random init)           1554088801
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5560,7 +5545,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.825	 DIC: 4333070.666 
+## 	ED:4333047.682	 DIC: 4333022.118 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K4/run3/snps_for_env_tests_imputed_r3_s1.4.dic.
@@ -5593,7 +5578,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K5/run3/snps_for_env_tests_imputed_r3
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1000378746
+##         -s (seed random init)           4608342229027750753
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5616,7 +5601,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.342	 DIC: 4269974.388 
+## 	ED:4333049.905	 DIC: 4234239.895 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K5/run3/snps_for_env_tests_imputed_r3_s1.5.dic.
@@ -5649,7 +5634,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K2/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1012703611
+##         -s (seed random init)           1469693115
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5672,7 +5657,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.877	 DIC: 4332516.325 
+## 	ED:4333049.882	 DIC: 4332338.524 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K2/run4/snps_for_env_tests_imputed_r4_s1.2.dic.
@@ -5705,7 +5690,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K3/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1012703611
+##         -s (seed random init)           1469693115
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5728,7 +5713,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.101	 DIC: 4333070.333 
+## 	ED:4333049.363	 DIC: 4333073.035 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K3/run4/snps_for_env_tests_imputed_r4_s1.3.dic.
@@ -5761,7 +5746,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K4/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1012703611
+##         -s (seed random init)           1469693115
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5784,7 +5769,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.584	 DIC: 4333062.623 
+## 	ED:4333047.522	 DIC: 4333064.763 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K4/run4/snps_for_env_tests_imputed_r4_s1.4.dic.
@@ -5817,7 +5802,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K5/run4/snps_for_env_tests_imputed_r4
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1012703611
+##         -s (seed random init)           1469693115
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5840,7 +5825,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED: 4333050.5	 DIC: 4223078.302 
+## 	ED:4333049.269	 DIC: 4262628.341 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K5/run4/snps_for_env_tests_imputed_r4_s1.5.dic.
@@ -5873,7 +5858,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K2/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1805712765
+##         -s (seed random init)           16103676205919623
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5896,7 +5881,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.895	 DIC: 4332553.287 
+## 	ED:4333049.222	 DIC: 4333021.126 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K2/run5/snps_for_env_tests_imputed_r5_s1.2.dic.
@@ -5929,7 +5914,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K3/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1805712765
+##         -s (seed random init)           1272245639
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -5952,7 +5937,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333049.291	 DIC: 4333017.16 
+## 	ED:4333049.633	 DIC: 4333052.23 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K3/run5/snps_for_env_tests_imputed_r5_s1.3.dic.
@@ -5985,7 +5970,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K4/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1805712765
+##         -s (seed random init)           1272245639
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -6008,7 +5993,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333047.882	 DIC: 4333014.012 
+## 	ED:4333048.148	 DIC: 4332961.403 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K4/run5/snps_for_env_tests_imputed_r5_s1.4.dic.
@@ -6041,7 +6026,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ##         -o (output file)                snps_for_env_tests_imputed_ann_srad.lfmm/K5/run5/snps_for_env_tests_imputed_r5
 ##         -i (number of iterations)       6000
 ##         -b (burnin)                     3000
-##         -s (seed random init)           1805712765
+##         -s (seed random init)           14418124880539015
 ##         -p (number of processes (CPU))  8
 ##         -x (genotype file)              snps_for_env_tests_imputed.lfmm
 ##         -v (variable file)              ann_srad.env
@@ -6064,7 +6049,7 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## 		End of the Gibbs Sampler algorithm.
 ## 
-## 	ED:4333046.671	 DIC: 4330731.595 
+## 	ED:4333050.332	 DIC: 4237676.973 
 ## 
 ## 	The statistics for the run are registered in:
 ##  		snps_for_env_tests_imputed_ann_srad.lfmm/K5/run5/snps_for_env_tests_imputed_r5_s1.5.dic.
@@ -6085,11 +6070,6 @@ ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
 ## 
 ## To remove the project, use:
 ##  remove.lfmmProject("snps_for_env_tests_imputed_ann_srad.lfmmProject")
-```
-
-```
-## LFMM uses a very naive imputation method which has low power when 
-##             genotypes are missing: See impute() for a better imputation method.
 ```
 
 ```r
@@ -6126,7 +6106,7 @@ dim(candidates)
 ```
 
 ```
-## [1] 1253    2
+## [1] 1226    2
 ```
 
 ```r
