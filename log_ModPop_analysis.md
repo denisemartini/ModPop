@@ -1318,7 +1318,36 @@ if (dir.exists("rEEMSplots")) {
   stop("Move to the directory that contains the rEEMSplots source to install the package.")
 }
 ```
-
+Then to produce the plot results:
+```R
+setwd("/data/denise/ModPop_analysis/pop_structure/EEMS")
+library("rEEMSplots")
+eems.plots(mcmcpath = c("eems_snp_dataset-chain1", "eems_snp_dataset-chain2", "eems_snp_dataset-chain3"),
+  plotpath = "eems_results-default",
+  longlat = TRUE)
+```
+Looking cool and interesting so far, but also like it has not really converged yet, so I will fix parameters and rerun the whole thing. Since it is so fast I can afford to lengthen the chains quite a bit.
+```
+nano params-chain1.ini # and filling with the following parameters:
+datapath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset
+mcmcpath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset-chain1
+nIndiv = 92
+nSites = 101539
+nDemes = 400
+diploid = true
+numMCMCIter = 5000000
+numBurnIter = 1000000
+numThinIter = 9999
+qEffctProposalS2 = 0.002
+mEffctProposalS2 = 0.15
+mSeedsProposalS2 = 0.02
+```
+I also increased the number of demes, and that might increase the computational costs quite a bit. I fixed all three parameter files and let's run:
+```bash
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain1.ini --seed 123
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain2.ini --seed 456
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain3.ini --seed 789
+```
 
 #### Stats for selection outliers
 ###### 14.3.19
