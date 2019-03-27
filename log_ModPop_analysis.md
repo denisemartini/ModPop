@@ -19,10 +19,10 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
   - [x] dapc in adegenet
   - [x] <del>tree in treemix</del>
   - [ ] modeling in dadi
-  - [ ] tree in BEAST
-  - [ ] migration surfaces with EEMS
+  - [x] tree in BEAST
+  - [x] migration surfaces with EEMS
 - [x] Stats for selection outliers (Fst, Tajima's D, etc)
-- [ ] Environmental correlations
+- [x] Environmental correlations
 
 ###### _Technical note_
 Most of the first part of the analysis has already been tested before, and scripts/tips are available from the Kaka_GBS directory. Parts yet to test from that part are ipyrad, treemix, dadi.  
@@ -1348,6 +1348,76 @@ I also increased the number of demes, and that might increase the computational 
 /home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain2.ini --seed 456
 /home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain3.ini --seed 789
 ```
+###### 27.3.19
+Still not quite right, the acceptance rate is still a bit too high, so:
+```
+nano params-chain1.ini # and filling with the following parameters:
+datapath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset
+mcmcpath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset-chain1
+nIndiv = 92
+nSites = 101539
+nDemes = 400
+diploid = true
+numMCMCIter = 5000000
+numBurnIter = 1000000
+numThinIter = 9999
+qEffctProposalS2 = 0.004
+mEffctProposalS2 = 0.25
+mSeedsProposalS2 = 0.025
+```
+And restarting it as usual. If it runs like last night it should take ~6hrs.
+
+##### Modeling in dadi
+###### 26.3.19
+I have been studying this for a while now and I have been wanting to try out this program ever since I found out about it in 2016. It is not an easy one, but might be one of the most interesting to use with this dataset. So, there is some preparation to do. dadi is basically a python language, so to run it you write a script of the model you want to test. Luckily, I found a nice resource online where all the scripts for the possible modelsI would like to test have already been implemented, together with a few other wrapping options: https://github.com/dportik/dadi_pipeline
+I also found here and there some perl scripts that I should be able to use to go from my vcf files to the input required by dadi. The only thing I want to fix before I dig into it, is that I would like to have the option of using the information from the outgroup, the kea in my case, in the spectrum. Ergo, I need to call these SNPs in kea. I think I can do that from the whole-genome alignment of kea that I did for the species comparison analysis. I have everything in NeSI.
+```bash
+cd pop_structure
+mkdir dadi
+cp maxmiss90_common_snps_HWE_LD.recode.vcf dadi
+cd dadi
+# just to check what the chromosome names where in the original alignment
+module load SAMtools
+samtools idxstats ../../../Kea-Kaka_take2/realignment/kea_sorted_rmdup.bam > kea_idxstats.txt
+# to call the positions from the vcf file (and fix chromosome names):
+module load BCFtools
+grep -v '#' maxmiss90_common_snps_HWE_LD.recode.vcf | awk '{print $1,$2}' | tr ' ' '\t' | sed 's/ch/chr/' > targets.txt
+# then to call the genotypes at those positions:
+samtools mpileup --positions targets.txt --BCF \
+--uncompressed --output-tags DP,AD,INFO/AD \
+--fasta-ref ../../../Kea-Kaka_take2/realignment/N_meridionalis_pseudochr.fa \
+../../../Kea-Kaka_take2/realignment/kea_sorted_rmdup.bam | bcftools call \
+--format-fields GQ,GP \
+--multiallelic-caller \
+--output-type v - --output kea_GBS_snps.vcf
+```
+Now, then, to add my kea vcf to my kaka vcf. First I need to bgzip and tabix both files, then merge them.
+```bash
+# bit of clean up on the kea file
+sed -i 's/ps_chr/ps_ch/' kea_GBS_snps.vcf
+sed -i 's/SM:kea/kea/' kea_GBS_snps.vcf
+# getting rid of all unnecessary information from the vcfs:
+bcftools annotate -x INFO,^FORMAT/GT kea_GBS_snps.vcf > clean_kea_GBS_snps.vcf
+bcftools annotate -x INFO,^FORMAT/GT maxmiss90_common_snps_HWE_LD.recode.vcf > clean_kaka_GBS_snps.vcf
+# bgzip and tabix
+bgzip clean_kea_GBS_snps.vcf
+tabix -p vcf clean_kea_GBS_snps.vcf.gz
+bgzip clean_kaka_GBS_snps.vcf
+tabix -p vcf clean_kaka_GBS_snps.vcf.gz
+# forgot that I don't need the indels in the kea, so getting rid of them now:
+module load VCFtools
+vcftools --remove-indels --vcf clean_kea_GBS_snps.vcf --remove-filtered-all --recode --out noind_clean_kea_GBS_snps.vcf
+# I worked on this last file in R a bit, because there were some problems with the reference sequence in places, so I opened it up in R, checked the places with problems against the kaka snp file, fixed the ref and genotypes and then put everything back together
+grep -v '##' clean_kaka_GBS_snps.vcf > noheader_kaka_GBS_snps.vcf
+grep -v '##' noind_clean_kea_GBS_snps.vcf.recode.vcf > noheader_kea_GBS_snps.vcf #these I imported in R
+grep '#' noind_clean_kea_GBS_snps.vcf.recode.vcf > kea_header
+cat kea_header fixed_kea_GBS_snps > fixed_kea_GBS_snps.vcf #the fixed file I exported from R
+###
+bgzip fixed_kea_GBS_snps.vcf
+tabix -p vcf fixed_kea_GBS_snps.vcf.gz
+bcftools merge -m snps clean_kaka_GBS_snps.vcf.gz fixed_kea_GBS_snps.vcf.gz > snps_with_outgroup.vcf
+```
+That finally went fine.
 
 #### Stats for selection outliers
 ###### 14.3.19
