@@ -1207,6 +1207,20 @@ beast -seed 345129842 -beagle -beagle_CPU -beagle_double -threads 48 final_snp_m
 ```
 This time I am also giving full 48hrs to the script, which should be enough to run the full chain the first time.
 
+###### 28.3.19
+I prepared all the other xml files I need to run with the taxa assigned by population and by island.
+Running the first chain of the pop taxa:
+```
+beast -seed 8660864 -beagle -beagle_CPU -beagle_double -threads 48 final_snp_matrix_pop_chain1.xml
+```
+I am giving it 50 hrs, because it looks like it does not quite get to the end of the chain safely in 48hrs.
+The commands for the rest of the runs will be:
+```
+beast -seed 1299718 -beagle -beagle_CPU -beagle_double -threads 48 final_snp_matrix_pop_chain2.xml
+beast -seed 4722735 -beagle -beagle_CPU -beagle_double -threads 48 final_snp_matrix_isl_chain1.xml
+beast -seed 2244459 -beagle -beagle_CPU -beagle_double -threads 48 final_snp_matrix_isl_chain2.xml
+```
+The seeds are randomly generated, of course.
 
 ##### Migration surfaces with EEMS
 ###### 25.3.19
@@ -1440,6 +1454,13 @@ That finally went fine. The R code I used to fix the kea refs problem is in `fix
 
 ###### 28.3.19
 Now, I need to do a couple of quick filterings on this set. Specifically, I need to remove any sites that are not not biallelic anymore and I might as well remove sites for which kea has missing data, since both of these will be excluded by dadi and I think they would mess up the file conversion step.
+```bash
+module load VCFtools
+vcftools --vcf snps_with_outgroup.vcf --min-alleles 2 --max-alleles 2 \
+--remove-filtered-all --recode --out biallelic_snps_with_outgroup
+After filtering, kept 101317 out of a possible 101553 Sites
+
+```
 
 
 #### Stats for selection outliers
