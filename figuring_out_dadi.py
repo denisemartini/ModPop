@@ -143,3 +143,62 @@ print('p-value for rejecting no-migration model: {0:.4f}'.format(pval))
 
 
 ## These were the examples from the dadi distribution, now let's see what happens with my data.
+import dadi
+import pylab
+from numpy import array
+
+dd = dadi.Misc.make_data_dict('../pop_structure/dadi/final_snps_for_dadi.recode.vcf.data')
+# I expected these two commands to run very slowly, but they were actually quite fast
+# this is just trying out with the standard projection commands
+fs = dadi.Spectrum.from_data_dict(dd, ['North','South'], [20,20], polarized = True)
+# let's see how many segregating sites I have left like that:
+S = fs.S()
+round(S)
+# 70432, that sounds like a lot, but it is almost 20,000 snps thrown, so we can probably do better.
+# I know that the missingness in my dataset should be at ~30%. So let's try projecting down to 70% of the alleles.
+fs = dadi.Spectrum.from_data_dict(dd, ['North','South'], [68,60], polarized = True)
+S = fs.S()
+round(S)
+# 56242, so that is a lot worse...maybe we can find a good spot in between?
+fs = dadi.Spectrum.from_data_dict(dd, ['North','South'], [38,34], polarized = True)
+S = fs.S()
+round(S)
+# 71542 (38,34)
+# 72100 (36,32)
+# 72552 (34,30)
+# trying all combinations is a bit silly, I should check what maximises each population in turn:
+seg_sites = {}
+for x in range(24, 52):
+            fs =  dadi.Spectrum.from_data_dict(dd, ['North'], [x], polarized=True)
+            s = fs.S()
+            seg_sites[x] = round(s)
+            print(x, seg_sites[x])
+
+# highest value for the North pop is definitely 38, even though 40 and 36 are close.
+seg_sites = {}
+for x in range(20, 46):
+            fs =  dadi.Spectrum.from_data_dict(dd, ['South'], [x], polarized=True)
+            s = fs.S()
+            seg_sites[x] = round(s)
+            print(x, seg_sites[x])
+# and 30/32 is the best value for the South pop, so it looks like I was close. Anyway, let's put it together.
+fs = dadi.Spectrum.from_data_dict(dd, ['North','South'], [38,30], polarized = True)
+S = fs.S()
+round(S)
+# 72831 is the end number and it sounds good.
+
+# Let's take a look at the spectrum.
+dadi.Plotting.plot_single_2d_sfs(fs, vmin=0.1)
+
+# This image is telling me that there are loads of alleles that are at low frequency in both populations
+# and really not many that are fixed in one or the other (low frequency in one pop and high in the other)
+# but for a small patch of near fixation in the South pop. But those might be really few snps.
+# I want to save this fs to file.
+fs.to_file('../pop_structure/dadi/dadi2D.fs')
+
+# Save the figure
+fig = pylab.figure()
+dadi.Plotting.plot_single_2d_sfs(fs, vmin=0.1)
+fig.savefig('../pop_structure/dadi/dadi2Dfs.png', dpi=300, bbox_inches='tight')
+# note for self: you need to run the above three lines all together, or hydrogen
+# evaluates them separately and does not actually print out the figure
