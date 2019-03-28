@@ -1488,6 +1488,18 @@ Ref     OUT     Allele1 North   South   Allele2 North   South   Gene    Position
 -G-     -G-     G       90      71      T       6       5       ps_ch_1 47471   
 -T-     -T-     T       96      78      C       2       4       ps_ch_1 60927   
 ```
+Time to get dadi setup. I will prepare it as a conda environment, so that I don't mess up my other python environments. I need to check what version of python is needed. --> Yup, as expected, Python >2.5 is required, but not Python3. Very annoying.
+```bash
+conda create -n dadi python=2.7
+source activate dadi
+conda install numpy scipy matplotlib
+conda install ipython
+conda install -c bioconda dadi
+conda install ipykernel # these last two I only need to run atom with this env
+conda install -c conda-forge python-language-server
+```
+Hopefully the conda install is solid, because it was an incredibly easy install like this.
+I will try running some tests and see what happens. I am playing around with it in the script `figuring_out_dadi.py`. I tried a couple of the examples that come with the dadi distribution, then I will try loading up my data and figuring out how to project down my snps.
 
 #### Stats for selection outliers
 ###### 14.3.19
