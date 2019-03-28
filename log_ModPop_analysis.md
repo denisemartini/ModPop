@@ -1367,6 +1367,26 @@ mSeedsProposalS2 = 0.025
 ```
 And restarting it as usual. If it runs like last night it should take ~6hrs.
 
+###### 28.3.19
+One last time:
+```
+nano params-chain1.ini # and filling with the following parameters:
+datapath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset
+mcmcpath = /data/denise/ModPop_analysis/pop_structure/EEMS/eems_snp_dataset-chain1
+nIndiv = 92
+nSites = 101539
+nDemes = 400
+diploid = true
+numMCMCIter = 5000000
+numBurnIter = 1000000
+numThinIter = 9999
+qEffctProposalS2 = 0.006
+mEffctProposalS2 = 0.6
+mSeedsProposalS2 = 0.035
+```
+And restarting it as usual. If it runs like last night it should take ~6hrs.
+
+
 ##### Modeling in dadi
 ###### 26.3.19
 I have been studying this for a while now and I have been wanting to try out this program ever since I found out about it in 2016. It is not an easy one, but might be one of the most interesting to use with this dataset. So, there is some preparation to do. dadi is basically a python language, so to run it you write a script of the model you want to test. Luckily, I found a nice resource online where all the scripts for the possible modelsI would like to test have already been implemented, together with a few other wrapping options: https://github.com/dportik/dadi_pipeline
