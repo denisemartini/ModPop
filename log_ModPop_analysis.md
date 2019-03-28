@@ -1459,7 +1459,13 @@ module load VCFtools
 vcftools --vcf snps_with_outgroup.vcf --min-alleles 2 --max-alleles 2 \
 --remove-filtered-all --recode --out biallelic_snps_with_outgroup
 After filtering, kept 101317 out of a possible 101553 Sites
-
+grep -v '#' biallelic_snps_with_outgroup.recode.vcf | awk -F'\t' 'BEGIN{OFS="\t";} {if ($102 == "./.") print $1,$2}' > missing_in_kea.txt
+wc -l missing_in_kea.txt
+2130
+vcftools --vcf biallelic_snps_with_outgroup.recode.vcf \
+--exclude-positions missing_in_kea.txt \
+--remove-filtered-all --recode --out final_snps_for_dadi
+After filtering, kept 99187 out of a possible 101317 Sites
 ```
 
 
