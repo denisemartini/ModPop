@@ -1384,8 +1384,7 @@ qEffctProposalS2 = 0.006
 mEffctProposalS2 = 0.6
 mSeedsProposalS2 = 0.035
 ```
-And restarting it as usual. If it runs like last night it should take ~6hrs.
-
+And restarting it again.
 
 ##### Modeling in dadi
 ###### 26.3.19
@@ -1437,7 +1436,11 @@ bgzip fixed_kea_GBS_snps.vcf
 tabix -p vcf fixed_kea_GBS_snps.vcf.gz
 bcftools merge -m snps clean_kaka_GBS_snps.vcf.gz fixed_kea_GBS_snps.vcf.gz > snps_with_outgroup.vcf
 ```
-That finally went fine.
+That finally went fine. The R code I used to fix the kea refs problem is in `fixing_kea_refs.R`.
+
+###### 28.3.19
+Now, I need to do a couple of quick filterings on this set. Specifically, I need to remove any sites that are not not biallelic anymore and I might as well remove sites for which kea has missing data, since both of these will be excluded by dadi and I think they would mess up the file conversion step.
+
 
 #### Stats for selection outliers
 ###### 14.3.19
