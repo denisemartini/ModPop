@@ -1467,7 +1467,27 @@ vcftools --vcf biallelic_snps_with_outgroup.recode.vcf \
 --remove-filtered-all --recode --out final_snps_for_dadi
 After filtering, kept 99187 out of a possible 101317 Sites
 ```
-
+Finally, to see whether the scripts I got from the dadi-user group work. The one to convert vcf files to dadi input comes from this thread https://groups.google.com/forum/#!searchin/dadi-user/vcf|sort:date/dadi-user/p1WvTKRI9_0/tqQQUJX7AwAJ, and this link: https://github.com/wk8910/bio_tools/blob/master/01.dadi_fsc/00.convertWithFSC/convert_vcf_to_dadi_input.pl. It should work with just the vcf file and a list of samples and populations.
+```bash
+awk '{print $1,$3}' ../population.txt | tr ' ' '\t' > dadi_poplist.txt
+```
+I added to that one line: `kea  out` to indicate that the kea sample is the outgroup. Now let's see if the script works.
+```
+perl convert_vcf_to_dadi_input.pl final_snps_for_dadi.recode.vcf dadi_poplist.txt
+```
+That worked like a charm, I am very grateful to whoever wrote it! I only fixed a typo in the header (Position) and changed the flanking positions in the sequence to be "-", as reported in dadi manual, rather than Ns.
+The output file looks like:
+```
+Ref     OUT     Allele1 North   South   Allele2 North   South   Gene    Position        
+-C-     -C-     C       79      82      T       11      4       ps_ch_1 9925    
+-C-     -C-     C       93      62      G       5       6       ps_ch_1 10540   
+-A-     -A-     A       15      5       G       3       5       ps_ch_1 23215   
+-T-     -T-     T       96      74      C       2       12      ps_ch_1 29295   
+-C-     -C-     C       88      74      T       10      12      ps_ch_1 35815   
+-T-     -T-     T       10      9       A       0       1       ps_ch_1 39436   
+-G-     -G-     G       90      71      T       6       5       ps_ch_1 47471   
+-T-     -T-     T       96      78      C       2       4       ps_ch_1 60927   
+```
 
 #### Stats for selection outliers
 ###### 14.3.19
