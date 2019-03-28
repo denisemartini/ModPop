@@ -1500,6 +1500,22 @@ conda install -c conda-forge python-language-server
 ```
 Hopefully the conda install is solid, because it was an incredibly easy install like this.
 I will try running some tests and see what happens. I am playing around with it in the script `figuring_out_dadi.py`. I tried a couple of the examples that come with the dadi distribution, then I will try loading up my data and figuring out how to project down my snps.
+Now that I have done that and read up some more, I want to try fitting my two populations separately at first, to see what kind of growth or not growth I can expect from them. I think it might be safe to try fitting these "simple" models here on my desktop.
+So, I downloaded the repo with the optimization scripts from https://github.com/dportik/dadi_pipeline and I am going to use his script with the models form 1D spectrum that come with the dadi distribution. To do these things I will need to modify the script accordingly.
+```bash
+git clone https://github.com/dportik/dadi_pipeline.git # in my ~ folder
+cd /Volumes/Denise/ModPop_analysis/pop_structure/dadi/
+cp ~/dadi_pipeline/Optimize_Functions.py .
+cp ~/dadi_pipeline/dadi_Run_Optimizations.py .
+cp ~/gutenkunstlab-dadi-f2f4b565089a/dadi/Demographics1D.py .
+```
+The second script is the one that needs to be modified. Specifically, I am removing a bunch of writing (instructions and examples), setting up my run, specifying all the models I want to try fitting and optimizing them one at a time. The models I want to try are all in Demographics1D.py, which I am importing in the script, it should be callable from dadi itself, but I copied it here just in case.
+```
+# in the dadi environment
+python dadi_Run_Optimizations_North.py
+python dadi_Run_Optimizations_South.py
+```
+Which such few parameters it really seems to be going pretty fast, but I can see how I would like to run it on the cluster with more complex models.
 
 #### Stats for selection outliers
 ###### 14.3.19
