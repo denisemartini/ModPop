@@ -1400,6 +1400,22 @@ mSeedsProposalS2 = 0.035
 ```
 And restarting it again.
 
+###### 29.3.19
+Parameters are not quite perfect yet, but much closer to where they should be. Let's take another look at those plots.
+```R
+library("rEEMSplots")
+library("rgdal")
+library("rworldmap")
+library("rworldxtra")
+projection_none <- "+proj=longlat +datum=WGS84"
+projection_mercator <- "+proj=merc +datum=WGS84"
+eems.plots(mcmcpath = c("eems_snp_dataset-chain1", "eems_snp_dataset-chain2", "eems_snp_dataset-chain3"),
+  plotpath = "eems_results-default",
+  longlat = TRUE, add.grid = TRUE, col.grid = "gray90", lwd.grid = 0.8,
+  add.demes = TRUE, col.demes = "black", pch.demes = 5, min.cex.demes = 0.5, max.cex.demes = 1.5,
+  projection.in = projection_none, projection.out = projection_mercator, add.map = TRUE, col.map = "black", lwd.map = 1)
+```
+
 ##### Modeling in dadi
 ###### 26.3.19
 I have been studying this for a while now and I have been wanting to try out this program ever since I found out about it in 2016. It is not an easy one, but might be one of the most interesting to use with this dataset. So, there is some preparation to do. dadi is basically a python language, so to run it you write a script of the model you want to test. Luckily, I found a nice resource online where all the scripts for the possible modelsI would like to test have already been implemented, together with a few other wrapping options: https://github.com/dportik/dadi_pipeline
@@ -1512,8 +1528,8 @@ cp ~/gutenkunstlab-dadi-f2f4b565089a/dadi/Demographics1D.py .
 The second script is the one that needs to be modified. Specifically, I am removing a bunch of writing (instructions and examples), setting up my run, specifying all the models I want to try fitting and optimizing them one at a time. The models I want to try are all in Demographics1D.py, which I am importing in the script, it should be callable from dadi itself, but I copied it here just in case.
 ```
 # in the dadi environment
-python dadi_Run_Optimizations_North.py
-python dadi_Run_Optimizations_South.py
+python dadi_Run_Optimizations_North.py | tee logNorth.txt
+python dadi_Run_Optimizations_South.py | tee logSouth.txt
 ```
 Which such few parameters it really seems to be going pretty fast, but I can see how I would like to run it on the cluster with more complex models.
 
