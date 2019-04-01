@@ -1415,6 +1415,13 @@ eems.plots(mcmcpath = c("eems_snp_dataset-chain1", "eems_snp_dataset-chain2", "e
   add.demes = TRUE, col.demes = "black", pch.demes = 5, min.cex.demes = 0.5, max.cex.demes = 1.5,
   projection.in = projection_none, projection.out = projection_mercator, add.map = TRUE, col.map = "black", lwd.map = 1)
 ```
+###### 1.4.19
+After a few other tweaks over the weekend, this is I think the winning combination of parameters:
+```
+qEffctProposalS2 = 0.008
+mEffctProposalS2 = 0.95
+mSeedsProposalS2 = 0.04
+```
 
 ##### Modeling in dadi
 ###### 26.3.19
