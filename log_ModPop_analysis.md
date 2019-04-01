@@ -1551,6 +1551,49 @@ mv South.* South
 python Summarize_Outputs.py ./South
 ```
 So I get that for the NI the best model is the bottlegrowth, but with growth followed by bottleneck, while for the SI I get a three_epoch model, with prolonged bottleneck and recovery. I am not sure of how comparable the parameters for the two populations are...like the time or pop size parameters. But in both cases it seems like convergence has not quite been reached, so I will need to run this again, with more iterations or rounds of optimization. And the bottlegrowth model estimates for the popsize reached the upper bound parameters in both pops, so I will need to change those as well. But first I am taking a quick look at the simulations generated from these models, with the optimized parameters, to compare them with the real data and see how well (or not) they fit it.
+I checked to fit of the models and I have a problem, probably due to ancestral misidentification, which seems to be fairly common with GBS/RAD datasets. So, following the suggestions here https://bit.ly/2Ul83f3 and here https://bit.ly/2FNyodA I am integrating a correction in my models. I will add a line in the dadi_Run_Optimizations scripts, that corrects the model function before running the optimizations and adds this parameter. I will need to remember that there is this extra parameter when I specify the optimization parameters.
+```py
+snps = "../final_snps_for_dadi.recode.vcf.data"
+prefix = "North_misid"
+pts = 60,70,80]
+reps = [20,30,50]
+maxiters = [10,15,25]
+folds = [3,2,1]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.two_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", func_anc, 3, 3, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T, p_misid")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.growth)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "growth", func_anc, 3, 3, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T, p_misid")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", func_anc, 3, 5, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF, p_misid")
+upper = [50,30,30,30]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.bottlegrowth)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "bottlegrowth", func_anc, 3, 4, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, T, p_misid", in_upper=upper)
+```
+I am also increasing the number of repetitions and iterations for each round of optimizations. And increasing upper bounds for the bottlegrowth model.
+There is just one problem: the conda installation of dadi does not include this function (it came with a later version of the program I guess). So let's fix that:
+```bash
+conda remove dadi
+cd ~
+# I went crazy because the package is in the middle of switching to Python3...and I had to find the specific commit where the developers started the switch -.-
+wget https://bitbucket.org/gutenkunstlab/dadi/get/f2f4b565089af660573339d88efe9548d2a596fa.zip
+unzip f2f4b565089af660573339d88efe9548d2a596fa.zip
+mv gutenkunstlab-dadi-f2f4b565089a/ dadi
+rm f2f4b565089af660573339d88efe9548d2a596fa.zip
+cd dadi
+python setup.py build_ext --inplace
+# then I need to add this to the PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:/home/denise/dadi
+https://bitbucket.org/gutenkunstlab/dadi/get/f2f4b565089af660573339d88efe9548d2a596fa.zip
+```
+Now, it should work:
+```
+cd /data/denise/ModPop_analysis/pop_structure/dadi
+cd North
+python -u ../dadi_Run_Optimizations_North.py | tee ../logNorth_misid.txt
+cd ../South
+python -u ../dadi_Run_Optimizations_South.py | tee ../logSouth_misid.txt
+```
+
 
 #### Stats for selection outliers
 ###### 14.3.19
