@@ -31,3 +31,19 @@ Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_bottlegrowth")
 # (ancestral misidentification error), I might have to fold the FS.
 # Because to apply a correction to that error I would need the flanking
 # bases of both ref and outgroup and that would be messy I think.
+
+# Now doing the same for the SI pop and I am afraid I will see the same problem.
+
+fs = South_fs
+pts = [40,50,60]
+prefix = "South"
+emp_params = [0.1314,1.6206,0.1034,0.4908]
+
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "three_epoch", Demographics1D.three_epoch, emp_params, fs_folded=False)
+
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_three_epoch")
+
+# I will try to fix this with the ancestral misidentification correction
+# that comes with the latest version of dadi. Basically, you add an extra
+# parameter to the model, that accounts for ancestral misidentification.
+# If this fixes my models great, otherwise I will have to fold the spectrum.
