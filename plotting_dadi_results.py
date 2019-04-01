@@ -1,3 +1,7 @@
+import sys
+sys.path.append('/Users/denisemartini/dadi_pipeline/Plotting')
+sys.path.append('/Users/denisemartini/dadi')
+
 import dadi
 import pylab
 from numpy import array
@@ -12,8 +16,6 @@ South_fs = dadi.Spectrum.from_data_dict(dd, ['South'], [30], polarized = True)
 from dadi import Demographics1D
 
 # then I can use the functions from the dadi pipeline to fit the models with the optimised parameters
-import sys
-sys.path.append('/Users/denisemartini/dadi_pipeline/Plotting')
 import Plotting_Functions
 
 # plotting for the NI population, bottlegrowth model:

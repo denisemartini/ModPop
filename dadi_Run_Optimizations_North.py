@@ -79,7 +79,7 @@ Updated May 2018
 #===========================================================================
 
 #**************
-snps = "final_snps_for_dadi.recode.vcf.data"
+snps = "../final_snps_for_dadi.recode.vcf.data"
 
 #Create python dictionary from snps file
 dd = dadi.Misc.make_data_dict(snps)
@@ -138,21 +138,26 @@ Now let's use the function to run an optimization routine for our data and this 
 This would perform three rounds of optimizations.
 '''
 #create a prefix to label the output files
-prefix = "North"
+prefix = "North_misid"
 #make sure to define your extrapolation grid size
-pts = [40,50,60]
+pts = [60,70,80]
 
-reps = [10,20,50]
-maxiters = [5,10,20]
+reps = [20,30,50]
+maxiters = [10,15,25]
 folds = [3,2,1]
-
 
 #Remember the order for mandatory arguments as below
 #Optimize_Routine(fs, pts, outfile, model_name, func, rounds, param_number, fs_folded)
-Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", Demographics1D.two_epoch, 3, 2, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.two_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", func_anc, 3, 3, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T, p_misid")
 
-Optimize_Functions.Optimize_Routine(fs, pts, prefix, "growth", Demographics1D.growth, 3, 2, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.growth)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "growth", func_anc, 3, 3, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T, p_misid")
 
-Optimize_Functions.Optimize_Routine(fs, pts, prefix, "bottlegrowth", Demographics1D.bottlegrowth, 3, 3, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, T")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", func_anc, 3, 5, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF, p_misid")
 
-Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", Demographics1D.three_epoch, 3, 4, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF")
+upper = [50,30,30,30]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.bottlegrowth)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "bottlegrowth", func_anc, 3, 4, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, T, p_misid", in_upper=upper)
+
