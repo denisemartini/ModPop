@@ -1540,6 +1540,18 @@ python dadi_Run_Optimizations_South.py | tee logSouth.txt
 ```
 Which such few parameters it really seems to be going pretty fast, but I can see how I would like to run it on the cluster with more complex models.
 
+###### 1.4.19
+While that really was quick (about 1hr to run all models) I didn't really have an opportunity to look at the results properly. So, I checked the likelihoods and all that by running the summarizing script from the dadi pipeline:
+```bash
+mkdir North
+mv North.* North
+python Summarize_Outputs.py ./North
+mkdir South
+mv South.* South
+python Summarize_Outputs.py ./South
+```
+So I get that for the NI the best model is the bottlegrowth, but with growth followed by bottleneck, while for the SI I get a three_epoch model, with prolonged bottleneck and recovery. I am not sure of how comparable the parameters for the two populations are...like the time or pop size parameters. But in both cases it seems like convergence has not quite been reached, so I will need to run this again, with more iterations or rounds of optimization. And the bottlegrowth model estimates for the popsize reached the upper bound parameters in both pops, so I will need to change those as well. But first I am taking a quick look at the simulations generated from these models, with the optimized parameters, to compare them with the real data and see how well (or not) they fit it.
+
 #### Stats for selection outliers
 ###### 14.3.19
 Finally back to work on this stuff after being drained of life by the kea project. So, I have done some more reading to decide exactly how to go about this, because there are many options and many programs that do different things, etc...and I have decided that the easiest and fastest way to go about this, considering my current time constraints, is to get the stats I need from VCFtools and some playing with R. Specifically, I am going to consider Fst, π, dxy and Tajima's D. These few stats aren't comprehensive, but they complement each other in ways that should allow me to interpret the patterns sensibly. At least I hope so.
