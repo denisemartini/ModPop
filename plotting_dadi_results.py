@@ -49,3 +49,53 @@ Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_three_epoch")
 # that comes with the latest version of dadi. Basically, you add an extra
 # parameter to the model, that accounts for ancestral misidentification.
 # If this fixes my models great, otherwise I will have to fold the spectrum.
+
+# Let's try some plotting again, after adding the correction for ancestral misidentification.
+
+fs = South_fs
+pts = [60,70,80]
+prefix = "South_misid"
+emp_params = [47.5337,1.6926,0.6433,0.0433]
+
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.bottlegrowth)
+
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "bottlegrowth", func_anc, emp_params, fs_folded=False)
+
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_bottlegrowth")
+
+# Much better but still not quite a proper fit. It might have to do with the fact that
+# the nuB parameter gets so close to the upper boundaries once again.
+
+# Expecting the same for the NI:
+fs = North_fs
+pts = [60,70,80]
+prefix = "North_misid"
+emp_params = [49.6807,1.3588,0.7463,0.0435]
+
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.bottlegrowth)
+
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "bottlegrowth", func_anc, emp_params, fs_folded=False)
+
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_bottlegrowth")
+
+# Same here. I do hope it is because of the boundaries. I will try fitting again
+# with increased upper boundaries. If that keeps failing I might have to
+# give up and fold the spectrum.
+
+# Trying the other models best fit, out of curiosity.
+emp_params = [2.9529,1.1872,0.0449]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.two_epoch)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "two_epoch", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_two_epoch")
+
+emp_params = [5.6064,6.7774,0.0445]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.growth)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "growth", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_growth")
+
+emp_params = [0.4734,2.2299,0.4451,0.9992,0.0439]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "three_epoch", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_three_epoch")
+
+# the bottlegrowth is definitely the best fit...
