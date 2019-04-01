@@ -1598,7 +1598,19 @@ python Summarize_Outputs.py ./South
 python Summarize_Outputs.py ./North
 ```
 Still not quite there, the fit is close but still deviating from the real data at the derived and ancestral low frequency alleles. It might still be that the ancestral misidentification was not corrected enough (even though the parameter was optimized at ~4.3% in both populations), or that the nuB parameter (pop size after the bottleneck, or in this case after the rapid expansion) is still hitting the upper boundaries.
-Even after increasing the boundaries again, I don't see a real improvement. Time to fold the SFS.
+Even after increasing the boundaries again, I don't see a real improvement. Time to fold the SFS. I will fix the Optimization script again, to use the folded SFS and forget about the ancestral misidentification.
+```py
+fs = dadi.Spectrum.from_data_dict(dd, pop_ids=pop_ids, projections = proj, polarized = False)
+prefix = "North_folded"
+pts = 60,70,80]
+reps = [20,30,50]
+maxiters = [10,15,25]
+folds = [3,2,1]
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", Demographics1D.two_epoch, 3, 2, fs_folded=True, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T")
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "growth", Demographics1D.growth, 3, 2, fs_folded=True, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T")
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", Demographics1D.three_epoch, 3, 4, fs_folded=True, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF")
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "bottlegrowth", Demographics1D.bottlegrowth, 3, 3, fs_folded=True, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, T")
+```
 
 #### Stats for selection outliers
 ###### 14.3.19
