@@ -1583,7 +1583,6 @@ cd dadi
 python setup.py build_ext --inplace
 # then I need to add this to the PYTHONPATH
 export PYTHONPATH=$PYTHONPATH:/home/denise/dadi
-https://bitbucket.org/gutenkunstlab/dadi/get/f2f4b565089af660573339d88efe9548d2a596fa.zip
 ```
 Now, it should work:
 ```
@@ -1593,7 +1592,13 @@ python -u ../dadi_Run_Optimizations_North.py | tee ../logNorth_misid.txt
 cd ../South
 python -u ../dadi_Run_Optimizations_South.py | tee ../logSouth_misid.txt
 ```
-
+Then collecting results:
+```
+python Summarize_Outputs.py ./South
+python Summarize_Outputs.py ./North
+```
+Still not quite there, the fit is close but still deviating from the real data at the derived and ancestral low frequency alleles. It might still be that the ancestral misidentification was not corrected enough (even though the parameter was optimized at ~4.3% in both populations), or that the nuB parameter (pop size after the bottleneck, or in this case after the rapid expansion) is still hitting the upper boundaries.
+Even after increasing the boundaries again, I don't see a real improvement. Time to fold the SFS.
 
 #### Stats for selection outliers
 ###### 14.3.19

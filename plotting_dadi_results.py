@@ -99,3 +99,24 @@ model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "three_epoch", fun
 Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_three_epoch")
 
 # the bottlegrowth is definitely the best fit...
+# After another round...
+
+emp_params = [12.2993,1.1869,0.7961,0.1057,0.0494]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "three_epoch", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_three_epoch")
+
+emp_params = [6.9479,1.3472,0.7791,0.0455]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.bottlegrowth)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "bottlegrowth", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_bottlegrowth")
+
+fs = South_fs
+pts = [60,70,80]
+prefix = "South_misid"
+emp_params = [35.2712,1.9514,0.8587,0.0528]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.bottlegrowth)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "bottlegrowth", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_bottlegrowth")
+
+# I really don't see it appriaching a good fit. Time to fold the FS.
