@@ -1602,7 +1602,7 @@ Even after increasing the boundaries again, I don't see a real improvement. Time
 ```py
 fs = dadi.Spectrum.from_data_dict(dd, pop_ids=pop_ids, projections = proj, polarized = False)
 prefix = "North_folded"
-pts = 60,70,80]
+pts = [60,70,80]
 reps = [20,30,50]
 maxiters = [10,15,25]
 folds = [3,2,1]
@@ -1610,6 +1610,64 @@ Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", Demographics1D
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "growth", Demographics1D.growth, 3, 2, fs_folded=True, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T")
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", Demographics1D.three_epoch, 3, 4, fs_folded=True, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF")
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "bottlegrowth", Demographics1D.bottlegrowth, 3, 3, fs_folded=True, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, T")
+```
+###### 2.4.19
+So, after folding the spectrum last night and rerunning, I feel like we are getting really close, the fit is almost perfect for the three epoch model in both populations. But it still looks like the optimization isn't quite there yet. And the results are still similar to the ones with the unfolded spectrum: very big growth followed by decline/bottleneck. I really wonder if I can't just get a good fit for the folded spectrum if I run the optimizations like, forever. Maybe starting with initial parameters close to the ones that were found in the best rounds last night?
+```py
+fs = dadi.Spectrum.from_data_dict(dd, pop_ids=pop_ids, projections = proj, polarized = True)
+prefix = "North_misid_long" # or "South_misid_long"
+pts = [80,90,100]
+reps = [20,30,40,50]
+maxiters = [10,15,20,25]
+folds = [3,2,2,1]
+
+params = [2.8,1.2,0.04]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.two_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", func_anc, 4, 3, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T, p_misid", in_params=params)
+params = [8.0,12.0,0.04]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.growth)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "growth", func_anc, 4, 3, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nu, T, p_misid", in_params=params)
+params = [12.0,1.2,0.7,0.1,0.04]
+upper = [100,30,30,30,30]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", func_anc, 4, 5, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF, p_misid", in_params=params)
+params = [75.0,1.3,0.8,0.04]
+upper = [120,30,30,30]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.bottlegrowth)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "bottlegrowth", func_anc, 4, 4, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, T, p_misid", in_upper=upper, in_params=params)
+
+# starting params for SI
+params = [3.0,0.8,0.04] #two_epoch
+params = [4.0,1.9,0.04] #growth
+params = [9.3,0.7,0.5,0.1,0.04] #three_epoch
+params = [35.0,2.0,0.8,0.04] #bottlegrowth
+```
+
+I think that took us quite close to the optimal fit. This is probably the best model I can get for my 1D populations, and it is relatively simple. But before diving into 2D models, I want to check a couple of other possibilities, adding some complexity to the three_epoch model in particular to see if it adds anything to it or not. Specifically, I am adding a couple more size changes, to verify if we are picking up a single recent bottleneck or two, and exponential rather than instantaneous size changes. These are several more models and I will test them all together against the three_epoch that we have already "established".
+```py
+import Exp1DModels
+prefix = "North_ext1D"
+params = [27.0,0.1,0.6,0.01,0.04]
+lower = [0.01,0.01,0.01,0.001,0.01]
+upper = [100,30,30,30,30]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", func_anc, 4, 5, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF, p_misid", in_params=params, in_upper=upper, in_lower=lower)
+func_anc = dadi.Numerics.make_anc_state_misid_func(Exp1DModels.four_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "four_epoch", func_anc, 4, 7, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuA, nuB, nuC, TA, TB, TC, p_misid")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Exp1DModels.five_epoch)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "five_epoch", func_anc, 4, 9, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuA, nuB, nuC, nuD, TA, TB, TC, TD, p_misid")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Exp1DModels.three_epoch_exp)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_exp", func_anc, 4, 5, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF, p_misid")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Exp1DModels.three_epoch_firstexp)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_firstexp", func_anc, 4, 5, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF, p_misid")
+func_anc = dadi.Numerics.make_anc_state_misid_func(Exp1DModels.three_epoch_scndexp)
+Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_scndexp", func_anc, 4, 5, fs_folded=False, reps = reps, maxiters = maxiters, folds = folds, param_labels = "nuB, nuF, TB, TF, p_misid")
+```
+I put the above in new optimization scripts, to avoid overwriting the last ones, which worked fairly well. Because these models are a bit more complex (especially the four and five epochs) I don't necessarily expect them to converge right away, but this might be a start.
+```
+scp ../../ModPop_repo/Exp1DModels.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
+python -u ../dadi_Run_Ext1D_NI.py | tee ../logNorth_misid.txt
+python -u ../dadi_Run_Ext1D_SI.py | tee ../logSouth_misid.txt
 ```
 
 #### Stats for selection outliers
