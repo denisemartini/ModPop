@@ -182,10 +182,10 @@ def three_epoch_exp(params, ns, pts):
     params = (nuB,nuF,TB,TF)
     ns = (n1,)
 
-    nuB: Ratio of bottleneck population size to ancient pop size
-    nuF: Ratio of contemporary to ancient pop size
-    TB: Length of bottleneck (in units of 2*Na generations)
-    TF: Time since bottleneck recovery (in units of 2*Na generations)
+    nuB: Ratio of population size to ancient pop size after 1st exp change
+    nuF: Ratio of contemporary to ancient pop size (after 2nd exp change)
+    TB: Time between 1st and 2nd size change (in units of 2*Na generations)
+    TF: Time since 2nd size change (in units of 2*Na generations)
 
     n1: Number of samples in resulting Spectrum
     pts: Number of grid points to use in integration.
@@ -199,6 +199,31 @@ def three_epoch_exp(params, ns, pts):
     phi = Integration.one_pop(phi, xx, TB, nuB_func)
     nuF_func = lambda t: nuB*(nuF/nuB) ** (t/TF)
     phi = Integration.one_pop(phi, xx, TF, nuF_func)
+
+    fs = Spectrum.from_phi(phi, ns, (xx,))
+    return fs
+
+def three_epoch_halfexp(params, ns, pts):
+    """
+    params = (nuB,nuF,TB,TF)
+    ns = (n1,)
+
+    nuB: Ratio of population size to ancient pop size after 1st change (exp)
+    nuF: Ratio of contemporary to ancient pop size (after instant change)
+    TB: Time between 1st and 2nd size change (in units of 2*Na generations)
+    TF: Time since 2nd size change (in units of 2*Na generations)
+
+    n1: Number of samples in resulting Spectrum
+    pts: Number of grid points to use in integration.
+    """
+    nuB,nuF,TB,TF = params
+
+    xx = Numerics.default_grid(pts)
+    phi = PhiManip.phi_1D(xx)
+
+    nuB_func = lambda t: 1*(nuB/1) ** (t/TB)
+    phi = Integration.one_pop(phi, xx, TB, nuB_func)
+    phi = Integration.one_pop(phi, xx, TF, nuF)
 
     fs = Spectrum.from_phi(phi, ns, (xx,))
     return fs
