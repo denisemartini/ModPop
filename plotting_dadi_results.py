@@ -174,3 +174,31 @@ Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_three_epoch")
 # wondering if what I need isn't simply more replicates to find a really
 # good fit there as well. We definitely were close to these parameters
 # there as well. I will try one last time, giving it very many iterations.
+
+# After giving the unfolded FS another shot, with longer optimization, both
+# NI and SI are leaning decisively towards the three epoch, an with very similar
+# parameters in both populations. Meaning very big population expansion some
+# time ago, followed by a sharp decrease a lot more recently. Let's look at the fit.
+
+fs = dadi.Spectrum.from_data_dict(dd, ['North'], [38], polarized = True)
+pts = [80,90,100]
+prefix = "North_misid_long"
+emp_params = [27.3296,0.1351,0.6007,0.0107,0.0436]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "three_epoch", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_three_epoch")
+# Not quite there yet, but so so close that probably just a smidge more
+# optimization could do it, and I feel like I can accept this and move on.
+fs = dadi.Spectrum.from_data_dict(dd, ['South'], [30], polarized = True)
+pts = [80,90,100]
+prefix = "South_misid_long"
+emp_params = [28.9926,0.2256,0.5318,0.0147,0.0427]
+func_anc = dadi.Numerics.make_anc_state_misid_func(Demographics1D.three_epoch)
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "three_epoch", func_anc, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_three_epoch")
+
+# Same, not quite perfect yet, but the range of the residuals is so much smaller
+# than before, I would consider this a good fit and move on.
+# And I just realised that the time for the second event (the decline in this
+# case) is very very close to the lower boundary for that parameter, so I will
+# have to fix that, it might be limiting the optimization space.
