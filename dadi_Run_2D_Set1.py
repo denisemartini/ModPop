@@ -137,21 +137,21 @@ Basic models with no size changes
 """
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.snm)
-params = [1]
+params = [0.05]
 lower = [0.001]
 upper = [20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "snm", func_anc, rounds, 1, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.no_mig)
-params = [1,1,1,1]
+params = [1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001]
 upper = [100,100,20,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "no_mig", func_anc, rounds, 4, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1, nu2, T, p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.sym_mig)
-params = [1,1,1,1,1]
+params = [1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001]
 upper = [100,100,20,20,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "sym_mig", func_anc, rounds, 5, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1, nu2, m, T, p_misid", in_params=params, in_upper=upper, in_lower=lower)
@@ -163,42 +163,42 @@ Models with size changes in the ancestral population
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch)
-params = [1,1,1,1,1]
+params = [1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001]
 upper = [100,100,20,20,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", func_anc, rounds, 5, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,TB,TF,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_split)
-params = [1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,100,20,20,20,100,100,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_split", func_anc, rounds, 8, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,TB,TF,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_split_mig)
-params = [1,1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,100,20,20,20,20,100,100,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_split_mig", func_anc, rounds, 9, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,m,TB,TF,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch)
-params = [1,1,1]
+params = [1,1,0.05]
 lower = [0.001,0.001,0.001]
 upper = [100,20,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", func_anc, rounds, 3, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch_split)
-params = [1,1,1,1,1,1]
+params = [1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,20,20,100,100,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch_split", func_anc, rounds, 6, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch_split_mig)
-params = [1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,20,20,20,100,100,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch_split_mig", func_anc, rounds, 7, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,m,T,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)

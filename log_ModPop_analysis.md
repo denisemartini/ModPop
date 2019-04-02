@@ -1669,6 +1669,18 @@ scp ../../ModPop_repo/Exp1DModels.py boros:/data/denise/ModPop_analysis/pop_stru
 python -u ../dadi_Run_Ext1D_NI.py | tee ../logNorth_misid.txt
 python -u ../dadi_Run_Ext1D_SI.py | tee ../logSouth_misid.txt
 ```
+From a quick look at results I can say that it's probably not worth going to the effort of trying to optimize the four and five_epoch models, too many parameters and there isn't much of an increase in likelihood I could gain at this stage. The three epoch models with exponential size changes instead might be a good option, they get close even if they are not optimized properly. So, I might consider including some of that in the models I test with the 2D spectrum. I will put a few of the most basic models in a script, then run veeeeery long optimizations with them.
+
+I set up the models in basic_2DModels.py and I split the optimisation routines in two scripts, to run them at the same time. I set them up to be fairly long and intensive and even increased the grid size. Some of these models are very parameter rich, so I expect this will take a while, especially on the 2D spectrum. Hopefully it will run fine.
+```
+scp ../../ModPop_repo/basic_2DModels.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
+scp ../../ModPop_repo/dadi_Run_2D_Set*.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
+mkdir 2Dfs
+cd 2Dfs
+python -u ../dadi_Run_2D_Set1.py | tee ../log2D_Set1.txt
+python -u ../dadi_Run_2D_Set2.py | tee ../log2D_Set2.txt
+```
+
 
 #### Stats for selection outliers
 ###### 14.3.19

@@ -137,21 +137,21 @@ Models with size changes in both ancestral and split population
 """
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_nomig)
-params = [1,1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,20,20,100,100,20,100,100,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "beforeafter_split_nomig", func_anc, rounds, 9, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,Ts,nu1a,nu2a,Tb,nu1b,nu2b,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_secmig)
-params = [1,1,1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,20,20,20,100,100,20,100,100,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "beforeafter_split_secmig", func_anc, rounds, 10, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,m,T,Ts,nu1a,nu2a,Tb,nu1b,nu2b,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_mig)
-params = [1,1,1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,20,20,20,100,100,20,100,100,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "beforeafter_split_mig", func_anc, rounds, 10, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,m,T,Ts,nu1a,nu2a,Tb,nu1b,nu2b,p_misid", in_params=params, in_upper=upper, in_lower=lower)
@@ -162,21 +162,21 @@ Models with size changes in split populations only
 """
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_after_split_nomig)
-params = [1,1,1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,100,100,100,100,100,20,20,20,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_after_split_nomig", func_anc, rounds, 10, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1a,nu2a,nu1b,nu2b,nu1c,nu2c,T1,T2,T3,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_after_split_secmig)
-params = [1,1,1,1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,100,100,100,100,100,20,20,20,20,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_after_split_secmig", func_anc, rounds, 11, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1a,nu2a,nu1b,nu2b,nu1c,nu2c,m,T1,T2,T3,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_after_split_mig)
-params = [1,1,1,1,1,1,1,1,1,1,1]
+params = [1,1,1,1,1,1,1,1,1,1,0.05]
 lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
 upper = [100,100,100,100,100,100,20,20,20,20,20]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_after_split_mig", func_anc, rounds, 11, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1a,nu2a,nu1b,nu2b,nu1c,nu2c,m,T1,T2,T3,p_misid", in_params=params, in_upper=upper, in_lower=lower)
