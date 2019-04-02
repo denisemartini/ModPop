@@ -202,3 +202,39 @@ Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_three_epoch")
 # And I just realised that the time for the second event (the decline in this
 # case) is very very close to the lower boundary for that parameter, so I will
 # have to fix that, it might be limiting the optimization space.
+
+# I never did actually try fitting the snm model, the normal population
+# without size changes.
+
+fs = dadi.Spectrum.from_data_dict(dd, ['South'], [30], polarized = True)
+pts = [80,90,100]
+prefix = "South_misid_long"
+emp_params = []
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "snm", Demographics1D.snm, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "SI_snm")
+
+fs = dadi.Spectrum.from_data_dict(dd, ['North'], [38], polarized = True)
+pts = [80,90,100]
+prefix = "North_misid_long"
+emp_params = []
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "snm", Demographics1D.snm, emp_params, fs_folded=False)
+Plotting_Functions.Plot_1D(fs, model_fit, prefix, "NI_snm")
+# Well, now I know for sure that that's definitely a worse fit. I mean, I did
+# not add the ancestral misidentification but it is not only the low-frequency
+# alleles that it is not fitting right, so I would say case closed.
+# Now, let's take a look at the 2D fs and plot the snm model, to have a
+# baseline to start with.
+
+# import the 2D models
+from dadi import Demographics2D
+
+fs = dadi.Spectrum.from_data_dict(dd, ['North','South'], [38,30], polarized = True)
+pts = [80,90,100]
+prefix = "2Dfs"
+emp_params = []
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "snm", Demographics2D.snm, emp_params, fs_folded=False)
+Plotting_Functions.Plot_2D(fs, model_fit, prefix, "snm", vmin_val=0.1)
+# Not a great fit, at first glance. I will add this model to the ones to
+# optimize, because I need to add the ancestral misidentification correction.
+# So that's at least one parameter to optimise. But I doubt that there is much
+# space for improvement in likelihood here.

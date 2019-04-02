@@ -228,7 +228,7 @@ def three_epoch_firstexp(params, ns, pts):
     fs = Spectrum.from_phi(phi, ns, (xx,))
     return fs
 
-def three_epoch_secndexp(params, ns, pts):
+def three_epoch_scndexp(params, ns, pts):
     """
     params = (nuB,nuF,TB,TF)
     ns = (n1,)
