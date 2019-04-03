@@ -34,7 +34,7 @@ Citations:
  If you use these scripts or the main diversification models for your work, please
  cite the following publication:
     Portik, D.M., Leache, A.D., Rivera, D., Blackburn, D.C., Rodel, M.-O.,
-    Barej, M.F., Hirschfeld, M., Burger, M., and M.K. Fujita. 2017.
+    Barej, M.F., Hirschfeld, M., Burger, M., and M.K. Fujita. 1017.
     Evaluating mechanisms of diversification in a Guineo-Congolian forest
     frog using demographic model selection. Molecular Ecology 26: 5245-5263.
     doi: 10.1111/mec.14266
@@ -49,7 +49,7 @@ Python modules required:
 Daniel Portik
 daniel.portik@gmail.com
 https://github.com/dportik
-Updated May 2018
+Updated May 1018
 
 Modified from the dadi_pipeline original version.
 '''
@@ -116,17 +116,17 @@ prefix = "2Dfs"
 
 #**************
 #make sure to define your extrapolation grid size (based on your projections)
-pts = [100,110,120]
+pts = [30,40,50]
 
 #**************
 #Set the number of rounds here
-rounds = 5
+rounds = 3
 
 #define the lists for optional arguments
 #you can change these to alter the settings of the optimization routine
-reps = [30,30,40,40,50]
-maxiters = [3,5,5,10,15]
-folds = [3,3,2,2,1]
+reps = [10,15,20]
+maxiters = [3,5,10]
+folds = [3,2,1]
 
 #**************
 #Indicate whether your frequency spectrum object is folded (True) or unfolded (False)
@@ -139,21 +139,21 @@ Basic models with no size changes
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.snm)
 params = [0.05]
 lower = [0.001]
-upper = [20]
+upper = [10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "snm", func_anc, rounds, 1, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.no_mig)
-params = [1,1,1,0.05]
-lower = [0.001,0.001,0.001,0.001]
-upper = [100,100,20,20]
+params = [0.5,0.5,0.5,0.05]
+lower = [0.01,0.01,0.01,0.001]
+upper = [30,30,10,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "no_mig", func_anc, rounds, 4, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1, nu2, T, p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.sym_mig)
-params = [1,1,1,1,0.05]
-lower = [0.001,0.001,0.001,0.001,0.001]
-upper = [100,100,20,20,20]
+params = [0.5,0.5,0.5,0.5,0.05]
+lower = [0.01,0.01,0.01,0.01,0.001]
+upper = [30,30,10,10,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "sym_mig", func_anc, rounds, 5, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1, nu2, m, T, p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
@@ -163,42 +163,42 @@ Models with size changes in the ancestral population
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch)
-params = [1,1,1,1,0.05]
-lower = [0.001,0.001,0.001,0.001,0.001]
-upper = [100,100,20,20,20]
+params = [0.5,0.5,0.5,0.5,0.05]
+lower = [0.01,0.01,0.01,0.01,0.001]
+upper = [30,30,10,10,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", func_anc, rounds, 5, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,TB,TF,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_split)
-params = [1,1,1,1,1,1,1,0.05]
-lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
-upper = [100,100,20,20,20,100,100,20]
+params = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.05]
+lower = [0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.001]
+upper = [30,30,10,10,10,30,30,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_split", func_anc, rounds, 8, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,TB,TF,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_split_mig)
-params = [1,1,1,1,1,1,1,1,0.05]
-lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
-upper = [100,100,20,20,20,20,100,100,20]
+params = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.05]
+lower = [0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.001]
+upper = [30,30,10,10,10,10,30,30,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_split_mig", func_anc, rounds, 9, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,m,TB,TF,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch)
-params = [1,1,0.05]
-lower = [0.001,0.001,0.001]
-upper = [100,20,20]
+params = [0.5,0.5,0.05]
+lower = [0.01,0.01,0.001]
+upper = [30,10,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", func_anc, rounds, 3, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch_split)
-params = [1,1,1,1,1,0.05]
-lower = [0.001,0.001,0.001,0.001,0.001,0.001]
-upper = [100,20,20,100,100,20]
+params = [0.5,0.5,0.5,0.5,0.5,0.05]
+lower = [0.01,0.01,0.01,0.01,0.01,0.001]
+upper = [30,10,10,30,30,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch_split", func_anc, rounds, 6, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch_split_mig)
-params = [1,1,1,1,1,1,0.05]
-lower = [0.001,0.001,0.001,0.001,0.001,0.001,0.001]
-upper = [100,20,20,20,100,100,20]
+params = [0.5,0.5,0.5,0.5,0.5,0.5,0.05]
+lower = [0.01,0.01,0.01,0.01,0.01,0.01,0.001]
+upper = [30,10,10,10,30,30,10]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch_split_mig", func_anc, rounds, 7, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,m,T,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)

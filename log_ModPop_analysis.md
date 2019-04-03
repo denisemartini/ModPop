@@ -1680,6 +1680,13 @@ cd 2Dfs
 python -u ../dadi_Run_2D_Set1.py | tee ../log2D_Set1.txt
 python -u ../dadi_Run_2D_Set2.py | tee ../log2D_Set2.txt
 ```
+###### 3.4.19
+Since this setup looked like it was going to take forever and ever, I reduced quite a few parameters (smaller grid size, less rounds, less reps per round and narrower parameter boundaries), to try and get a quick and dirty look at what the models look like they are fitting before starting the real long optimizations. Hopefully this will speed up things in the long term. Also, I noticed that the log files were not picking up the errors/warnings from the run and I would really like to have those included, so fixing the logging method now. I hope.
+```
+scp ../../ModPop_repo/dadi_Run_2D_Set*.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
+python -u ../dadi_Run_2D_Set1.py 2>&1 | tee ../log2D_Set1.txt
+python -u ../dadi_Run_2D_Set2.py 2>&1 | tee ../log2D_Set2.txt
+```
 
 
 #### Stats for selection outliers
