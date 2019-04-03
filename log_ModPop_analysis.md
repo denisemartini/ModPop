@@ -1671,7 +1671,7 @@ python -u ../dadi_Run_Ext1D_SI.py | tee ../logSouth_misid.txt
 ```
 From a quick look at results I can say that it's probably not worth going to the effort of trying to optimize the four and five_epoch models, too many parameters and there isn't much of an increase in likelihood I could gain at this stage. The three epoch models with exponential size changes instead might be a good option, they get close even if they are not optimized properly. So, I might consider including some of that in the models I test with the 2D spectrum. I will put a few of the most basic models in a script, then run veeeeery long optimizations with them.
 
-I set up the models in basic_2DModels.py and I split the optimisation routines in two scripts, to run them at the same time. I set them up to be fairly long and intensive and even increased the grid size. Some of these models are very parameter rich, so I expect this will take a while, especially on the 2D spectrum. Hopefully it will run fine.
+I set up the models in basic_2DModels.py and I split the optimization routines in two scripts, to run them at the same time. I set them up to be fairly long and intensive and even increased the grid size. Some of these models are very parameter rich, so I expect this will take a while, especially on the 2D spectrum. Hopefully it will run fine.
 ```
 scp ../../ModPop_repo/basic_2DModels.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
 scp ../../ModPop_repo/dadi_Run_2D_Set*.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
@@ -1687,7 +1687,18 @@ scp ../../ModPop_repo/dadi_Run_2D_Set*.py boros:/data/denise/ModPop_analysis/pop
 python -u ../dadi_Run_2D_Set1.py 2>&1 | tee ../log2D_Set1.txt
 python -u ../dadi_Run_2D_Set2.py 2>&1 | tee ../log2D_Set2.txt
 ```
-
+###### 4.4.19
+That went much better, with a lot less errors than the first time as well, even though clearly we did not reach convergence. I will run this another couple of times, taking care not to overwrite the results, so that I can see if the optimizations are at least all heading in the same direction. So the only things I am changing are the prefix for the output files in the optimization routines.
+```
+prefix = "2Dfs_2"
+scp ../../ModPop_repo/dadi_Run_2D_Set*.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
+python -u ../dadi_Run_2D_Set1.py 2>&1 | tee ../log2D_2_Set1.txt
+python -u ../dadi_Run_2D_Set2.py 2>&1 | tee ../log2D_2_Set2.txt
+prefix = "2Dfs_3"
+scp ../../ModPop_repo/dadi_Run_2D_Set*.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
+python -u ../dadi_Run_2D_Set1.py 2>&1 | tee ../log2D_3_Set1.txt
+python -u ../dadi_Run_2D_Set2.py 2>&1 | tee ../log2D_3_Set2.txt
+```
 
 #### Stats for selection outliers
 ###### 14.3.19

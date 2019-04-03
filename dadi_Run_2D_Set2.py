@@ -112,7 +112,7 @@ print "Sum of SFS = ", sfs_sum, '\n', '\n'
 
 #create a prefix based on the population names to label the output files
 #ex. Pop1_Pop2
-prefix = "2Dfs"
+prefix = "2Dfs_2"
 
 #**************
 #make sure to define your extrapolation grid size (based on your projections)
