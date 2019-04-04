@@ -1699,6 +1699,55 @@ scp ../../ModPop_repo/dadi_Run_2D_Set*.py boros:/data/denise/ModPop_analysis/pop
 python -u ../dadi_Run_2D_Set1.py 2>&1 | tee ../log2D_3_Set1.txt
 python -u ../dadi_Run_2D_Set2.py 2>&1 | tee ../log2D_3_Set2.txt
 ```
+As for the actual serious optimizations, I think I might like to run that in NeSI instead, because it might take much longer than this. So, I will install the environment I need over there as well...
+```bash
+cd /nesi/project/uoo02327/programs
+module load Miniconda3/4.4.10
+conda create -p /nesi/project/uoo02327/programs/miniconda_envs/dadi python=2.7
+source activate /nesi/project/uoo02327/programs/miniconda_envs/dadi
+conda install numpy scipy matplotlib ipython
+wget https://bitbucket.org/gutenkunstlab/dadi/get/f2f4b565089af660573339d88efe9548d2a596fa.zip
+unzip f2f4b565089af660573339d88efe9548d2a596fa.zip
+mv gutenkunstlab-dadi-f2f4b565089a/ dadi
+rm f2f4b565089af660573339d88efe9548d2a596fa.zip
+cd dadi
+python setup.py build_ext --inplace
+# then I need to add this to the PYTHONPATH when I am running scripts
+export PYTHONPATH=$PYTHONPATH:/nesi/project/uoo02327/programs/dadi
+```
+Then I should be able to run my dadi scripts...I might test out the fast ones for a second, because it might be convenient to split the models in more separate jobs. I just don't know if NeSI will be faster if not by splitting the job, since dadi does not actually run in parallel, so I don't know that giving it more memory in NeSI will help.
+```
+scp final_snps_for_dadi.recode.vcf.data mahuika://nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dadi
+scp Optimize_Functions.py mahuika://nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dadi
+scp ../../ModPop_repo/dadi_Run_2D_Set*.py mahuika://nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dadi
+scp ../../ModPop_repo/basic_2DModels.py mahuika://nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dadi
+scp Summarize_Outputs.py mahuika://nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dadi
+```
+After moving there the essentials, I can just briefly put the commands to run the optimizations in a nesi script.
+```
+#!/bin/bash -e
+#SBATCH --job-name=dadi_2D_Set2      # job name (shows up in the queue)
+#SBATCH --account=uoo02327     # Project Account
+#SBATCH --time=02:00:00         # Walltime (HH:MM:SS)
+#SBATCH --mem=12GB      # memory
+#SBATCH --ntasks=1              # number of tasks (e.g. MPI)
+#SBATCH --partition=large       # specify a partition
+#SBATCH --hint=nomultithread    # don't use hyperthreading
+#SBATCH --chdir=/nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dadi/2Dfs   # directory where you run the job
+#SBATCH --output=%x-%j.log      # %x and %j are replaced by job name and ID
+#SBATCH --mail-type=ALL         # Optional: Send email notifications
+#SBATCH --mail-user=marde569@student.otago.ac.nz     # Use with --mail-type option
+
+# loading conda and dadi
+module load Miniconda3/4.4.10
+source activate /nesi/project/uoo02327/programs/miniconda_envs/dadi
+export PYTHONPATH=$PYTHONPATH:/nesi/project/uoo02327/programs/dadi
+
+# running the optimization script
+python -u ../dadi_Run_2D_Set2.py
+```
+I have tried asking directly for memory rather than cpu, not sure if that changes anything. 12GB of RAM should be about 8 CPUs in NeSI? I will leave this running for a little bit, then stop it, increase memory requirements and see if it gets any further...
+
 
 #### Stats for selection outliers
 ###### 14.3.19
