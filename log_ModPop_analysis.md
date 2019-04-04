@@ -1781,6 +1781,15 @@ sbatch nesi_dadi2D_Set1-2.sh
 sbatch nesi_dadi2D_Set2-1.sh
 sbatch nesi_dadi2D_Set2-2.sh
 ```
+###### 5.4.19
+So, with slightly optimized parameters I seem to be getting less "model is masked" errors, but I think I am still getting lots (more?) "extrapolation failed" errors. Even though I did increase the grid size before running these. Also, the runs did not finish because there was the thing again where it got stuck on some repetitions. I will try switching to the linear extrapolation function, rather than the logarithmic one, by changing this in the Optimize_Functions.py script.
+```py
+# at line 233 change from:
+func_exec = dadi.Numerics.make_extrap_log_func(func)
+#to:
+func_exec = dadi.Numerics.make_extrap_func(func)
+```
+I will also increase the time requirements a bit, just in case...I am asking for 10 hrs now. That problem of some models getting stuck seems really unpredictable though.
 
 
 #### Stats for selection outliers
