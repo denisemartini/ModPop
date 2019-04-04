@@ -1747,6 +1747,14 @@ export PYTHONPATH=$PYTHONPATH:/nesi/project/uoo02327/programs/dadi
 python -u ../dadi_Run_2D_Set2.py
 ```
 I have tried asking directly for memory rather than cpu, not sure if that changes anything. 12GB of RAM should be about 8 CPUs in NeSI? I will leave this running for a little bit, then stop it, increase memory requirements and see if it gets any further...
+I tested with 12GB and 24GB of mem requirements and it does not seem to make any difference. Seems to go smoother than in boros anyway, and to use far less memory than those requirements (probably ~250MB?). There is more variability in terms of time per model in boros, which makes me think that there might be some struggle there which might not be happening over here. The models simply don't seem to get stuck the way they do there. So, my final idea is that I will split my optimization runs a bit further, setting up the models in 4 jobs that should take about the same time: one with the easier SNM and two epoch models, one with the simple three epochs, one with the beforeafters and one with the three_epoch_afters. I will only ask for one CPU each and not too many hours for now (6?). And I will fix those optimization reps to be longer and with a larger grid size, as soon as I have an idea of what the best initial parameters might be.
+```
+scp ../../ModPop_repo/dadi_Run_2D_Set*-*.py mahuika://nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dadi
+sbatch nesi_dadi2D_Set1-1.sh
+sbatch nesi_dadi2D_Set1-2.sh
+sbatch nesi_dadi2D_Set2-1.sh
+sbatch nesi_dadi2D_Set2-2.sh
+```
 
 
 #### Stats for selection outliers
