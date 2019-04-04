@@ -1422,6 +1422,32 @@ qEffctProposalS2 = 0.008
 mEffctProposalS2 = 0.95
 mSeedsProposalS2 = 0.04
 ```
+###### 5.4.19
+Those are winning parameters I think, but looking at the plots again, maybe convergence has not quite been reached yet. I will run it again later with a longer chain. But first, Michael and I wanted to see what would happen to these migration surfaces if Kapiti and Zealandia were not there, since they seem to be a hole of non-migration. So, I need to take them out from the input files.
+```bash
+mkdir noKZ
+cp eems_snp_dataset.outer noKZ/ #this stays the same
+cp eems_snp_dataset.coord noKZ/ #from this I remove Kapiti and Zealandia samples in nano
+cp ../maxmiss90_common_snps.ped noKZ/ #also removed Kapiti and Zealandia in nano
+cp ../maxmiss90_common_snps.map noKZ/ #this stays the same
+/usr/local/plink-1.9/plink --file maxmiss90_common_snps --make-bed --out eems_snp_dataset
+# now running the eems conversion
+/home/denise/eems-master/bed2diffs/src/bed2diffs_v1 --bfile eems_snp_dataset
+cp ../params-chain*.ini .
+```
+Fixing just the first lines of the params files:
+```
+datapath = /data/denise/ModPop_analysis/pop_structure/EEMS/noKZ/eems_snp_dataset
+mcmcpath = /data/denise/ModPop_analysis/pop_structure/EEMS/noKZ/eems_snp_dataset-chain1
+nIndiv = 67
+```
+I also shortened the chain a bit, I don't want it to run forever. I left all other params to the latest optimization ones.
+```
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain1.ini --seed 123
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain2.ini --seed 456
+/home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain3.ini --seed 789
+```
+
 
 ##### Modeling in dadi
 ###### 26.3.19
