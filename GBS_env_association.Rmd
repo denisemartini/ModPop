@@ -2,13 +2,13 @@
 title: "Environmental association analysis on GBS data"
 author: "Denise Martini"
 date: "19 March 2019"
-output: 
-  html_document: 
+output:
+  html_document:
     keep_md: yes
 ---
 
 I want to use the package LEA to run some environmental association tests on my GBS data. First, I need to setup the environmental data though. I downloaded the variables I want to use from the WorldClim dataset, and I have a file with the coordinates (longitude and latitude) for my kaka individuals (or rather, their populations).
-Now, I needed to install a few packages, but that went quite smoothly, they are here for reference. 
+Now, I needed to install a few packages, but that went quite smoothly, they are here for reference.
 
 ```{r eval=FALSE}
 install.packages("dismo")
@@ -129,7 +129,7 @@ Now, time to finally run those association tests on this dataset. Starting with 
 In the documentation they recommend running the test with different Ks around the value identified with snmf, with multiple repetitions for each K (repetitions=5-10), a decent number of cycles (e.g. -i 6000) and half of that as burning cycles (-b 3000). So, here we go.
 
 ```{r message=FALSE, cache=TRUE}
-mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env", 
+mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
                 K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 ```
 
@@ -167,12 +167,20 @@ candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
 dim(candidates)
 write.table(candidates, "sig_mean_temp.txt", sep = "\t", row.names = F,
             col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_mean_temp_01.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
 ```
 
 Running it all for the other variables as well. Annual precipitation.
 
 ```{r message=FALSE, cache=TRUE}
-ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env", 
+ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
                  K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 p_2 = lfmm.pvalues(ann_prec, K = 2)
 p_3 = lfmm.pvalues(ann_prec, K = 3)
@@ -198,12 +206,20 @@ candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
 dim(candidates)
 write.table(candidates, "sig_ann_prec.txt", sep = "\t", row.names = F,
             col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_ann_prec_01.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
 ```
 
 Then minimum temperature of the coldest month.
 
 ```{r message=FALSE, cache=TRUE}
-coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env", 
+coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
                  K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 p_2 = lfmm.pvalues(coldest_month, K = 2)
 p_3 = lfmm.pvalues(coldest_month, K = 3)
@@ -229,12 +245,20 @@ candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
 dim(candidates)
 write.table(candidates, "sig_coldest_month.txt", sep = "\t", row.names = F,
             col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_coldest_month_01.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
 ```
 
 Finally mean annual solar radiation.
 
 ```{r message=FALSE, cache=TRUE}
-ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env", 
+ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
                  K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
 p_2 = lfmm.pvalues(ann_srad, K = 2)
 p_3 = lfmm.pvalues(ann_srad, K = 3)
@@ -259,5 +283,13 @@ w = which(sort(p_4$pvalues) < q * (1:L) / L)
 candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
 dim(candidates)
 write.table(candidates, "sig_ann_srad.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_ann_srad_01.txt", sep = "\t", row.names = F,
             col.names = c("index", "p-value"), quote = F)
 ```
