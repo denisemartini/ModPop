@@ -1447,7 +1447,12 @@ I also shortened the chain a bit, I don't want it to run forever. I left all oth
 /home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain2.ini --seed 456
 /home/denise/eems-master/runeems_snps/src/runeems_snps --params params-chain3.ini --seed 789
 ```
-
+The results are pretty neat. I mean, they haven't quite converged yet, which is expected, but the real nice thing is that I was right, if you exclude Kapiti and Zelandia the Cook strait does not look like a barrier to migration anymore. There is still the Nelson population looking grim in there, but I did have lower diversity there as well in my stats. So, I think I will try removing that as well, and my guess is that then I will see pretty much an IBD pattern. I need to remember that the Nelson population has also been probably isolated for a while, since the current kaka distribution pretty much excludes the central SI. So, the migration surfaces are pretty much reflecting the current distribution and its fragmentations. I will try that out, to confirm my interpretation. Running everything just like before, but after removing the Nelson samples from the input files and increasing the chains (it can run overnight).
+```
+nIndiv = 59
+numMCMCIter = 8000000
+```
+Those were the only two things I changed in the params files.
 
 ##### Modeling in dadi
 ###### 26.3.19
@@ -2024,3 +2029,15 @@ Then I am moving this to boros, together with the locations file and the rmarkdo
 rmarkdown::render("GBS_env_association.Rmd")
 ```
 It will probably run for a full day before I see results.
+
+###### 5.4.19
+I had to think about what to do with those results, because it turns out that there's very many outliers in these tests.
+To see if there is anything in there worth discussing, I think I can only do two things: first, I annotate the outliers, to see if they end up in genes and are non-synonymous substitutions or anything like that. Second, I also run an enrichment test to see if they are around genes involved in specific categories of processes.
+I should already have everything I need to run SnpEff (on NeSI though) and GOwinda (on my desktop), from when I did this on the spp comparison project.
+I need to copy over those reference files though and see if the names of chromosomes etc need fixing.
+```bash
+cd env_correlations
+mkdir annotation
+cp -r /Volumes/Denise/Kea-Kaka_take2/realignment/snpeff/data .
+
+```
