@@ -2046,7 +2046,7 @@ cp ../../../Kea-Kaka_take2/realignment/snpeff/gowinda/ref_ann.txt .
 I can already see that I will need to fix the chromosome names to fit the snp files. I also just realised that I don't have a proper vcf on which to run these tests, I converted it straight away to .ped, so I will need to fix that as well.
 ```bash
 sed -i.tmp 's/ps_chr/ps_ch/' kaka_annotation.gtf
-sed -i.tmp 's/ps_chr/ps_ch/' data/Nmer/genes.gff
+sed -i.tmp 's/ps_chr/ps_ch/g' data/Nmer/genes.gff
 cp ../../selection_stats/filtered_snps_for_selection_tests.recode.vcf ./snps_for_env_tests.vcf
 ```
 I will also need to go back from the snp index that lfmm gave me in the output of most significant snps, to the snp chromosome and position. It should be straightforward using the plink .map file (which is basically made for that). But I will run all this in NeSI because it is crazy how slow everything is now on my desktop.
@@ -2056,4 +2056,12 @@ scp -r annotation mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/env_cor
 scp -r sig*.txt mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/env_correlations/
 scp -r *.map mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/env_correlations/
 ```
-I just realised in the meantime that I made a bit of a fatal mistake in assuming that I would be able to get FDR<0.01 values from a list that came with FDR<0.05. The significant outliers in the list contain the p-values, not the corrected q-values, unfortunately. I will fix the rmarkdown to add that output file. 
+I just realised in the meantime that I made a bit of a fatal mistake in assuming that I would be able to get FDR<0.01 values from a list that came with FDR<0.05. The significant outliers in the list contain the p-values, not the corrected q-values, unfortunately. I will fix the rmarkdown to add that output file.
+```bash
+TAB=$'\t'
+for i in $(grep -v "index" sig_ann_srad.txt | awk '{print $1}')
+do
+  awk "NR==$i" snps_for_env_tests.map | awk '{print $2}' | sed 's/\(ps_ch_[0-9A-Z]*\)_\([0-9]*\)/\1'"${TAB}"'\2/' >> pos_sig_ann_srad.txt
+done
+```
+Once you sub that file name with the other environmental variables, all files are ready.
