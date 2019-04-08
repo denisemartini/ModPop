@@ -222,7 +222,7 @@ GENOME.class.split <- neutrality.stats(GENOME.class.split)
 ```
 
 ```
-## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpWmZ3Nu/ff96d8671bc070.ff
+## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpLuO3cI/ffbe0342edb730.ff
 ```
 
 ```
@@ -426,7 +426,18 @@ outlier_stats <- tibble(new_bins$CHROM, new_bins$newSTART, new_bins$newEND, mean
 colnames(outlier_stats) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
                              "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")
 outlier_stats %>% mutate(., BIN_MIDDLE=BIN_START + ((BIN_END-BIN_START)/2)) -> outlier_stats
-write.table(outlier_stats, "../selection_stats/outlier_stats.txt", row.names = F, col.names = T, quote = F, sep = "\t")
+```
+
+And I will also be outputting a quick summary file for later, with the original bin positions.
+
+
+```r
+outfile <- tibble(new_bins$CHROM, new_bins$START, new_bins$END, mean_Fst, 
+                        mean_NI_pi, mean_SI_pi, mean_dxy, NI_Tajima, SI_Tajima)
+colnames(outfile) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
+                             "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")
+outfile <- arrange(outfile, desc(Fst))
+write.table(outfile, "../selection_stats/outlier_stats.txt", row.names = F, col.names = T, quote = F, sep = "\t")
 ```
 
 Plotting Fst.
@@ -461,7 +472,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
 ## Warning: Removed 14 rows containing missing values (geom_point).
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/Fst.png", width=8, height=4, dpi=300)
@@ -498,7 +509,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
 ## Warning: Removed 2 rows containing missing values (geom_point).
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/NI_pi.png", width=8, height=4, dpi=300)
@@ -532,7 +543,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
 ## Warning: Removed 12 rows containing missing values (geom_point).
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-2.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-22-2.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/SI_pi.png", width=8, height=4, dpi=300)
@@ -571,7 +582,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
 ## Warning: Removed 12 rows containing missing values (geom_point).
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-3.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-22-3.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/both_pi.png", width=8, height=4, dpi=300)
@@ -612,7 +623,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
 ## Warning: Removed 14 rows containing missing values (geom_point).
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/dxy.png", width=8, height=4, dpi=300)
@@ -645,7 +656,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   )
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/NI_tajima.png", width=8, height=4, dpi=300)
@@ -669,7 +680,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   )
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-23-2.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-24-2.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/SI_tajima.png", width=8, height=4, dpi=300)
@@ -694,7 +705,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
   )
 ```
 
-![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-23-3.png)<!-- -->
+![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-24-3.png)<!-- -->
 
 ```r
 ggsave("../selection_stats/both_tajima.png", width=8, height=4, dpi=300)

@@ -2030,6 +2030,17 @@ Nope, it only uses the snps in the specified regions, but it still starts and en
 I think I will try PopGenome in R instead, which sounds promising.
 That actually did work fine. The rest of the log on this topic is in the same outlier stats markdown document.
 
+###### 8.4.19
+I need to annotate these outlier windows in a similar way to the one I use to annotate environmental association outliers. Not exactly the same way because in this case I have outlier WINDOWS, not single snps. So, to use GOwinda and SnpEff I will need to extract the snps present in these windows first. I also need to define my threshold for the outliers. And I forgot that there is a fix I need to perform: when I output the outlier stats file in R, I actually used the modified bin start and end positions, the ones I used for plotting. So I am quickly fixing that first, and outputting the stats arranged by Fst value. While I was rerunning that I also calculated the threshold values (in this case, the 99 and 99.9 quantiles):
+```R
+quantile(outlier_stats$Fst, probs = 0.999, na.rm = TRUE)
+    99.9%
+0.1056391
+quantile(outlier_stats$Fst, probs = 0.99, na.rm = TRUE)
+       99%
+0.08209132
+```
+
 #### Environmental correlations
 ###### 19.3.19
 For the environmental association tests I decided to use the R package LEA (http://membres-timc.imag.fr/Olivier.Francois/LEA/software.htm), which uses the lfmm method and has been used quite a lot. I downloaded the environmental variables from WorldClim (http://worldclim.org/version2), because they seem to be quite accurate and they include several biologically relevant variables in the bioclim section. I am also going to use the info from this tutorial (http://evomics.org/learning/population-and-speciation-genomics/2018-population-and-speciation-genomics/environmental-correlation-analysis/#sec4) to extract the variables I need for my samples and put together the input files in R. The only thing I need to prepare then is the snp file, which they suggest should be cleaned up of maf < .05 and is easier to deal with if in .ped format. I can do this with VCFtools once again. I think I will be conservative and only remove maf < .02 for now. I will use the file I prepared for the selection stats and convert that.
