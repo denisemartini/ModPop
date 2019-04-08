@@ -120,13 +120,13 @@ pts = [80,90,100]
 
 #**************
 #Set the number of rounds here
-rounds = 5
+rounds = 4
 
 #define the lists for optional arguments
 #you can change these to alter the settings of the optimization routine
-reps = [30,30,40,40,50]
-maxiters = [3,5,5,10,15]
-folds = [3,3,2,2,1]
+reps = [100,80,60,50]
+maxiters = [100,60,40,30]
+folds = [3,2,1,1]
 
 #**************
 #Indicate whether your frequency spectrum object is folded (True) or unfolded (False)
@@ -139,21 +139,21 @@ Models with size changes in the ancestral population
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch)
-params = [0.05,0.5,0.15,0.15,0.05]
-lower = [0.001,0.01,0.001,0.001,0.001]
+params = [0.003,0.72,0.006,0.26,0.02]
+lower = [0.0001,0.01,0.0001,0.001,0.001]
 upper = [30,30,10,10,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch", func_anc, rounds, 5, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,TB,TF,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_split)
-params = [3.5,2.0,0.8,0.9,0.05,1.2,1.5,0.05]
-lower = [0.01,0.01,0.01,0.01,0.001,0.01,0.01,0.001]
-upper = [30,30,10,10,10,30,30,1]
+params = [26.87,2.57,0.30,0.22,0.009,14.26,0.28,0.03]
+lower = [0.01,0.01,0.01,0.01,0.0001,0.01,0.01,0.001]
+upper = [40,30,10,10,10,30,30,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_split", func_anc, rounds, 8, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,TB,TF,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.three_epoch_split_mig)
-params = [0.5,2.9,0.05,0.2,0.9,0.05,1.2,4.5,0.05]
-lower = [0.01,0.01,0.001,0.01,0.01,0.001,0.01,0.01,0.001]
+params = [0.11,2.74,1.5,0.04,0.53,0.01,0.35,0.56,0.002]
+lower = [0.01,0.01,0.001,0.001,0.01,0.001,0.01,0.01,0.0001]
 upper = [30,30,10,10,10,10,30,30,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "three_epoch_split_mig", func_anc, rounds, 9, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nuB,nuF,m,TB,TF,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)

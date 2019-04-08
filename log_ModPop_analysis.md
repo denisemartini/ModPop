@@ -1795,6 +1795,28 @@ func_exec = dadi.Numerics.make_extrap_log_func(func)
 func_exec = dadi.Numerics.make_extrap_func(func)
 ```
 I will also increase the time requirements a bit, just in case...I am asking for 10 hrs now. That problem of some models getting stuck seems really unpredictable though.
+###### 8.4.19
+After a few other trials over the last couple of days, I had to resort to put some of the models that were getting "stuck" more frequently in their own run, and asked for full 24hrs for each of them. It was a good idea, since one of the more complex models still managed to run for 21.5hrs on its own. But, even with that, after looking at the logs, I don't think the more complex models have actually reached convergence yet. I will use these new "optimums" as initial parameters again and rerun the optimisations, but I will change the rounds a little bit:
+```
+rounds = 4
+reps = [100,80,60,50]
+maxiters = [100,60,40,30]
+folds = [3,2,1,1]
+```
+Increasing the number of iterations is going to considerably increase the run time I believe. Especially increasing it so much. I expect this will run for a couple of days at least. I will split the longest models in separate runs, and require 72hrs. Having more reps at the first steps should allow the script to explore as much as possible around the parameter space of the initial parameters, which might help in finding new local optimums. Also, looking at the parameters coming out so far, the favoured models are not really all in agreement as to whether the first event was an expansion or a bottleneck. So there is still a lot to debate.
+```
+sbatch --time=48:00:00 --job-name=dadi_1-1_basic nesi_dadi2D_Set1-1.sh
+sbatch --time=48:00:00 --job-name=dadi_1-1_splitmig nesi_dadi2D_Set1-1.sh
+sbatch --time=48:00:00 --job-name=dadi_1-2_basic nesi_dadi2D_Set1-2.sh
+sbatch --time=48:00:00 --job-name=dadi_1-2_splitmig nesi_dadi2D_Set1-2.sh
+sbatch --time=48:00:00 --job-name=dadi_2-1_nomig nesi_dadi2D_Set2-1.sh
+sbatch --time=72:00:00 --job-name=dadi_2-1_secmig nesi_dadi2D_Set2-1.sh
+sbatch --time=72:00:00 --job-name=dadi_2-1_mig nesi_dadi2D_Set2-1.sh
+sbatch --time=48:00:00 --job-name=dadi_2-2_nomig nesi_dadi2D_Set2-2.sh
+sbatch --time=72:00:00 --job-name=dadi_2-2_secmig nesi_dadi2D_Set2-2.sh
+sbatch --time=72:00:00 --job-name=dadi_2-2_mig nesi_dadi2D_Set2-2.sh
+```
+Done. Let's hope I don't run out of time, these are very long to run...
 
 
 #### Stats for selection outliers

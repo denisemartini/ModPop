@@ -120,13 +120,13 @@ pts = [80,90,100]
 
 #**************
 #Set the number of rounds here
-rounds = 5
+rounds = 4
 
 #define the lists for optional arguments
 #you can change these to alter the settings of the optimization routine
-reps = [30,30,40,40,50]
-maxiters = [3,5,5,10,15]
-folds = [3,3,2,2,1]
+reps = [100,80,60,50]
+maxiters = [100,60,40,30]
+folds = [3,2,1,1]
 
 #**************
 #Indicate whether your frequency spectrum object is folded (True) or unfolded (False)
@@ -137,21 +137,21 @@ Basic models with no size changes
 """
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.snm)
-params = [0.05]
-lower = [0.001]
+params = [0.0089]
+lower = [0.0001]
 upper = [1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "snm", func_anc, rounds, 1, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.no_mig)
-params = [0.8,1.1,0.02,0.05]
+params = [0.8,0.9,0.02,0.01]
 lower = [0.01,0.01,0.001,0.001]
 upper = [30,30,10,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "no_mig", func_anc, rounds, 4, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1, nu2, T, p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.sym_mig)
-params = [1.5,1.5,0.2,0.1,0.05]
+params = [1.05,1.04,1.8,0.03,0.01]
 lower = [0.01,0.01,0.01,0.001,0.001]
 upper = [30,30,10,10,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "sym_mig", func_anc, rounds, 5, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu1, nu2, m, T, p_misid", in_params=params, in_upper=upper, in_lower=lower)
@@ -163,21 +163,21 @@ Models with size changes in the ancestral population
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch)
-params = [3.1,0.9,0.05]
+params = [3.27,0.93,0.03]
 lower = [0.01,0.01,0.001]
 upper = [30,10,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch", func_anc, rounds, 3, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch_split)
-params = [2.5,0.9,0.05,1.6,1.5,0.05]
+params = [4.72,0.84,0.01,0.41,0.57,0.03]
 lower = [0.01,0.01,0.001,0.01,0.01,0.001]
 upper = [30,10,10,30,30,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch_split", func_anc, rounds, 6, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.two_epoch_split_mig)
-params = [0.01,8.0,0.5,1.8,0.8,1.0,0.05]
+params = [0.29,2.72,0.13,2.99,2.63,3.13,0.04]
 lower = [0.001,0.01,0.01,0.01,0.01,0.01,0.001]
 upper = [30,20,10,10,30,30,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "two_epoch_split_mig", func_anc, rounds, 7, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,m,T,Ts,nu1,nu2,p_misid", in_params=params, in_upper=upper, in_lower=lower)

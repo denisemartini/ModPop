@@ -120,13 +120,13 @@ pts = [80,90,100]
 
 #**************
 #Set the number of rounds here
-rounds = 5
+rounds = 4
 
 #define the lists for optional arguments
 #you can change these to alter the settings of the optimization routine
-reps = [30,30,40,40,50]
-maxiters = [3,5,5,10,15]
-folds = [3,3,2,2,1]
+reps = [100,80,60,50]
+maxiters = [100,60,40,30]
+folds = [3,2,1,1]
 
 #**************
 #Indicate whether your frequency spectrum object is folded (True) or unfolded (False)
@@ -137,21 +137,21 @@ Models with size changes in both ancestral and split population
 """
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_nomig)
-params = [1.6,7.0,0.01,0.6,0.2,0.02,0.5,0.7,0.05]
-lower = [0.01,0.01,0.001,0.01,0.01,0.001,0.01,0.01,0.001]
+params = [4.52,0.73,0.006,0.22,0.24,0.001,4.76,4.59,0.03]
+lower = [0.01,0.01,0.0001,0.01,0.01,0.0001,0.01,0.01,0.001]
 upper = [30,20,10,30,30,10,30,30,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "beforeafter_split_nomig", func_anc, rounds, 9, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,T,Ts,nu1a,nu2a,Tb,nu1b,nu2b,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_secmig)
-params = [0.8,9.0,0.2,0.95,1.0,0.5,0.02,3.5,2.0,0.05]
-lower = [0.01,0.01,0.01,0.01,0.01,0.01,0.001,0.01,0.01,0.001]
+params = [9.63,13.19,0.09,0.63,2.03,1.09,0.007,0.3,3.94,0.007]
+lower = [0.01,0.01,0.001,0.01,0.01,0.01,0.0001,0.01,0.01,0.0001]
 upper = [30,30,10,10,30,30,10,30,30,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "beforeafter_split_secmig", func_anc, rounds, 10, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,m,T,Ts,nu1a,nu2a,Tb,nu1b,nu2b,p_misid", in_params=params, in_upper=upper, in_lower=lower)
 
 
 func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_mig)
-params = [3.8,8.0,1.5,0.9,0.3,0.09,0.8,1.0,0.9,0.05]
-lower = [0.01,0.01,0.01,0.01,0.01,0.001,0.01,0.01,0.01,0.001]
-upper = [30,20,10,10,30,30,10,30,30,1]
+params = [6.06,1.83,6.44,0.25,0.07,0.44,2.45,3.86,4.9,0.01]
+lower = [0.01,0.01,0.01,0.01,0.001,0.001,0.01,0.01,0.01,0.001]
+upper = [30,20,20,10,30,30,10,30,30,1]
 Optimize_Functions.Optimize_Routine(fs, pts, prefix, "beforeafter_split_mig", func_anc, rounds, 10, fs_folded=fs_folded, reps=reps, maxiters=maxiters, folds=folds, param_labels = "nu,m,T,Ts,nu1a,nu2a,Tb,nu1b,nu2b,p_misid", in_params=params, in_upper=upper, in_lower=lower)
