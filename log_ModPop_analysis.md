@@ -2072,6 +2072,7 @@ I can already see that I will need to fix the chromosome names to fit the snp fi
 ```bash
 sed -i.tmp 's/ps_chr/ps_ch/' kaka_annotation.gtf
 sed -i.tmp 's/ps_chr/ps_ch/g' data/Nmer/genes.gff
+sed -i.tmp 's/ps_chr/ps_ch/' data/Nmer/sequences.fa
 cp ../../selection_stats/filtered_snps_for_selection_tests.recode.vcf ./snps_for_env_tests.vcf
 ```
 I will also need to go back from the snp index that lfmm gave me in the output of most significant snps, to the snp chromosome and position. It should be straightforward using the plink .map file (which is basically made for that). But I will run all this in NeSI because it is crazy how slow everything is now on my desktop.
@@ -2090,6 +2091,8 @@ do
 done
 ```
 Once you substitute that file name with the other environmental variables, all files are ready.
+
+###### 8.4.19
 These files can be run in GOwinda already as they are. Installing GOwinda on NeSI (it's a java jar file, so it is a matter of downloading it rather than installing it).
 ```bash
 wget https://sourceforge.net/projects/gowinda/files/latest/download
@@ -2102,9 +2105,47 @@ filelist="ann_srad coldest_month ann_prec"
 for f in $filelist
 do
   java -Xmx12g -jar $gowinda --annotation-file kaka_annotation.gtf --gene-set-file GO_mappings \
-  --snp-file snps_for_env_tests.vcf --candidate-snp-file pos_sig_${f}_01.txt \
+  --snp-file snps_for_env_tests.vcf --candidate-snp-file ../pos_sig_${f}_01.txt \
   --output-file gowinda_${f}.txt --mode snp --gene-definition updownstream5000 --simulations 1000000 --threads 8
 done
 ```
 This command is set up to take in the file containing all snps used for environmental analysis, the kaka annotation file and the mappings of kaka genes to GO terms, and test against all these the set of candidate snps, which in this case includes the outliers from the environmental tests. Since I am pretty sure that the vast majority of these snps (coming from GBS) are not going to be in genes, I am expanding the gene definition to include 5kbp up- and down-stream of the gene regions in the annotations, to allow snps in regulatory regions to be associated with genes as well. Since I believe that the snps in this set are mostly in linkage equilibrium (I thinned the set, it comes from GBS, etc) I am using the mode "snp" for the analysis.
 The documentation says that running 1M simulations should take about 30mins on 8 threads. Since I am looping this through my 3 sets of outliers, I will require ~2hrs for the run.
+
+I also decided to annotate the outliers directly with SnpEff, but there's really two ways to go about it: I can annotate all the set for env association and then simply extract the outlier positions, or I can extract the outlier positions from the vcf and annotate only those. I think the first option might be more convenient, so I will go with that. I simply need this in a NeSI script:
+```bash
+module load snpEff
+java -Xmx2G -jar /opt/nesi/mahuika/snpEff/4.2/snpEff.jar eff -c ./snpEff.config -stats snpeff_snps_for_env_tests.html \
+-v Nmer snps_for_env_tests.vcf > snpeff_snps_for_env_tests.vcf
+```
+I need to prepare the snpEff.config file.
+```bash
+cp /opt/nesi/mahuika/snpEff/4.2/snpEff.config .
+nano snpEff.config #adding the following lines:
+data.dir = /nesi/nobackup/uoo02327/denise/ModPop_analysis/env_correlations/annotation/data
+#---
+# Databases: Not from ENSEMBL
+#---
+
+# Nestor_meridionalis
+Nmer.genome : Nestor_meridionalis
+Nmer.ps_mito.codonTable : Vertebrate_Mitochondrial
+```
+I will also need to reinstall the kaka database, since I modified the annotation and fasta files.
+```bash
+module load snpEff
+snpEff build -gff3 -c ./snpEff.config -v Nmer
+```
+It ran super fast, since this was a pretty small vcf file. Taking a look at the summary, I see no big surprises: the vast majority of snps are not in exons (~96%) and most of the exonic ones are silent (~72%). I think this sounds pretty good overall, because I don't see a bias in the composition of snps compared to the whole genome annotation, and that's what you would expect from GBS data (this might be a good technical note on this dataset). There might be a slight increase in the variants that are around genes, but not in the overall syn/nonsyn proportions. A consideration that this set has been heavily filtered already, so some bias might come from that.
+To see where the outliers fit in all this I just need to extract those positions from the annotated vcf.
+```bash
+module load VCFtools
+filelist="ann_srad coldest_month ann_prec"
+for f in $filelist
+do
+  VCFtools --vcf snpeff_snps_for_env_tests.vcf \
+  --positions ../pos_sig_${f}_01.txt \
+  --recode --recode-INFO-all \
+  --remove-filtered-all --out annotated_${}
+done
+```
