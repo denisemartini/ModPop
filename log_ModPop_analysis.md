@@ -1454,6 +1454,9 @@ numMCMCIter = 8000000
 ```
 Those were the only two things I changed in the params files.
 
+###### 8.4.19
+I am rerunning the normal dataset (with all individuals) for a bit longer, increasing the chain length to 8000000. Left all other parames as before.
+
 ##### Modeling in dadi
 ###### 26.3.19
 I have been studying this for a while now and I have been wanting to try out this program ever since I found out about it in 2016. It is not an easy one, but might be one of the most interesting to use with this dataset. So, there is some preparation to do. dadi is basically a python language, so to run it you write a script of the model you want to test. Luckily, I found a nice resource online where all the scripts for the possible modelsI would like to test have already been implemented, together with a few other wrapping options: https://github.com/dportik/dadi_pipeline
@@ -2081,9 +2084,27 @@ scp -r *.map mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/env_correlat
 I just realised in the meantime that I made a bit of a fatal mistake in assuming that I would be able to get FDR<0.01 values from a list that came with FDR<0.05. The significant outliers in the list contain the p-values, not the corrected q-values, unfortunately. I will fix the rmarkdown to add that output file.
 ```bash
 TAB=$'\t'
-for i in $(grep -v "index" sig_ann_srad.txt | awk '{print $1}')
+for i in $(grep -v "index" sig_ann_srad_01.txt | awk '{print $1}')
 do
-  awk "NR==$i" snps_for_env_tests.map | awk '{print $2}' | sed 's/\(ps_ch_[0-9A-Z]*\)_\([0-9]*\)/\1'"${TAB}"'\2/' >> pos_sig_ann_srad.txt
+  awk "NR==$i" snps_for_env_tests.map | awk '{print $2}' | sed 's/\(ps_ch_[0-9A-Z]*\)_\([0-9]*\)/\1'"${TAB}"'\2/' >> pos_sig_ann_srad_01.txt
 done
 ```
-Once you sub that file name with the other environmental variables, all files are ready.
+Once you substitute that file name with the other environmental variables, all files are ready.
+These files can be run in GOwinda already as they are. Installing GOwinda on NeSI (it's a java jar file, so it is a matter of downloading it rather than installing it).
+```bash
+wget https://sourceforge.net/projects/gowinda/files/latest/download
+mv download Gowinda-1.12.jar
+```
+So, now to run GOwinda on our set of candidates, it's enough in a quick nesi script:
+```bash
+gowinda=/nesi/project/uoo02327/programs/Gowinda-1.12.jar
+filelist="ann_srad coldest_month ann_prec"
+for f in $filelist
+do
+  java -Xmx12g -jar $gowinda --annotation-file kaka_annotation.gtf --gene-set-file GO_mappings \
+  --snp-file snps_for_env_tests.vcf --candidate-snp-file pos_sig_${f}_01.txt \
+  --output-file gowinda_${f}.txt --mode snp --gene-definition updownstream5000 --simulations 1000000 --threads 8
+done
+```
+This command is set up to take in the file containing all snps used for environmental analysis, the kaka annotation file and the mappings of kaka genes to GO terms, and test against all these the set of candidate snps, which in this case includes the outliers from the environmental tests. Since I am pretty sure that the vast majority of these snps (coming from GBS) are not going to be in genes, I am expanding the gene definition to include 5kbp up- and down-stream of the gene regions in the annotations, to allow snps in regulatory regions to be associated with genes as well. Since I believe that the snps in this set are mostly in linkage equilibrium (I thinned the set, it comes from GBS, etc) I am using the mode "snp" for the analysis.
+The documentation says that running 1M simulations should take about 30mins on 8 threads. Since I am looping this through my 3 sets of outliers, I will require ~2hrs for the run.
