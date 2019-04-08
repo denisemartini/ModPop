@@ -266,7 +266,7 @@ outlier_stats %>% mutate(., BIN_MIDDLE=BIN_START + ((BIN_END-BIN_START)/2)) -> o
 And I will also be outputting a quick summary file for later, with the original bin positions.
 
 ```{r}
-outfile <- tibble(new_bins$CHROM, new_bins$START, new_bins$END, mean_Fst, 
+outfile <- tibble(new_bins$CHROM, as.integer(new_bins$START), as.integer(new_bins$END), mean_Fst, 
                         mean_NI_pi, mean_SI_pi, mean_dxy, NI_Tajima, SI_Tajima)
 colnames(outfile) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
                              "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")

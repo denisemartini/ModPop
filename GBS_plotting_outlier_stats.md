@@ -222,7 +222,7 @@ GENOME.class.split <- neutrality.stats(GENOME.class.split)
 ```
 
 ```
-## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpLuO3cI/ffbe0342edb730.ff
+## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpIup2LR/ff139b9f8a91b9.ff
 ```
 
 ```
@@ -432,7 +432,7 @@ And I will also be outputting a quick summary file for later, with the original 
 
 
 ```r
-outfile <- tibble(new_bins$CHROM, new_bins$START, new_bins$END, mean_Fst, 
+outfile <- tibble(new_bins$CHROM, as.integer(new_bins$START), as.integer(new_bins$END), mean_Fst, 
                         mean_NI_pi, mean_SI_pi, mean_dxy, NI_Tajima, SI_Tajima)
 colnames(outfile) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
                              "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")

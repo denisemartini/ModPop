@@ -2040,6 +2040,29 @@ quantile(outlier_stats$Fst, probs = 0.99, na.rm = TRUE)
        99%
 0.08209132
 ```
+I think it is safe to use the 99% quantile as a threshold. I might restrict it later if I feel conservative. So, now I have a proper file with ranges of positions to call, that I can quite easily extract from the general vcf file. I will only extract the windows over the threshold and output those regions in a new file.
+```bash
+grep -v "CHROM" outlier_stats.txt | awk '($4 >= 0.08209132){print $1,$2,$3,$4}' > outlier_windows.bed
+wc -l outlier_windows.bed
+67
+mkdir annotation
+mv outlier_windows.bed annotation/
+cd annotation
+vcftools --gzvcf ../filtered_snps_for_selection_tests_maf02.recode.vcf.gz \
+--bed outlier_windows.bed --recode --recode-INFO-all --out snps_in_outlier_windows
+After filtering, kept 904 out of a possible 77318 Sites
+```
+###### 9.4.19
+It looks like we have quite a few snps in those outlier windows. Time to annotate them and find out if they are involved in something interesting. I might as well annotate it directly with SnpEff. Just copying over the database and reference files from the env_correlations folder. I just need to change the datadir path in snpEff.config and file names in the snpeff command.
+```
+nano snpEff.config
+data.dir = /nesi/nobackup/uoo02327/denise/ModPop_analysis/selection_stats/annotation/data
+nano nesi_snpeff.sh
+java -Xmx2G -jar /opt/nesi/mahuika/snpEff/4.2/snpEff.jar eff -c ./snpEff.config -stats snpeff_snps_in_outlier_windows.html \
+-v Nmer snps_in_outlier_windows.recode.vcf > snpeff_snps_in_outlier_windows.vcf
+```
+
+
 
 #### Environmental correlations
 ###### 19.3.19
