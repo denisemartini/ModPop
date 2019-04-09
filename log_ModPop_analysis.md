@@ -2061,8 +2061,15 @@ nano nesi_snpeff.sh
 java -Xmx2G -jar /opt/nesi/mahuika/snpEff/4.2/snpEff.jar eff -c ./snpEff.config -stats snpeff_snps_in_outlier_windows.html \
 -v Nmer snps_in_outlier_windows.recode.vcf > snpeff_snps_in_outlier_windows.vcf
 ```
-
-
+Taking a look at results, it looks like the usual spread of snps, with only ~2% of them in exonic regions and 60% in intergenic regions. Still, they are not all completely far away from genes, so that's okay. And 32 have some kind of effect (low or moderate, no high). I will use GOwinda to see if there are overrepresented GO categories in this mix.
+```bash
+gowinda=/nesi/project/uoo02327/programs/Gowinda-1.12.jar
+java -Xmx12g -jar $gowinda --annotation-file kaka_annotation.gtf --gene-set-file GO_mappings \
+--snp-file ../filtered_snps_for_selection_tests_maf02.recode.vcf --candidate-snp-file snps_in_outlier_windows.recode.vcf \
+--output-file gowinda_outlier_windows.txt --mode gene --gene-definition updownstream5000 --simulations 1000000 --threads 8
+```
+I am using the mode "gene" here, because since I got these outlier snps from specific genome windows, I would obviously overestimate the significance if I were to count each gene as many times as there is a snp around them in these windows. What I am really interested in is in seeing if the genes across these windows have anything in common.
+Turns out that after FDR correction there is no overrepresented GO term in this set. Even if there was though, I admit that I can't see anything jumping at me from this list, it is the usual fairly general GO terms, protein modification activity, components of membrane...
 
 #### Environmental correlations
 ###### 19.3.19
