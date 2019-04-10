@@ -47,6 +47,12 @@ One thing that would be worth investigating is if I can run most of this in NeSI
     - [ADMIXTURE](#admixture)
     - [DAPC/ADEGENET](#dapcadegenet)
     - [TREEMIX](#treemix)
+    - [Genetic diversity stats](#genetic-diversity-stats)
+    - [Tree using SNAPP/BEAST](#tree-using-snappbeast)
+    - [Migration surfaces with EEMS](#migration-surfaces-with-eems)
+    - [Modeling in dadi](#modeling-in-dadi)
+  - [Stats for selection outliers](#stats-for-selection-outliers)
+  - [Environmental correlations](#environmental-correlations)
 
 <!-- /TOC -->
 
