@@ -1463,6 +1463,9 @@ Those were the only two things I changed in the params files.
 ###### 8.4.19
 I am rerunning the normal dataset (with all individuals) for a bit longer, increasing the chain length to 8000000. Left all other parames as before.
 
+###### 11.4.19
+Repeating the above again, because I looked at the plots from those runs and it really does not look like they converged, one of the three is on a quite different track than the other two. So now I am running a 12,000,000 chain, with 2,000,000 burning iterations.
+
 ##### Modeling in dadi
 ###### 26.3.19
 I have been studying this for a while now and I have been wanting to try out this program ever since I found out about it in 2016. It is not an easy one, but might be one of the most interesting to use with this dataset. So, there is some preparation to do. dadi is basically a python language, so to run it you write a script of the model you want to test. Luckily, I found a nice resource online where all the scripts for the possible modelsI would like to test have already been implemented, together with a few other wrapping options: https://github.com/dportik/dadi_pipeline
@@ -1805,14 +1808,14 @@ func_exec = dadi.Numerics.make_extrap_func(func)
 ```
 I will also increase the time requirements a bit, just in case...I am asking for 10 hrs now. That problem of some models getting stuck seems really unpredictable though.
 ###### 8.4.19
-After a few other trials over the last couple of days, I had to resort to put some of the models that were getting "stuck" more frequently in their own run, and asked for full 24hrs for each of them. It was a good idea, since one of the more complex models still managed to run for 21.5hrs on its own. But, even with that, after looking at the logs, I don't think the more complex models have actually reached convergence yet. I will use these new "optimums" as initial parameters again and rerun the optimisations, but I will change the rounds a little bit:
+After a few other trials over the last couple of days, I had to resort to put some of the models that were getting "stuck" more frequently in their own run, and asked for full 24hrs for each of them. It was a good idea, since one of the more complex models still managed to run for 21.5hrs on its own. But, even with that, after looking at the logs, I don't think the more complex models have actually reached convergence yet. I will use these new "optimums" as initial parameters again and rerun the optimizations, but I will change the rounds a little bit:
 ```
 rounds = 4
 reps = [100,80,60,50]
 maxiters = [100,60,40,30]
 folds = [3,2,1,1]
 ```
-Increasing the number of iterations is going to considerably increase the run time I believe. Especially increasing it so much. I expect this will run for a couple of days at least. I will split the longest models in separate runs, and require 72hrs. Having more reps at the first steps should allow the script to explore as much as possible around the parameter space of the initial parameters, which might help in finding new local optimums. Also, looking at the parameters coming out so far, the favoured models are not really all in agreement as to whether the first event was an expansion or a bottleneck. So there is still a lot to debate.
+Increasing the number of iterations is going to considerably increase the run time I believe. Especially increasing it so much. I expect this will run for a couple of days at least. I will split the longest models in separate runs, and require 72hrs. Having more reps at the first steps should allow the script to explore as much as possible around the parameter space of the initial parameters, which might help in finding new local optimums. Also, looking at the parameters coming out so far, the favored models are not really all in agreement as to whether the first event was an expansion or a bottleneck. So there is still a lot to debate.
 ```
 sbatch --time=48:00:00 --job-name=dadi_1-1_basic nesi_dadi2D_Set1-1.sh
 sbatch --time=48:00:00 --job-name=dadi_1-1_splitmig nesi_dadi2D_Set1-1.sh
@@ -1826,6 +1829,15 @@ sbatch --time=72:00:00 --job-name=dadi_2-2_secmig nesi_dadi2D_Set2-2.sh
 sbatch --time=72:00:00 --job-name=dadi_2-2_mig nesi_dadi2D_Set2-2.sh
 ```
 Done. Let's hope I don't run out of time, these are very long to run...
+###### 11.4.19
+While almost all of these finished in time, some of the longest running ones are not going to make it: two_epoch_split_mig (already failed), beforeafter_split_mig, three_epoch_after_split_mig, three_epoch_after_split_secmig. And because of how unpredictable the time they need is, I think I will have to run them in boros, to make sure that they get to the end. I am also not convinced that they reached optimization, but we will have to see about that later. For now, I will just set them up in different jobs in boros.
+```bash
+scp ../../ModPop_repo/dadi_Run_2D_Set*-*.py boros:/data/denise/ModPop_analysis/pop_structure/dadi
+python -u ../dadi_Run_2D_Set1-1.py 2>&1 | tee ../dadi_1-1_splitmig.log
+python -u ../dadi_Run_2D_Set2-1.py 2>&1 | tee ../dadi_2-1_mig.log
+python -u ../dadi_Run_2D_Set2-2.py 2>&1 | tee ../dadi_2-2_secmig.log
+python -u ../dadi_Run_2D_Set2-2.py 2>&1 | tee ../dadi_2-2_mig.log
+```
 
 
 #### Stats for selection outliers
