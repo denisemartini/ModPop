@@ -14,7 +14,7 @@ I will import that file first and see what I can do with it.
 library(dplyr)
 library(ggplot2)
 library(knitr)
-read.table("../selection_stats/NI_maf02_25kb.Tajima.D", header = T) -> starting_bins
+read.table("../selection_stats/NI_25kb.Tajima.D", header = T) -> starting_bins
 starting_bins <- starting_bins[,1:3]
 starting_bins %>% mutate(., BIN_END=BIN_START+25000) -> starting_bins
 ```
@@ -36,7 +36,7 @@ Then I keep only the rows where the cumsum is over 10, so I have the end positio
 starting_bins %>% filter(., c>=10) -> bins # here I get end positions
 bins %>% mutate(., BIN_START=BIN_END) %>% pull(.,BIN_START) -> bins_start # making up the start positions
 bins_start <- c(0,bins_start)
-bins_start <- bins_start[1:5809] # bit of fixing of first and last records
+bins_start <- bins_start[1:3982] # bit of fixing of first and last records
 bins <- tibble(bins$CHROM, bins$c, bins_start, bins$BIN_END) # re-merging with the original dataset
 colnames(bins) <- c("CHROM", "SNPS", "START", "END")
 bins %>% mutate(., START=replace(START,START>END, 0)) -> bins # fixing records at the start of chromosomes
@@ -53,7 +53,7 @@ bin_sizes %>% mutate(., SUM=cumsum(n)/sum(n)) -> bin_sizes
 kable(bin_sizes[1:25,])
 ```
 
-Not great, some of these windows are way too big to be of any importance, the SNPs will be too sparse. But 90% of windows are under or at 400kbp, so I will set my limit there and remove all others.
+Not great, some of these windows are way too big to be of any importance, the SNPs will be too sparse. But 80% of windows are under or at 400kbp, so I will set my limit there and remove all others.
 
 ```{r}
 bins %>% filter(., SIZE <= 400000) -> bins
@@ -101,7 +101,7 @@ Now on to see if I can get the Tajima's D values that I need from the PopGenome 
 
 ```{r message=FALSE, warning=FALSE}
 library(PopGenome)
-GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests_maf02.recode.vcf.gz", 
+GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests.recode.vcf.gz", 
                         tid="ps_ch_1", frompos = 1, topos = 135425000, include.unknown=TRUE, numcols = 10000)
 ```
 
@@ -148,7 +148,7 @@ as.character(unique(new_bins$CHROM)) -> chromosomes
 for (i in seq(2, to=(length(chromosomes)), by=1)) {
   chr <- paste0(chromosomes[i])
   chrend <- max(new_bins %>% filter(.,CHROM==chr) %>% select(., END))
-  GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests_maf02.recode.vcf.gz", 
+  GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests.recode.vcf.gz", 
                           tid=chr, frompos = 1, topos = chrend, include.unknown=TRUE, numcols = 10000)
   GENOME.class <- set.populations(GENOME.class,
                                   list(NI_pop,SI_pop), diploid=TRUE)
@@ -178,7 +178,7 @@ colnames(coordinate_scaler) <- c("CHROM", "tot")
 Then, let's read in and prepare the Fst stats.
 
 ```{r}
-Fst_all <- read.table("../selection_stats/NI_vs_SI_maf02.weir.fst", header=T)
+Fst_all <- read.table("../selection_stats/NI_vs_SI.weir.fst", header=T)
 Fst_all %>% arrange(match(CHROM, chromosomes)) -> Fst_all  # rearrange the chromosome order
 left_join(Fst_all, coordinate_scaler) -> Fst_all
 Fst_all %>% mutate(., newPOS=POS+tot) -> Fst_all # scale to the new positions
@@ -200,7 +200,7 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
 Quick rinse and repeat for the NI and SI mean nucleotide diversity, pi.
 
 ```{r}
-NI_pi <- read.table("../selection_stats/NI_maf02.sites.pi", header=T)
+NI_pi <- read.table("../selection_stats/NI.sites.pi", header=T)
 NI_pi %>% arrange(match(CHROM, chromosomes)) -> NI_pi  # rearrange the chromosome order
 left_join(NI_pi, coordinate_scaler) -> NI_pi
 NI_pi %>% mutate(., newPOS=POS+tot) -> NI_pi # scale to the new positions
@@ -210,7 +210,7 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
                                  pull(., PI)))
 }
 
-SI_pi <- read.table("../selection_stats/SI_maf02.sites.pi", header=T)
+SI_pi <- read.table("../selection_stats/SI.sites.pi", header=T)
 SI_pi %>% arrange(match(CHROM, chromosomes)) -> SI_pi  # rearrange the chromosome order
 left_join(SI_pi, coordinate_scaler) -> SI_pi
 SI_pi %>% mutate(., newPOS=POS+tot) -> SI_pi # scale to the new positions
@@ -224,8 +224,8 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
 Getting dxy is going to be just slightly more complicated, because there are some calculations to perform. Importing both populations allele frequencies to get them ready.
 
 ```{r}
-NI_frq <- read.table("../selection_stats/NI_maf02.frq", header=T, row.names = NULL)
-SI_frq <- read.table("../selection_stats/SI_maf02.frq", header=T, row.names = NULL)
+NI_frq <- read.table("../selection_stats/NI.frq", header=T, row.names = NULL)
+SI_frq <- read.table("../selection_stats/SI.frq", header=T, row.names = NULL)
 colnames(NI_frq) <- c(c("CHROM", "POS", "N_ALLELES", "N_CHR", "NI_p", "NI_q"))
 colnames(SI_frq) <- c(c("CHROM", "POS", "N_ALLELES", "N_CHR", "SI_p", "SI_q"))
 NI_frq <- NI_frq[,1:2-5:6]
@@ -261,6 +261,8 @@ outlier_stats <- tibble(new_bins$CHROM, new_bins$newSTART, new_bins$newEND, mean
 colnames(outlier_stats) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
                              "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")
 outlier_stats %>% mutate(., BIN_MIDDLE=BIN_START + ((BIN_END-BIN_START)/2)) -> outlier_stats
+quantile(outlier_stats$Fst, probs = 0.99, na.rm = TRUE)
+quantile(outlier_stats$dxy, probs = 0.99, na.rm = TRUE)
 ```
 
 And I will also be outputting a quick summary file for later, with the original bin positions.

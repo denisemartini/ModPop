@@ -15,7 +15,7 @@ I will import that file first and see what I can do with it.
 library(dplyr)
 library(ggplot2)
 library(knitr)
-read.table("../selection_stats/NI_maf02_25kb.Tajima.D", header = T) -> starting_bins
+read.table("../selection_stats/NI_25kb.Tajima.D", header = T) -> starting_bins
 starting_bins <- starting_bins[,1:3]
 starting_bins %>% mutate(., BIN_END=BIN_START+25000) -> starting_bins
 ```
@@ -39,7 +39,7 @@ Then I keep only the rows where the cumsum is over 10, so I have the end positio
 starting_bins %>% filter(., c>=10) -> bins # here I get end positions
 bins %>% mutate(., BIN_START=BIN_END) %>% pull(.,BIN_START) -> bins_start # making up the start positions
 bins_start <- c(0,bins_start)
-bins_start <- bins_start[1:5809] # bit of fixing of first and last records
+bins_start <- bins_start[1:3982] # bit of fixing of first and last records
 bins <- tibble(bins$CHROM, bins$c, bins_start, bins$BIN_END) # re-merging with the original dataset
 colnames(bins) <- c("CHROM", "SNPS", "START", "END")
 bins %>% mutate(., START=replace(START,START>END, 0)) -> bins # fixing records at the start of chromosomes
@@ -66,33 +66,33 @@ kable(bin_sizes[1:25,])
 
    SIZE     n         SUM
 -------  ----  ----------
-  25000   602   0.1036323
-  50000   899   0.2583922
-  75000   619   0.3649509
- 100000   537   0.4573937
- 125000   455   0.5357204
- 150000   373   0.5999311
- 175000   287   0.6493372
- 200000   274   0.6965054
- 225000   256   0.7405750
- 250000   191   0.7734550
- 275000   168   0.8023756
- 300000   142   0.8268205
- 325000   138   0.8505767
- 350000   100   0.8677914
- 375000    97   0.8844896
- 400000    84   0.8989499
- 425000    66   0.9103116
- 450000    61   0.9208125
- 475000    61   0.9313135
- 500000    38   0.9378551
- 525000    26   0.9423309
- 550000    36   0.9485281
- 575000    40   0.9554140
- 600000    23   0.9593734
- 625000    30   0.9645378
+  25000   161   0.0404319
+  50000   443   0.1516826
+  75000   390   0.2496233
+ 100000   301   0.3252135
+ 125000   287   0.3972878
+ 150000   247   0.4593169
+ 175000   204   0.5105475
+ 200000   188   0.5577599
+ 225000   164   0.5989453
+ 250000   135   0.6328478
+ 275000   122   0.6634857
+ 300000   135   0.6973882
+ 325000   121   0.7277750
+ 350000    95   0.7516323
+ 375000    94   0.7752386
+ 400000    92   0.7983425
+ 425000    58   0.8129081
+ 450000    65   0.8292315
+ 475000    62   0.8448016
+ 500000    54   0.8583626
+ 525000    55   0.8721748
+ 550000    46   0.8837268
+ 575000    34   0.8922652
+ 600000    45   0.9035660
+ 625000    31   0.9113511
 
-Not great, some of these windows are way too big to be of any importance, the SNPs will be too sparse. But 90% of windows are under or at 400kbp, so I will set my limit there and remove all others.
+Not great, some of these windows are way too big to be of any importance, the SNPs will be too sparse. But 80% of windows are under or at 400kbp, so I will set my limit there and remove all others.
 
 
 ```r
@@ -108,7 +108,7 @@ mean(bins$SIZE)
 ```
 
 ```
-## [1] 138251.6
+## [1] 163911.6
 ```
 
 That's better. Now, there are two thing I need to fix next: first, I want the chromosomes to be in the correct order in the table, second I will need the bins start and end positions to be concatenated, for ease of plotting later. 
@@ -152,7 +152,7 @@ Now on to see if I can get the Tajima's D values that I need from the PopGenome 
 
 ```r
 library(PopGenome)
-GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests_maf02.recode.vcf.gz", 
+GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests.recode.vcf.gz", 
                         tid="ps_ch_1", frompos = 1, topos = 135425000, include.unknown=TRUE, numcols = 10000)
 ```
 
@@ -165,7 +165,7 @@ GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests_ma
 ## [16] "ps_ch_22"    "ps_ch_23"    "ps_ch_24"    "ps_ch_25"    "ps_ch_26"   
 ## [21] "ps_ch_27"    "ps_ch_28"    "ps_ch_3"     "ps_ch_4"     "ps_ch_4A"   
 ## [26] "ps_ch_5"     "ps_ch_6"     "ps_ch_7"     "ps_ch_8"     "ps_ch_9"    
-## [31] "ps_ch_LG2"   "ps_ch_LGE22" "ps_ch_Z"    
+## [31] "ps_ch_LGE22" "ps_ch_Z"    
 ## |            :            |            :            | 100 %
 ## |====================================================
 ```
@@ -222,7 +222,7 @@ GENOME.class.split <- neutrality.stats(GENOME.class.split)
 ```
 
 ```
-## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpIup2LR/ff139b9f8a91b9.ff
+## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpeZce3B/ff153d74ba349d7.ff
 ```
 
 ```
@@ -234,22 +234,22 @@ GENOME.class.split@Tajima.D[1:15,]
 ```
 
 ```
-##             pop 1      pop 2
-##  [1,] -0.16281988  0.5115251
-##  [2,] -1.02301548 -1.6681942
-##  [3,] -0.17530959  0.1781261
-##  [4,] -0.24952652  0.6606346
-##  [5,] -0.45728216 -1.3852229
-##  [6,] -0.17384704  0.1086427
-##  [7,] -0.17132451 -0.8120317
-##  [8,] -0.55615404 -0.1179191
-##  [9,]  0.29271160  0.4911120
-## [10,] -0.09776309  0.2777151
-## [11,] -0.21099799 -0.1293195
-## [12,] -0.93734090 -0.8338438
-## [13,] -0.56680139 -0.7904362
-## [14,] -0.71072426 -0.7502393
-## [15,] -1.03340087 -0.3105139
+##              pop 1        pop 2
+##  [1,]  0.008510748  0.658111200
+##  [2,]  0.387159856 -0.242534490
+##  [3,]  0.576179686  1.053225570
+##  [4,]  0.473082171  0.007852962
+##  [5,]  0.532743338 -0.182111361
+##  [6,]  1.611923433  1.765231787
+##  [7,]  0.226764625  0.615511913
+##  [8,]  0.243035451 -0.015769730
+##  [9,]  0.462523252 -0.477873630
+## [10,]  0.708528952  0.639796952
+## [11,] -0.048959521  0.144116886
+## [12,]  0.367438489  0.566336027
+## [13,] -0.029684701  0.317747139
+## [14,]  0.833554260  0.668434759
+## [15,]  0.674180480  0.196605911
 ```
 
 ```r
@@ -265,7 +265,7 @@ as.character(unique(new_bins$CHROM)) -> chromosomes
 for (i in seq(2, to=(length(chromosomes)), by=1)) {
   chr <- paste0(chromosomes[i])
   chrend <- max(new_bins %>% filter(.,CHROM==chr) %>% select(., END))
-  GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests_maf02.recode.vcf.gz", 
+  GENOME.class <- readVCF("../selection_stats/filtered_snps_for_selection_tests.recode.vcf.gz", 
                           tid=chr, frompos = 1, topos = chrend, include.unknown=TRUE, numcols = 10000)
   GENOME.class <- set.populations(GENOME.class,
                                   list(NI_pop,SI_pop), diploid=TRUE)
@@ -297,7 +297,7 @@ Then, let's read in and prepare the Fst stats.
 
 
 ```r
-Fst_all <- read.table("../selection_stats/NI_vs_SI_maf02.weir.fst", header=T)
+Fst_all <- read.table("../selection_stats/NI_vs_SI.weir.fst", header=T)
 Fst_all %>% arrange(match(CHROM, chromosomes)) -> Fst_all  # rearrange the chromosome order
 left_join(Fst_all, coordinate_scaler) -> Fst_all
 ```
@@ -328,7 +328,7 @@ Quick rinse and repeat for the NI and SI mean nucleotide diversity, pi.
 
 
 ```r
-NI_pi <- read.table("../selection_stats/NI_maf02.sites.pi", header=T)
+NI_pi <- read.table("../selection_stats/NI.sites.pi", header=T)
 NI_pi %>% arrange(match(CHROM, chromosomes)) -> NI_pi  # rearrange the chromosome order
 left_join(NI_pi, coordinate_scaler) -> NI_pi
 ```
@@ -345,7 +345,7 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
                                  pull(., PI)))
 }
 
-SI_pi <- read.table("../selection_stats/SI_maf02.sites.pi", header=T)
+SI_pi <- read.table("../selection_stats/SI.sites.pi", header=T)
 SI_pi %>% arrange(match(CHROM, chromosomes)) -> SI_pi  # rearrange the chromosome order
 left_join(SI_pi, coordinate_scaler) -> SI_pi
 ```
@@ -367,8 +367,8 @@ Getting dxy is going to be just slightly more complicated, because there are som
 
 
 ```r
-NI_frq <- read.table("../selection_stats/NI_maf02.frq", header=T, row.names = NULL)
-SI_frq <- read.table("../selection_stats/SI_maf02.frq", header=T, row.names = NULL)
+NI_frq <- read.table("../selection_stats/NI.frq", header=T, row.names = NULL)
+SI_frq <- read.table("../selection_stats/SI.frq", header=T, row.names = NULL)
 colnames(NI_frq) <- c(c("CHROM", "POS", "N_ALLELES", "N_CHR", "NI_p", "NI_q"))
 colnames(SI_frq) <- c(c("CHROM", "POS", "N_ALLELES", "N_CHR", "SI_p", "SI_q"))
 NI_frq <- NI_frq[,1:2-5:6]
@@ -426,6 +426,21 @@ outlier_stats <- tibble(new_bins$CHROM, new_bins$newSTART, new_bins$newEND, mean
 colnames(outlier_stats) <- c("CHROM", "BIN_START", "BIN_END", "Fst", 
                              "NI_pi", "SI_pi", "dxy", "NI_Tajima", "SI_Tajima")
 outlier_stats %>% mutate(., BIN_MIDDLE=BIN_START + ((BIN_END-BIN_START)/2)) -> outlier_stats
+quantile(outlier_stats$Fst, probs = 0.99, na.rm = TRUE)
+```
+
+```
+##       99% 
+## 0.1027804
+```
+
+```r
+quantile(outlier_stats$dxy, probs = 0.99, na.rm = TRUE)
+```
+
+```
+##       99% 
+## 0.3653933
 ```
 
 And I will also be outputting a quick summary file for later, with the original bin positions.
@@ -469,7 +484,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=Fst)) +
 ```
 
 ```
-## Warning: Removed 14 rows containing missing values (geom_point).
+## Warning: Removed 11 rows containing missing values (geom_point).
 ```
 
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
@@ -479,7 +494,7 @@ ggsave("../selection_stats/Fst.png", width=8, height=4, dpi=300)
 ```
 
 ```
-## Warning: Removed 14 rows containing missing values (geom_point).
+## Warning: Removed 11 rows containing missing values (geom_point).
 ```
 
 Plotting pi.
@@ -540,7 +555,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
 ```
 
 ```
-## Warning: Removed 12 rows containing missing values (geom_point).
+## Warning: Removed 9 rows containing missing values (geom_point).
 ```
 
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-22-2.png)<!-- -->
@@ -550,7 +565,7 @@ ggsave("../selection_stats/SI_pi.png", width=8, height=4, dpi=300)
 ```
 
 ```
-## Warning: Removed 12 rows containing missing values (geom_point).
+## Warning: Removed 9 rows containing missing values (geom_point).
 ```
 
 ```r
@@ -579,7 +594,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
 ```
 
 ```
-## Warning: Removed 12 rows containing missing values (geom_point).
+## Warning: Removed 9 rows containing missing values (geom_point).
 ```
 
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-22-3.png)<!-- -->
@@ -591,7 +606,7 @@ ggsave("../selection_stats/both_pi.png", width=8, height=4, dpi=300)
 ```
 ## Warning: Removed 2 rows containing missing values (geom_point).
 
-## Warning: Removed 12 rows containing missing values (geom_point).
+## Warning: Removed 9 rows containing missing values (geom_point).
 ```
 
 Then dxy.
@@ -620,7 +635,7 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE, y=dxy)) +
 ```
 
 ```
-## Warning: Removed 14 rows containing missing values (geom_point).
+## Warning: Removed 11 rows containing missing values (geom_point).
 ```
 
 ![](GBS_plotting_outlier_stats_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
@@ -630,7 +645,7 @@ ggsave("../selection_stats/dxy.png", width=8, height=4, dpi=300)
 ```
 
 ```
-## Warning: Removed 14 rows containing missing values (geom_point).
+## Warning: Removed 11 rows containing missing values (geom_point).
 ```
 
 Finally, Tajima's D.

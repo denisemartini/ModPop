@@ -7,7 +7,7 @@ import pylab
 from numpy import array
 
 # first let's get my real data in here
-dd = dadi.Misc.make_data_dict('../pop_structure/dadi/final_snps_for_dadi.recode.vcf.data')
+dd = dadi.Misc.make_data_dict('/Volumes/Denise/ModPop_analysis/pop_structure/dadi/final_snps_for_dadi.recode.vcf.data')
 
 North_fs = dadi.Spectrum.from_data_dict(dd, ['North'], [38], polarized = True)
 South_fs = dadi.Spectrum.from_data_dict(dd, ['South'], [30], polarized = True)
@@ -244,13 +244,15 @@ Plotting_Functions.Plot_2D(fs, model_fit, prefix, "snm", vmin_val=0.1)
 
 import basic_2DModels
 fs = dadi.Spectrum.from_data_dict(dd, ['North','South'], [38,30], polarized = True)
-pts = [30,40,50]
+pts = [80,90,100]
 prefix = "2Dfs"
-func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_mig)
-emp_params = [3.8916,8.0554,1.3233,0.9106,0.3238,0.0953,0.8273,1.0325,0.9149,0.0604]
-model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "beforeafter_split_mig", func_anc, emp_params, fs_folded=False)
+func_anc = dadi.Numerics.make_anc_state_misid_func(basic_2DModels.beforeafter_split_secmig)
+emp_params = [15.365,28.914,0.5825,0.0406,0.5011,0.3299,0.0008,0.0482,22.5972,0.0355]
+model_fit = Plotting_Functions.Fit_Empirical(fs, pts, prefix, "beforeafter_split_secmig", func_anc, emp_params, fs_folded=False)
+# remember to run all this last figure bit together if you want to save the image properly
 fig = pylab.figure()
 pylab.subplots_adjust(bottom=0.07, left=0.07, top=0.94, right=0.95,
                               hspace=0.56, wspace=0.26)
 dadi.Plotting.plot_2d_comp_multinom(model_fit, fs, resid_range = 10, vmin = 0.1, adjust=False)
-fig.savefig('../pop_structure/dadi/2Dfs/2Dfs.beforeafter_split_mig.png', dpi=300, bbox_inches='tight')
+fig.savefig('../pop_structure/dadi/2Dfs/2Dfs_last_rounds.beforeafter_split_secmig.png', dpi=300, bbox_inches='tight')
+# remember to run all this last figure bit together if you want to save the image properly

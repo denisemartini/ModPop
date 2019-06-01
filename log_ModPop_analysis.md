@@ -2089,6 +2089,77 @@ java -Xmx12g -jar $gowinda --annotation-file kaka_annotation.gtf --gene-set-file
 I am using the mode "gene" here, because since I got these outlier snps from specific genome windows, I would obviously overestimate the significance if I were to count each gene as many times as there is a snp around them in these windows. What I am really interested in is in seeing if the genes across these windows have anything in common.
 Turns out that after FDR correction there is no overrepresented GO term in this set. Even if there was though, I admit that I can't see anything jumping at me from this list, it is the usual fairly general GO terms, protein modification activity, components of membrane...
 
+###### 1.6.19
+I just came back to this because I am rounding up the final results and I decided that I should use the maf 0.05 filter for these stats, to maintain consistency between this and the environmental correlation analysis, so that I am in fact using the same dataset for both.
+So, quickly going back to see what I need and repeating the necessary steps to input files in R...I believe I had already prepared all outputs for the maf05 dataset originally, the only thing I did not do was a last preprocess of the frequency files:
+```bash
+list="A C G T"
+for i in $list
+do
+sed -i.tmp 's/'"${i}"'://' NI.frq
+sed -i.tmp 's/'"${i}"'://' SI.frq
+done
+```
+Then I should be able to simply rerun the whole R analysis using these new files as input, after tabixing the vcf file and making the necessary adjustments to the R script file names.
+```bash
+/Users/denisemartini/htslib-1.3.1/bgzip filtered_snps_for_selection_tests.recode.vcf
+/Users/denisemartini/htslib-1.3.1/tabix -p vcf filtered_snps_for_selection_tests.recode.vcf.gz
+```
+I almost forgot, I also need the Tajima's D calculated on a 25kb window size, because that's what I used as starting bins in the first place. I could simply get the number of snps from somer othe file...but I am feeling lazy and this is quicker right now:
+```bash
+vcftools --vcf NI_pop_for_stats.recode.vcf \
+--TajimaD 25000 --out NI_25kb
+```
+Now I need to recalculate the outlier Fst threshold:
+```R
+quantile(outlier_stats$Fst, probs = 0.99, na.rm = TRUE)
+       99%
+0.1027804
+```
+Which is higher than before, but I already noticed that there seem to be some outliers that are more outlying than previously.
+Now it is time to extract the windows over the threshold, to get the relative snps:
+```bash
+grep -v "CHROM" outlier_stats.txt | awk '($4 >= 0.1027804){print $1,$2,$3,$4}' > outlier_windows.bed
+wc -l outlier_windows.bed
+43
+mkdir annotation
+mv outlier_windows.bed annotation/
+cd annotation
+vcftools --gzvcf ../filtered_snps_for_selection_tests.recode.vcf.gz \
+--bed outlier_windows.bed --recode --recode-INFO-all --out snps_in_outlier_windows
+After filtering, kept 513 out of a possible 47098 Sites
+```
+A lot less than last time, as expected.
+Time to run gowinda and snpeff, moving this to nesi.
+```bash
+scp -r annotation/ mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/selection_stats/
+scp filtered_snps_for_selection_tests.recode.vcf.gz mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/selection_stats/
+gunzip filtered_snps_for_selection_tests.recode.vcf.gz
+```
+Snpeff first:
+```
+nano snpEff.config
+data.dir = /nesi/nobackup/uoo02327/denise/ModPop_analysis/selection_stats/annotation/data
+nano nesi_snpeff.sh
+java -Xmx2G -jar /opt/nesi/mahuika/snpEff/4.2/snpEff.jar eff -c ./snpEff.config -stats snpeff_snps_in_outlier_windows.html \
+-v Nmer snps_in_outlier_windows.recode.vcf > snpeff_snps_in_outlier_windows.vcf
+sbatch nesi_snpeff.sh
+```
+And gowinda:
+```bash
+gowinda=/nesi/project/uoo02327/programs/Gowinda-1.12.jar
+java -Xmx12g -jar $gowinda --annotation-file kaka_annotation.gtf --gene-set-file GO_mappings \
+--snp-file ../filtered_snps_for_selection_tests.recode.vcf --candidate-snp-file snps_in_outlier_windows.recode.vcf \
+--output-file gowinda_outlier_windows.txt --mode gene --gene-definition updownstream5000 --simulations 1000000 --threads 8
+```
+Grabbing back results:
+```bash
+cd annotation
+scp -r mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/selection_stats/annotation/* .
+```
+
+
+
 #### Environmental correlations
 ###### 19.3.19
 For the environmental association tests I decided to use the R package LEA (http://membres-timc.imag.fr/Olivier.Francois/LEA/software.htm), which uses the lfmm method and has been used quite a lot. I downloaded the environmental variables from WorldClim (http://worldclim.org/version2), because they seem to be quite accurate and they include several biologically relevant variables in the bioclim section. I am also going to use the info from this tutorial (http://evomics.org/learning/population-and-speciation-genomics/2018-population-and-speciation-genomics/environmental-correlation-analysis/#sec4) to extract the variables I need for my samples and put together the input files in R. The only thing I need to prepare then is the snp file, which they suggest should be cleaned up of maf < .05 and is easier to deal with if in .ped format. I can do this with VCFtools once again. I think I will be conservative and only remove maf < .02 for now. I will use the file I prepared for the selection stats and convert that.
@@ -2205,6 +2276,6 @@ do
   VCFtools --vcf snpeff_snps_for_env_tests.vcf \
   --positions ../pos_sig_${f}_01.txt \
   --recode --recode-INFO-all \
-  --remove-filtered-all --out annotated_${}
+  --remove-filtered-all --out annotated_${f}
 done
 ```
