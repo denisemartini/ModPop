@@ -980,6 +980,24 @@ cd dapc
 scp -r mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dapc/* .
 ```
 
+The other thing I want to do is a tree in ape with the kea as an outgroup. I have a file that contains the biallelic snps to which I added the kea information for dadi. There are going to be a few snps in which the kea info is missing, but it will be just the same as all other individuals, so I won't bother with it. I will run this in R, in a markdown called `GBS_ape_outgroup_tree.Rmd`. The only thing is that I need to prepare the input file as a plink file.
+```bash
+cd ../dadi/
+vcftools --vcf biallelic_snps_with_outgroup.recode.vcf \
+--plink --out biallelic_snps_with_outgroup
+# need to fix pop names
+sed -i.tmp 's/^NI_KAP[0-9]*/KapitiIsland/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^NI_LBI[0-9]*/LittleBarrierIsland/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^NI_PUR[0-9]*/Pureora/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^NI_ZEA[0-9]*/Zealandia/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^SI_COD[0-9]*/CodfishIsland/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^SI_FIO[0-9]*/Fiordland/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^SI_WES[0-9]*/Westland/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^SI_NEL[0-9]*/Nelson/' biallelic_snps_with_outgroup.ped
+sed -i.tmp 's/^kea*/Outgroup/' biallelic_snps_with_outgroup.ped
+~/plink_mac/plink --file biallelic_snps_with_outgroup --recode A --out biallelic_snps_with_outgroup --allow-extra-chr
+```
+
 
 ##### TREEMIX
 ###### 17.12.18
