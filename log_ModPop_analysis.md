@@ -14,11 +14,11 @@ All the analysis is done in the ModPop_analysis directory in boros/nesi and move
   - [x] <del>ipyrad</del>
   - [x] samtools
 - [x] Filter and merge results, vcftools and VennDiagram
-- [ ] Population structure tests:
+- [x] Population structure tests:
   - [x] admixture
   - [x] dapc in adegenet
   - [x] <del>tree in treemix</del>
-  - [ ] modeling in dadi
+  - [x] modeling in dadi
   - [x] tree in BEAST
   - [x] migration surfaces with EEMS
 - [x] Stats for selection outliers (Fst, Tajima's D, etc)
@@ -928,6 +928,58 @@ scp boros:/data/denise/ModPop_analysis/pop_structure/maxmiss90_common_snps.map .
 ```
 ###### 17.12.18
 All the tests I ran are in a separate report, called `GBS_adegenet.Rmd`. Nothing particularly new, but I managed to output a phylogenetic tree which looks a bit interesting, because the SI samples seem to "envelop" the NI samples. Not unexpectedly, the Kapiti and Zealandia samples are very nested within the tree (not one within the other though). The other cool thing is that there is a discriminant between the NI and the SI, I extracted the snps that contribute to it and I am looking at where they end up in the annotation.
+
+###### 02.06.19
+Coming back to this after quite a while, because I decided (a while ago actually, just never got around to doing it) to actually set a sensible threshold to select the topmost contributing loadings and look into them properly. Specifically, I am setting a 0.01 threshold (p-value like) and annotating them with snpeff and gowinda.
+So, I rerun the adegenet markdown just adding this bit at the end to extract proper outliers. Now, let's check them out.
+```bash
+cd ModPop_analysis/pop_structure
+mkdir dapc
+cd dapc
+wc -l subspp_loadings_outliers.txt
+1017
+```
+Which, excluding the header, maker it 1016 SNPs. Quite obviously, it's going to be about 1% of the original SNPs in the dataset. Now, I need to quickly fix the snp ids into chr and position again, so that I can use them in gowinda and extract them for snpeff.
+```bash
+TAB=$'\t'
+grep -v "SNP_ID" subspp_loadings_outliers.txt | awk '{print $1}' | sed 's/\([a-z]*_[a-z]*_[0-9A-Z]*\)_\([0-9]*\)/\1'"${TAB}"'\2/' >> pos_loadings_outliers.txt
+```
+Looking good. Let's extract these from the vcf file, so that I can move this to nesi and run both gowinda and snpeff over there.
+```bash
+vcftools --vcf ../maxmiss90_common_snps_HWE_LD.recode.vcf \
+--positions pos_loadings_outliers.txt \
+--recode --recode-INFO-all \
+--remove-filtered-all --out subspp_loadings_outliers
+```
+I can use the snpeff database that I prepared for the environmental associations, but I will need to fix the config file. Moving everything I need to nesi and getting it ready.
+```bash
+scp -r dapc/ mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dapc
+scp maxmiss90_common_snps_HWE_LD.recode.vcf mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/
+# easier to just copy everything over and remove unneccessary files
+cp -r ../../selection_stats/annotation/* .
+```
+Then, running snpeff first:
+```bash
+nano snpEff.config
+data.dir = /nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dapc/data
+nano nesi_snpeff.sh
+java -Xmx2G -jar /opt/nesi/mahuika/snpEff/4.2/snpEff.jar eff -c ./snpEff.config -stats snpeff_loadings_outliers.html \
+-v Nmer subspp_loadings_outliers.recode.vcf > snpeff_loadings_outliers.vcf
+sbatch nesi_snpeff.sh
+```
+And gowinda, using the snp mode in this case, because we want to weight up if multiple snps in the same gene are contributing to the loading more:
+```bash
+gowinda=/nesi/project/uoo02327/programs/Gowinda-1.12.jar
+java -Xmx12g -jar $gowinda --annotation-file kaka_annotation.gtf --gene-set-file GO_mappings \
+--snp-file ../maxmiss90_common_snps_HWE_LD.recode.vcf --candidate-snp-file subspp_loadings_outliers.recode.vcf \
+--output-file gowinda_loadings_outliers.txt --mode snp --gene-definition updownstream5000 --simulations 1000000 --threads 8
+```
+Grabbing back results:
+```bash
+cd dapc
+scp -r mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dapc/* .
+```
+
 
 ##### TREEMIX
 ###### 17.12.18

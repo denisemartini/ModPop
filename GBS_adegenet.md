@@ -407,7 +407,22 @@ Well, not quite as extreme as I expected, but there is a noticeable difference b
 
 ```r
 contributions <- cbind(GBS[,c(contrib$var.idx)]@loc.names, contrib$var.values)
-write.table(contributions, file = "../pop_structure/islands_discriminants.txt", 
+write.table(contributions, file = "../pop_structure/dapc/islands_discriminants.txt", 
             row.names = FALSE, col.names = c("SNP_ID", "LOADING"), quote = FALSE, sep = "\t")
 ```
 
+**Added on 02.6.19**
+I decided to actually look a bit better into these loadings and increase the threshold a bit for that. SO:
+
+
+```r
+outliers <- loadingplot(dapc_isl$var.contr, axis=1, thres=quantile(dapc_isl$var.contr, 0.99))
+```
+
+<img src="GBS_adegenet_files/figure-html/export-1.png" width="850px" />
+
+```r
+outfile <- cbind(GBS[,c(outliers$var.idx)]@loc.names, outliers$var.values)
+write.table(outfile, file = "../pop_structure/dapc/subspp_loadings_outliers.txt", 
+            row.names = FALSE, col.names = c("SNP_ID", "LOADING"), quote = FALSE, sep = "\t")
+```
