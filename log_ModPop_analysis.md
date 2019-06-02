@@ -2137,7 +2137,7 @@ scp filtered_snps_for_selection_tests.recode.vcf.gz mahuika:/nesi/nobackup/uoo02
 gunzip filtered_snps_for_selection_tests.recode.vcf.gz
 ```
 Snpeff first:
-```
+```bash
 nano snpEff.config
 data.dir = /nesi/nobackup/uoo02327/denise/ModPop_analysis/selection_stats/annotation/data
 nano nesi_snpeff.sh
@@ -2157,7 +2157,9 @@ Grabbing back results:
 cd annotation
 scp -r mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/selection_stats/annotation/* .
 ```
+Once again, the results are not particularly interesting. There are 3 overrepresented GO terms, but I know nothing about any of them. There are 4 SNPs with a MODERATE effect on genes, but the genes themselves don't say anything to me. So, nothing that I can really build on.
 
+**IMPORTANT NOTE: I realised that there is an essential fault in the way I calculated pi (nucleotide diversity) for this analysis, a gross miscalculation! You are supposed, quite obviously, to use all genotyped sites in a window to calculate diversity, not just the segregating sites (and filtered ones at that). So, scrap everything I have said and done so far with pi, it is unusable. It will require quite a lot more thinking to actually calculate it from this data, so I am giving up on it for the moment, I might come back to it at a later stage (paper?). I can't believe I did not realise it just by looking at the numbers, duh.** :expressionless:
 
 
 #### Environmental correlations

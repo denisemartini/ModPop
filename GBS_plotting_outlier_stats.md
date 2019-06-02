@@ -222,7 +222,7 @@ GENOME.class.split <- neutrality.stats(GENOME.class.split)
 ```
 
 ```
-## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpeZce3B/ff153d74ba349d7.ff
+## opening ff /private/var/folders/5k/7v2qdmp52_7f7krprpl16bb80000gq/T/RtmpJV7R6b/ff64274d7833af.ff
 ```
 
 ```
@@ -324,7 +324,7 @@ for (i in seq(1, to=(nrow(new_bins)), by=1)) {
 }
 ```
 
-Quick rinse and repeat for the NI and SI mean nucleotide diversity, pi.
+Quick rinse and repeat for the NI and SI mean nucleotide diversity, pi. **SEE NOTE AT THE END**
 
 
 ```r
@@ -726,3 +726,4 @@ ggplot(outlier_stats, aes(x=BIN_MIDDLE)) +
 ggsave("../selection_stats/both_tajima.png", width=8, height=4, dpi=300)
 ```
 
+**02.06.19 - IMPORTANT NOTE: my calculations of pi are grossly wrong! I am supposed to use all genotyped sites in a window to calculate the mean pi, not just segregating sites! So, until I figure out a way of correcting those means by the genotyped sites in those windows, and use all sites rather than just these filtered ones, scrap all those calculations and forget about the pi in these outputs.**
