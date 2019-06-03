@@ -1110,6 +1110,14 @@ I think this is all I need to do some manipulation in R. Log in `GBS_gendiversit
 Moving the files to desktop so I can work in R over there.
 `scp -r boros:/data/denise/ModPop_analysis/pop_structure/gen_diversity ./pop_structure`
 
+###### 3.6.19
+Coming back to this to try something quickly before wrapping up: I think that having a different number of individuals in each populations might be confusing my stats a little bit. So, it might be nice to have instead the same number of individuals from each population? -> but I can't think of a way of doing this sensibly at the moment: the amount of missing data might be confusing things as well, I am simply not convinced. I think what I will do instead, for now, is just calculate overall mean heterozigosity and mean maf. I already have the overall per-individual heterozigosity stata, so I will just compute the overall frequency stats to compute maf in R.
+```bash
+vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+--freq2 --out all_freq
+```
+I also made a couple of plots out of this.
+
 ##### Tree using SNAPP/BEAST
 ###### 21.3.19
 I need to do some filtering on my SNPs, because SNAPP is super computationally intensive. I will have to limit my number of samples to 3 from each population (24 total) and might still be too many. I will decide which individuals to keep based on their levels of missing data. I can obtain this information from VCFtools.

@@ -12,6 +12,7 @@ I will use this log to experiment on how to get the specific stats I want from t
 
 ```r
 library(dplyr)
+library(ggplot2)
 ```
 
 So, first of all, I think I can get the heterozygosity measures, which at this stage I mean as average proportion of sites at which an individual of that population was heterozygous. I have a file with the per-individual homozygosity and number of sites, I just need to extract this info for all the individuals in a population and average it across them.
@@ -37,6 +38,35 @@ pop_het <- left_join(indv, het, by=c("V1"="INDV"))
 
 ```r
 pop_het <- mutate(pop_het, prop_het=(1-(pop_het$O.HOM./pop_het$N_SITES)))
+```
+
+```
+## Warning: `as_dictionary()` is soft-deprecated as of rlang 0.3.0.
+## Please use `as_data_pronoun()` instead
+## This warning is displayed once per session.
+```
+
+```
+## Warning: `new_overscope()` is soft-deprecated as of rlang 0.2.0.
+## Please use `new_data_mask()` instead
+## This warning is displayed once per session.
+```
+
+```
+## Warning: The `parent` argument of `new_data_mask()` is deprecated.
+## The parent of the data mask is determined from either:
+## 
+##   * The `env` argument of `eval_tidy()`
+##   * Quosure environments when applicable
+## This warning is displayed once per session.
+```
+
+```
+## Warning: `overscope_clean()` is soft-deprecated as of rlang 0.2.0.
+## This warning is displayed once per session.
+```
+
+```r
 mean(pop_het$prop_het)
 ```
 
@@ -248,3 +278,62 @@ write.table(Codfish_private, "../pop_structure/gen_diversity/Codfish_private_sit
 ```
 
 These numbers look like a direct function of the number of individuals I had in each population. Which does make sense.
+
+**03.06.19 quick add-on**
+
+I just want to also calculate mean overall heterozygosity and maf. I already have the overall het file, just need to read in the overall frequencies file:
+
+
+```r
+read.table("../pop_structure/gen_diversity/all_freq.frq", header = TRUE, row.names = NULL) -> freq
+colnames(freq) <- c("CHROM", "POS", "N_ALLELES", "N_CHR", "FREQ_REF", "FREQ_ALT")
+```
+
+Now, let's calculate the per-individual mean heterozigosity:
+
+
+```r
+het <- mutate(het, prop_het=(1-(het$O.HOM./het$N_SITES)))
+mean(het$prop_het)
+```
+
+```
+## [1] 0.1203995
+```
+
+Looks like overall, a kaka individual is expected to be heterozygous at 12% of sites.
+Let's plot it quickly.
+
+
+```r
+palette=(c(rep("#D9EF8B", 13), rep("#1A9850", 14), rep("#66BD63", 10), rep("#A6D96A", 12), 
+           rep("#D73027", 7), rep("#F46D43", 11), rep("#FEE08B", 8), rep("#FDAE61", 17)))
+ggplot(het, aes(INDV, prop_het)) + geom_col(fill = palette) + theme_bw() + scale_y_continuous(expand = c(0, 0)) +
+  scale_x_discrete(breaks = c("NI_KAP07","NI_LBI07","NI_PUR05","NI_ZEA06","SI_COD04","SI_FIO08","SI_NEL04","SI_WES09") , 
+                   labels = c("Kapiti", "LittleBarrier", "Pureora", "Zealandia", "Codfish", "Fiordland", "Nelson", "Westland"))
+```
+
+<img src="GBS_gendiversity_stats_files/figure-html/het_plot-1.png" width="850px" />
+
+
+Now, the mean maf.
+
+
+```r
+apply(freq[,5:6], 1, FUN=min) -> maf
+mean(maf)
+```
+
+```
+## [1] 0.09286056
+```
+
+And the mean maf is fairly low, definitely lower overall than when I was calculating it per population. It also explains why when I filter by maf>0.05 I lose about half of my SNPs. Maybe I could just quickly plot a maf distribution.
+
+
+```r
+ggplot() + aes(maf) + geom_density(color = "#66BD63", fill = "#A6D96A") + theme_bw()
+```
+
+<img src="GBS_gendiversity_stats_files/figure-html/maf_plot-1.png" width="850px" />
+
