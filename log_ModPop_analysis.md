@@ -979,6 +979,25 @@ Grabbing back results:
 cd dapc
 scp -r mahuika:/nesi/nobackup/uoo02327/denise/ModPop_analysis/pop_structure/dapc/* .
 ```
+To quickly investigate the genes in which snpeff found moderate effects:
+```bash
+awk '($6 == 1){print $1}' snpeff_loadings_outliers.genes.txt
+Nmer_00748
+Nmer_04699
+Nmer_05367
+Nmer_06164
+Nmer_06577
+Nmer_09425
+Nmer_09619
+Nmer_11452
+Nmer_11504
+Nmer_13098
+Nmer_13777
+Nmer_15311
+Nmer_15438
+Nmer_15686
+Nmer_16026
+```
 
 The other thing I want to do is a tree in ape with the kea as an outgroup. I have a file that contains the biallelic snps to which I added the kea information for dadi. There are going to be a few snps in which the kea info is missing, but it will be just the same as all other individuals, so I won't bother with it. I will run this in R, in a markdown called `GBS_ape_outgroup_tree.Rmd`. The only thing is that I need to prepare the input file as a plink file.
 ```bash
@@ -997,7 +1016,6 @@ sed -i.tmp 's/^SI_NEL[0-9]*/Nelson/' biallelic_snps_with_outgroup.ped
 sed -i.tmp 's/^kea*/Outgroup/' biallelic_snps_with_outgroup.ped
 ~/plink_mac/plink --file biallelic_snps_with_outgroup --recode A --out biallelic_snps_with_outgroup --allow-extra-chr
 ```
-
 
 ##### TREEMIX
 ###### 17.12.18
