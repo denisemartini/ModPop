@@ -1136,6 +1136,68 @@ vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
 ```
 I also made a couple of plots out of this.
 
+###### 4.6.19
+I almost forgot that I wanted to replot a pairwise Fst table at some point. I will have to do it with VCFtools and it will require some looping.
+```bash
+poplist="Pureora Kapiti Zealandia Nelson Fiordland Westland Codfish"
+for i in $poplist
+do
+  vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+  --weir-fst-pop LittleBarrier.txt --weir-fst-pop ${i}.txt \
+  --out LittleBarrier_vs_${i}
+done
+poplist="Kapiti Zealandia Nelson Fiordland Westland Codfish"
+for i in $poplist
+do
+  vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+  --weir-fst-pop Pureora.txt --weir-fst-pop ${i}.txt \
+  --out Pureora_vs_${i}
+done
+poplist="Zealandia Nelson Fiordland Westland Codfish"
+for i in $poplist
+do
+  vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+  --weir-fst-pop Kapiti.txt --weir-fst-pop ${i}.txt \
+  --out Kapiti_vs_${i}
+done
+poplist="Nelson Fiordland Westland Codfish"
+for i in $poplist
+do
+  vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+  --weir-fst-pop Zealandia.txt --weir-fst-pop ${i}.txt \
+  --out Zealandia_vs_${i}
+done
+poplist="Fiordland Westland Codfish"
+for i in $poplist
+do
+  vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+  --weir-fst-pop Nelson.txt --weir-fst-pop ${i}.txt \
+  --out Nelson_vs_${i}
+done
+poplist="Westland Codfish"
+for i in $poplist
+do
+  vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+  --weir-fst-pop Fiordland.txt --weir-fst-pop ${i}.txt \
+  --out Fiordland_vs_${i}
+done
+vcftools --vcf maxmiss90_common_snps_HWE_LD.recode.vcf \
+--weir-fst-pop Westland.txt --weir-fst-pop Codfish.txt \
+--out Westland_vs_Codfish
+```
+Just quickly putting all in a file:
+```bash
+for f in $(ls *_vs_*.log)
+do
+  a=$(echo ${f} | cut -d "_" -f1)
+  b=$(echo ${f} | cut -d "_" -f3 | cut -d "." -f1)
+  mean=$(grep "mean Fst" ${f} | cut -d ":" -f2)
+  weighted=$(grep "weighted Fst" ${f} | cut -d ":" -f2)
+  echo $a$'\t'$b$'\t'$mean$'\t'$weighted >> summary_fst.txt
+done
+```
+As expected, Kapiti has the highest Fst values against every other pop, while in the SI there are super low values overall.
+
 ##### Tree using SNAPP/BEAST
 ###### 21.3.19
 I need to do some filtering on my SNPs, because SNAPP is super computationally intensive. I will have to limit my number of samples to 3 from each population (24 total) and might still be too many. I will decide which individuals to keep based on their levels of missing data. I can obtain this information from VCFtools.
