@@ -177,7 +177,17 @@ ggplot(het, aes(INDV, prop_het)) + geom_col(fill = palette) + theme_bw() + scale
                    labels = c("Kapiti", "LittleBarrier", "Pureora", "Zealandia", "Codfish", "Fiordland", "Nelson", "Westland"))
 ```
 
+Almost as an afterthought: I just realised that the inbreeding coefficient/fixation index F is also reported in the VCFtools file, and it could well be a better measure to show in a plot like the one above. So:
 
+```{r F_plot, , fig.height=7, fig.width=12, out.width="850px"}
+palette=(c(rep("#D9EF8B", 13), rep("#1A9850", 14), rep("#66BD63", 10), rep("#A6D96A", 12), 
+           rep("#D73027", 7), rep("#F46D43", 11), rep("#FEE08B", 8), rep("#FDAE61", 17)))
+ggplot(het, aes(INDV, F)) + geom_col(fill = palette) + theme_bw() + scale_y_continuous(expand = c(0, 0)) +
+  scale_x_discrete(breaks = c("NI_KAP07","NI_LBI07","NI_PUR05","NI_ZEA06","SI_COD04","SI_FIO08","SI_NEL04","SI_WES09") , 
+                   labels = c("Kapiti", "LittleBarrier", "Pureora", "Zealandia", "Codfish", "Fiordland", "Nelson", "Westland"))
+```
+
+This is actually really neat, because it highlights very clearly the only individual with het excess from Kapiti Island, which might be a very clear cut sign of genetic drift.
 Now, the mean maf.
 
 ```{r all_maf}

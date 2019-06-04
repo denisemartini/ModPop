@@ -315,6 +315,19 @@ ggplot(het, aes(INDV, prop_het)) + geom_col(fill = palette) + theme_bw() + scale
 
 <img src="GBS_gendiversity_stats_files/figure-html/het_plot-1.png" width="850px" />
 
+Almost as an afterthought: I just realised that the inbreeding coefficient/fixation index F is also reported in the VCFtools file, and it could well be a better measure to show in a plot like the one above. So:
+
+
+```r
+palette=(c(rep("#D9EF8B", 13), rep("#1A9850", 14), rep("#66BD63", 10), rep("#A6D96A", 12), 
+           rep("#D73027", 7), rep("#F46D43", 11), rep("#FEE08B", 8), rep("#FDAE61", 17)))
+ggplot(het, aes(INDV, F)) + geom_col(fill = palette) + theme_bw() + scale_y_continuous(expand = c(0, 0)) +
+  scale_x_discrete(breaks = c("NI_KAP07","NI_LBI07","NI_PUR05","NI_ZEA06","SI_COD04","SI_FIO08","SI_NEL04","SI_WES09") , 
+                   labels = c("Kapiti", "LittleBarrier", "Pureora", "Zealandia", "Codfish", "Fiordland", "Nelson", "Westland"))
+```
+
+<img src="GBS_gendiversity_stats_files/figure-html/F_plot, -1.png" width="850px" />
+
 
 Now, the mean maf.
 
