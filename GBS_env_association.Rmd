@@ -1,0 +1,295 @@
+---
+title: "Environmental association analysis on GBS data"
+author: "Denise Martini"
+date: "19 March 2019"
+output:
+  html_document:
+    keep_md: yes
+---
+
+I want to use the package LEA to run some environmental association tests on my GBS data. First, I need to setup the environmental data though. I downloaded the variables I want to use from the WorldClim dataset, and I have a file with the coordinates (longitude and latitude) for my kaka individuals (or rather, their populations).
+Now, I needed to install a few packages, but that went quite smoothly, they are here for reference.
+
+```{r eval=FALSE}
+install.packages("dismo")
+install.packages("maptools")
+install.packages("rgdal")
+```
+
+Now, loading the packages that I actually need for this first part.
+
+```{r message=FALSE}
+library(dismo)
+library(maptools)
+library(dplyr)
+```
+
+Loading and fixing my locations file, because I realised the order of the coordinates was wrong. These packages like to have longitude before latitude.
+
+```{r}
+kakalocs <- read.table("samples_locations.txt", sep="\t", header=T)
+kakalocs <- tibble(kakalocs$SampleID, kakalocs$Longitude, kakalocs$Latitude)
+colnames(kakalocs) <- c("SAMPLE", "LONG", "LAT")
+```
+
+Loading the bioclimatic variables files.
+
+```{r}
+files <- list.files("env_variables/wc2.0_2.5m_bio/", pattern='tif', full.names=TRUE)
+bioclim2.5 <- stack(files)
+```
+
+Solar radiation is in a stack of its own (wd) and needs to be synthesized in a single layer if I want to have one value for the annual solar radiation, rather than twelve monthly values. I decided to go for a mean value.
+
+```{r, cache=TRUE}
+files_wd <- list.files("env_variables/wc2.0_2.5m_srad/", pattern='tif', full.names=TRUE)
+wd <- stack(files_wd)
+mean(wd) -> mean_srad
+```
+
+Now I can extract the values for my locations from the variables I want. And I can plot the maps too, because it's fun. And save the result as .env files for LEA.
+Annual mean temperature.
+
+```{r}
+mean_temp <- extract(bioclim2.5[[1]], kakalocs[,2:3])
+plot(bioclim2.5, 1, xlim=c(160,180), ylim=c(-48,-34))
+points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
+write.table(mean_temp, "mean_temp.env", col.names = F, row.names = F, quote = F)
+```
+
+Minimum temperature of the coldest month.
+
+```{r}
+coldest_month <- extract(bioclim2.5[[6]], kakalocs[,2:3])
+plot(bioclim2.5, 6, xlim=c(160,180), ylim=c(-48,-34))
+points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
+write.table(coldest_month, "coldest_month.env", col.names = F, row.names = F, quote = F)
+```
+
+Annual precipitation.
+
+```{r}
+ann_prec <- extract(bioclim2.5[[12]], kakalocs[,2:3])
+plot(bioclim2.5, 12, xlim=c(160,180), ylim=c(-48,-34))
+points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
+write.table(ann_prec, "ann_prec.env", col.names = F, row.names = F, quote = F)
+```
+
+Solar radiation.
+
+```{r}
+ann_srad <- extract(mean_srad, kakalocs[,2:3])
+plot(mean_srad, xlim=c(160,180), ylim=c(-48,-34))
+points(x=kakalocs$LONG, y=kakalocs$LAT, col="red", cex=0.8)
+write.table(ann_srad, "ann_srad.env", col.names = F, row.names = F, quote = F)
+```
+
+Now, on to use LEA for the correlations, real quick.
+Nope, not on this version of R. -.-
+So, sicne I can't update R on my desktop, because the OS is too out of date, I will finish writing up this script and run it in boros instead, where I have my nice R 3.5 installed and I already checked that LEA works fine.
+
+```{r eval=FALSE}
+install.packages("devtools")
+devtools::install_github("bcm-uga/LEA")
+```
+
+Loading packages and snp files, that I need to quickly convert in other formats.
+
+```{r message=FALSE}
+library(LEA)
+library(RColorBrewer)
+snpfile = ped2lfmm("snps_for_env_tests.ped")
+genotype = lfmm2geno("snps_for_env_tests.lfmm")
+```
+
+Testing the population structure (this is a similar thing to admixture), just to check that the signal is the same as usual.
+
+```{r}
+obj.snmf = snmf(genotype, K = 1:8, entropy = T, ploidy = 2, project="new", CPU = 8)
+plot(obj.snmf)
+barplot(t(Q(obj.snmf, K = 4)), col = c(values=brewer.pal(4, "RdYlGn")))
+```
+
+Everything seems to be as usual, so I am running the imputation for missing data, to check that everything is fine again and because they specify that it is recommended before the environmental associations.
+
+```{r message=FALSE}
+obj.snmf = snmf("snps_for_env_tests.lfmm", K = 4,
+                       entropy = TRUE, repetitions = 10,
+                       project = "new", CPU = 8)
+# select the run with the lowest cross-entropy value
+best = which.min(cross.entropy(obj.snmf, K = 4))
+barplot(t(Q(obj.snmf, K = 4, run = best)), col = c(values=brewer.pal(4, "RdYlGn")))
+# Impute the missing genotypes
+impute(obj.snmf, "snps_for_env_tests.lfmm",
+       method = 'mode', K = 4, run = best)
+file.rename("snps_for_env_tests.lfmm_imputed.lfmm", "snps_for_env_tests_imputed.lfmm")
+```
+
+Now, time to finally run those association tests on this dataset. Starting with the mean temp variable.
+In the documentation they recommend running the test with different Ks around the value identified with snmf, with multiple repetitions for each K (repetitions=5-10), a decent number of cycles (e.g. -i 6000) and half of that as burning cycles (-b 3000). So, here we go.
+
+```{r message=FALSE, cache=TRUE}
+mean_temp = lfmm("snps_for_env_tests_imputed.lfmm", "mean_temp.env",
+                K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
+```
+
+This takes a VERY LONG time.
+Then I need to adjust the p-values combining the repetitions from each run, and choose the appropriate run based on the shape of the p-value histogram, which "should be flat, with a peak close to zero".
+
+```{r}
+p_2 = lfmm.pvalues(mean_temp, K = 2)
+p_3 = lfmm.pvalues(mean_temp, K = 3)
+p_4 = lfmm.pvalues(mean_temp, K = 4)
+p_5 = lfmm.pvalues(mean_temp, K = 5)
+par(mfrow = c(2,2))
+hist(p_2$pvalues, col = "#D73027")
+hist(p_3$pvalues, col = "#D9EF8B")
+hist(p_4$pvalues, col = "#1A9850")
+hist(p_5$pvalues, col = "#FDAE61")
+```
+
+Once confirmed that K=4 is as usual our best guess, we can go on and plot the p-values of that run and see if we have any outliers. There isn't really that much of a difference between the different Ks.
+
+```{r}
+plot(-log10(p_4$pvalues), pch = 19, col = "#1A9850", cex = .7)
+```
+
+Looks like there might be outliers here.
+Then let's apply a multiple testing correction (FDR with Benjamini-Hochberg method) and extract the candidates.
+
+```{r}
+L = length(p_4$pvalues)
+q = .05
+# return a list of candidates with expected FDR .05
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_mean_temp.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_mean_temp_01.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+```
+
+Running it all for the other variables as well. Annual precipitation.
+
+```{r message=FALSE, cache=TRUE}
+ann_prec = lfmm("snps_for_env_tests_imputed.lfmm", "ann_prec.env",
+                 K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
+p_2 = lfmm.pvalues(ann_prec, K = 2)
+p_3 = lfmm.pvalues(ann_prec, K = 3)
+p_4 = lfmm.pvalues(ann_prec, K = 4)
+p_5 = lfmm.pvalues(ann_prec, K = 5)
+par(mfrow = c(2,2))
+hist(p_2$pvalues, col = "#D73027")
+hist(p_3$pvalues, col = "#D9EF8B")
+hist(p_4$pvalues, col = "#1A9850")
+hist(p_5$pvalues, col = "#FDAE61")
+```
+
+Checking outliers with K=4 and writing out candidates.
+
+```{r}
+plot(-log10(p_4$pvalues), pch = 19, col = "#1A9850", cex = .7)
+L = length(p_4$pvalues)
+q = .05
+# return a list of candidates with expected FDR .05
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_ann_prec.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_ann_prec_01.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+```
+
+Then minimum temperature of the coldest month.
+
+```{r message=FALSE, cache=TRUE}
+coldest_month = lfmm("snps_for_env_tests_imputed.lfmm", "coldest_month.env",
+                 K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
+p_2 = lfmm.pvalues(coldest_month, K = 2)
+p_3 = lfmm.pvalues(coldest_month, K = 3)
+p_4 = lfmm.pvalues(coldest_month, K = 4)
+p_5 = lfmm.pvalues(coldest_month, K = 5)
+par(mfrow = c(2,2))
+hist(p_2$pvalues, col = "#D73027")
+hist(p_3$pvalues, col = "#D9EF8B")
+hist(p_4$pvalues, col = "#1A9850")
+hist(p_5$pvalues, col = "#FDAE61")
+```
+
+Checking outliers with K=4 and writing out candidates.
+
+```{r}
+plot(-log10(p_4$pvalues), pch = 19, col = "#1A9850", cex = .7)
+L = length(p_4$pvalues)
+q = .05
+# return a list of candidates with expected FDR .05
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_coldest_month.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_coldest_month_01.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+```
+
+Finally mean annual solar radiation.
+
+```{r message=FALSE, cache=TRUE}
+ann_srad = lfmm("snps_for_env_tests_imputed.lfmm", "ann_srad.env",
+                 K = 2:5, repetitions = 5, iterations = 6000, burnin = 3000, project="new", CPU = 8)
+p_2 = lfmm.pvalues(ann_srad, K = 2)
+p_3 = lfmm.pvalues(ann_srad, K = 3)
+p_4 = lfmm.pvalues(ann_srad, K = 4)
+p_5 = lfmm.pvalues(ann_srad, K = 5)
+par(mfrow = c(2,2))
+hist(p_2$pvalues, col = "#D73027")
+hist(p_3$pvalues, col = "#D9EF8B")
+hist(p_4$pvalues, col = "#1A9850")
+hist(p_5$pvalues, col = "#FDAE61")
+```
+
+Checking outliers with K=4 and writing out candidates.
+
+```{r}
+plot(-log10(p_4$pvalues), pch = 19, col = "#1A9850", cex = .7)
+L = length(p_4$pvalues)
+q = .05
+# return a list of candidates with expected FDR .05
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_ann_srad.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+q = .01
+# return a list of candidates with expected FDR .01
+# Benjamini-Hochberg's algorithm:
+w = which(sort(p_4$pvalues) < q * (1:L) / L)
+candidates = tibble(order(p_4$pvalues)[w], sort(p_4$pvalues)[w])
+dim(candidates)
+write.table(candidates, "sig_ann_srad_01.txt", sep = "\t", row.names = F,
+            col.names = c("index", "p-value"), quote = F)
+```
